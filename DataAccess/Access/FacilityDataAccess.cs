@@ -7,14 +7,9 @@ using Dapper;
 
 namespace DataAccess.Access
 {
-    public class FacilityDataAccess
+    public class FacilityDataAccess : Access
     {
-        private readonly ISQLDataAccess _db;
-
-        public FacilityDataAccess(ISQLDataAccess db)
-        {
-            _db = db;
-        }
+        public FacilityDataAccess(ISQLDataAccess db) : base(db) { }
 
         public Task<IEnumerable<Facility>> GetFacilities()
         {
@@ -25,6 +20,7 @@ namespace DataAccess.Access
         public async Task<Facility> GetFacility(int facilityId)
         {
             string sql = "select * from facilities where facilityId = :Id";
+            
             DynamicParameters dynamicParameters = new DynamicParameters(new
             {
                 Id = facilityId
@@ -37,6 +33,7 @@ namespace DataAccess.Access
         public Task InsertFacility(Facility facility)
         {
             string sql = "insert into facilities(address, phoneNumber) values(:Address, :PhoneNumber)";
+            
             DynamicParameters dynamicParameters = new DynamicParameters(new
             {
                 Address = facility.Address,
@@ -55,7 +52,7 @@ namespace DataAccess.Access
                 Id = facility.FacilityId,
                 Address = facility.Address,
                 PhoneNumber = facility.PhoneNumber
-            }); ;
+            });
 
             return _db.SaveData(sql, dynamicParameters);
         }
