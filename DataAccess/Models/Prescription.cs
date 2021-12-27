@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Models
 {
-    internal class Prescription
+    public class Prescription
     {
+        public string Dosage { get; set; }
+        public int DrugId { get; set; }
+        public int AppointmentId { get; set; }
     }
 }
