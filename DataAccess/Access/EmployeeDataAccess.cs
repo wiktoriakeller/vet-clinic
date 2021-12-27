@@ -7,7 +7,7 @@ using Dapper;
 
 namespace DataAccess.Access
 {
-    public class EmployeeDataAccess : Access
+    public class EmployeeDataAccess : Access, IEmployeeDataAccess
     {
         public EmployeeDataAccess(ISQLDataAccess db) : base(db) { }
 
@@ -33,7 +33,7 @@ namespace DataAccess.Access
         public Task InsertEmployee(Employee Employee)
         {
             string sql = "insert into employees(name, surname, salary, bonusSalary, address, phoneNumber, position, facility) values(:Name, :Surname, :Salary, :BonusSalary, :Address, :PhoneNumber, :Position, :Facility)";
-                
+
             DynamicParameters dynamicParameters = new DynamicParameters(new
             {
                 Name = Employee.Name,
