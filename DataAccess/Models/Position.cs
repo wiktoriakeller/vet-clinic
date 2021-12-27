@@ -10,7 +10,7 @@ namespace DataAccess.Models
     {
         public int PositionId { get; set; }
         public string Name { get; set; }
-        public float SalaryMin { get; set; }
-        public float SalaryMax { get; set; }
+        public double SalaryMin { get; set; }
+        public double SalaryMax { get; set; }
     }
 }

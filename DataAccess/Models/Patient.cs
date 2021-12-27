@@ -11,7 +11,7 @@ namespace DataAccess.Models
         public int PatientId { get; set; }
         public string Name { get; set; }
         public int Species { get; set; }
-        public int Organization { get; set; }
-        public int Owner { get; set; }
+        public int? Organization { get; set; }
+        public int? Owner { get; set; }
     }
 }
