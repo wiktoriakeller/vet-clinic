@@ -7,7 +7,7 @@ using Dapper;
 
 namespace DataAccess.Access
 {
-    public class PositionDataAccess : Access
+    public class PositionDataAccess : Access, IPositionDataAccess
     {
         public PositionDataAccess(ISQLDataAccess db) : base(db) { }
 
@@ -20,7 +20,7 @@ namespace DataAccess.Access
         public async Task<Position> GetPosition(int positionId)
         {
             string sql = "select * from positions where positionId = :Id";
-            
+
             DynamicParameters dynamicParameters = new DynamicParameters(new
             {
                 Id = positionId
@@ -33,7 +33,7 @@ namespace DataAccess.Access
         public Task InsertPosition(Position position)
         {
             string sql = "insert into positions(name, salaryMin, salaryMax) values(:Name, :SalaryMin, :SalaryMax)";
-            
+
             DynamicParameters dynamicParameters = new DynamicParameters(new
             {
                 Name = position.Name,

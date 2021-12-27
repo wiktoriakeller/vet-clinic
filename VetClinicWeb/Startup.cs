@@ -25,9 +25,12 @@ namespace VetClinicWeb
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<ISQLDataAccess, SQLDataAccess>();
+            services.AddSingleton<IFacilityDataAccess, FacilityDataAccess>();
+            services.AddSingleton<IOfficeDataAccess, OfficeDataAccess>();
+            services.AddSingleton<IPositionDataAccess, PositionDataAccess>();
+            services.AddSingleton<IEmployeeDataAccess, EmployeeDataAccess>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddRazorPages();
-            services.AddControllersWithViews();
             services.AddControllersWithViews();
         }
 

@@ -7,7 +7,7 @@ using Dapper;
 
 namespace DataAccess.Access
 {
-    public class OfficeDataAccess : Access
+    public class OfficeDataAccess : Access, IOfficeDataAccess
     {
         public OfficeDataAccess(ISQLDataAccess db) : base(db) { }
         public Task<IEnumerable<Office>> GetOffices()
