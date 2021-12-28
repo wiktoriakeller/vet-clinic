@@ -11,5 +11,16 @@ namespace VetClinicWeb.Controllers
         {
             _mapper = mapper;
         }
+
+        protected string GetExceptionMessage(int number)
+        {
+            switch (number)
+            {
+                case 2292:
+                    return "is in use";
+                default:
+                    return "can't be deleted";
+            }
+        }
     }
 }

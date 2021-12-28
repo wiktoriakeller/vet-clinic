@@ -6,7 +6,6 @@ using VetClinicWeb.Models;
 using System.Threading.Tasks;
 using AutoMapper;
 using System.Linq;
-using System;
 
 namespace VetClinicWeb.Controllers
 {
@@ -26,9 +25,7 @@ namespace VetClinicWeb.Controllers
             List<FacilityViewModel> facilities = new List<FacilityViewModel>();
 
             foreach (var dbFacility in dbFacilities)
-            {
                 facilities.Add(_mapper.Map<FacilityViewModel>(dbFacility));
-            }
 
             return View(facilities);
         }
@@ -94,16 +91,7 @@ namespace VetClinicWeb.Controllers
             }
             catch (Oracle.ManagedDataAccess.Client.OracleException ex)
             {
-                switch (ex.Number)
-                {
-                    case 2292:
-                        ViewBag.ErrorMessage = "Facility is in use.";
-                        break;
-                    default:
-                        ViewBag.ErrorMessage = "You can't delete this facility.";
-                        break;
-                }
-
+                ViewBag.ErrorMessage = $"Facility {GetExceptionMessage(ex.Number)}";
                 var facility = await _facilityDataAccess.GetFacility(id);
                 return View(_mapper.Map<FacilityViewModel>(facility));
             }
@@ -119,13 +107,9 @@ namespace VetClinicWeb.Controllers
             bool isAddressInUse = results.FirstOrDefault(x => (x.Address == address && x.FacilityId != facilityId)) == null;
 
             if (isAddressInUse == false)
-            {
                 return Json($"Address {address} already in use.");
-            }
             else
-            {
                 return Json(true);
-            }
         }
     }
 }
