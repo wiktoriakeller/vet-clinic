@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DataAccess.DbAccess;
 using DataAccess.Access;
+using System.Globalization;
 
 namespace VetClinicWeb
 {
@@ -36,6 +37,13 @@ namespace VetClinicWeb
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
+            var cultureInfo = new CultureInfo("en-EN", false);
+
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+            cultureInfo.NumberFormat.CurrencySymbol = "";
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

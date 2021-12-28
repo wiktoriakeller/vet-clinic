@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using VetClinicWeb.Models;
+using System.Linq;
 
 namespace VetClinicWeb.Controllers
 {
@@ -24,9 +25,8 @@ namespace VetClinicWeb.Controllers
             List<PositionViewModel> positions = new List<PositionViewModel>();
 
             foreach (Position dbPosition in dbPositions)
-            {
                 positions.Add(_mapper.Map<PositionViewModel>(dbPosition));
-            }
+
             return View(positions);
         }
 
@@ -45,6 +45,7 @@ namespace VetClinicWeb.Controllers
                 ModelState.Clear();
                 return RedirectToAction("Index");
             }
+
             return View(model);
         }
 
@@ -60,16 +61,7 @@ namespace VetClinicWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                try
-                {
-                    await _positionDataAccess.UpdatePosition(_mapper.Map<Position>(model));
-                }
-                catch (Oracle.ManagedDataAccess.Client.OracleException ex)
-                {
-                    ViewBag.ErrorMessage = $"Position {GetExceptionMessage(ex.Number)}";
-                    return View(model);
-                }
-
+                await _positionDataAccess.UpdatePosition(_mapper.Map<Position>(model));
                 ModelState.Clear();
                 return RedirectToAction("Index");
             }
