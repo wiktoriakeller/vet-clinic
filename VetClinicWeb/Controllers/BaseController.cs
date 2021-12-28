@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 
-namespace VetClinic.Controllers
+namespace VetClinicWeb.Controllers
 {
     public abstract class BaseController : Controller
     {

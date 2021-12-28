@@ -1,0 +1,41 @@
+﻿@model IEnumerable<VetClinicWeb.Models.FacilityViewModel>
+
+@{
+    ViewData["Title"] = "Facility";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h4>List of facilities</h4>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhoneNumber)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhoneNumber)
+            </td>
+            <td>
+                @Html.ActionLink("Update", "Update", new { id=item.FacilityId }) |
+                @Html.ActionLink("Delete", "ShowDelete", new { id=item.FacilityId })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
