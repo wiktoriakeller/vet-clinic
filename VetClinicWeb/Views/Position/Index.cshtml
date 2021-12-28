@@ -1,11 +1,11 @@
 ﻿@model IEnumerable<VetClinicWeb.Models.PositionViewModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Position";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>List of positions</h1>
+<h5>List of positions</h5>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -39,7 +39,7 @@
             </td>
             <td>
                 @Html.ActionLink("Update", "Update", new { id = item.PositionId }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.PositionId })
+                @Html.ActionLink("Delete", "ShowDelete", new { id = item.PositionId })
             </td>
         </tr>
 }

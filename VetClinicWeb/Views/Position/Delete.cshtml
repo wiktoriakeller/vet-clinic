@@ -1,15 +1,13 @@
 ﻿@model VetClinicWeb.Models.PositionViewModel
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Position";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Delete</h1>
-
-<h3>Are you sure you want to delete this?</h3>
+<h5>Are you sure you want to delete this?</h5>
+<br />
 <div>
-    <h4>PositionViewModel</h4>
-    <hr />
     <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Name)
@@ -31,8 +29,12 @@
         </dd>
     </dl>
     
-    <form asp-action="Delete">
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+    <form method="post" asp-controller="Position" asp-action="Delete" asp-route-id="@Model.PositionId">
+        <input type="submit" value="Delete" class="btn btn-danger"/>
     </form>
+    <br />
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
 </div>
