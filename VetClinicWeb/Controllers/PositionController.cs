@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using DataAccess.Access;
 using DataAccess.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using VetClinicWeb.Models;
@@ -32,12 +30,18 @@ namespace VetClinicWeb.Controllers
             return View(positions);
         }
 
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
         [HttpPost]
-        public IActionResult Create(PositionViewModel model)
+        public async Task<IActionResult> Create(PositionViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _positionDataAccess.InsertPosition(_mapper.Map<Position>(model));
+                await _positionDataAccess.InsertPosition(_mapper.Map<Position>(model));
                 ModelState.Clear();
                 return RedirectToAction("Index");
             }
@@ -47,7 +51,6 @@ namespace VetClinicWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Update(int id)
         {
-
             Position position = await _positionDataAccess.GetPosition(id);
             return View(_mapper.Map<PositionViewModel>(position));
         }
@@ -66,11 +69,18 @@ namespace VetClinicWeb.Controllers
                     ViewBag.ErrorMessage = $"Position {GetExceptionMessage(ex.Number)}";
                     return View(model);
                 }
+
                 ModelState.Clear();
                 return RedirectToAction("Index");
             }
 
             return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult ShowDelete(int id)
+        {
+            return RedirectToAction("Delete", new { id = id });
         }
 
         [HttpGet]
@@ -81,32 +91,31 @@ namespace VetClinicWeb.Controllers
         }
 
         [HttpPost]
-        public IActionResult Delete(int id, PositionViewModel model)
+        public async Task<IActionResult> Delete(int id, PositionViewModel model)
         {
             try
             {
-                _positionDataAccess.DeletePosition(id);
+                await _positionDataAccess.DeletePosition(id);
             }
             catch (Oracle.ManagedDataAccess.Client.OracleException ex)
             {
                 ViewBag.ErrorMessage = $"Position {GetExceptionMessage(ex.Number)}";
-                return View(model);
+                var facility = await _positionDataAccess.GetPosition(id);
+                return View(_mapper.Map<PositionViewModel>(facility));
             }
             return RedirectToAction("Index");
         }
 
-        [HttpGet]
-        public IActionResult ShowDelete(int id)
+        [AcceptVerbs("Get", "Post")]
+        public IActionResult IsSalaryValid(PositionViewModel model)
         {
-            return RedirectToAction("Delete", new { id = id });
+            double? salaryMin = model.SalaryMin;
+            double? salaryMax = model.SalaryMax;
+
+            if (salaryMin != null && salaryMax != null && salaryMax < salaryMin)
+                return Json("Maximum salary should be bigger than minimum salary");
+
+            return Json(true);
         }
-
-        [HttpGet]
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-
     }
 }

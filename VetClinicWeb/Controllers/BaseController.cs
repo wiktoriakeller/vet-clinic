@@ -17,9 +17,9 @@ namespace VetClinicWeb.Controllers
             switch (number)
             {
                 case 2292:
-                    return "is in use";
+                    return "is used in diffrent table";
                 default:
-                    return "can't be deleted";
+                    return "can't be modified or deleted";
             }
         }
     }

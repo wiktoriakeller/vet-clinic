@@ -29,6 +29,8 @@
         </dd>
     </dl>
     
+    <p class="text-danger">@ViewBag.ErrorMessage</p>
+
     <form method="post" asp-controller="Position" asp-action="Delete" asp-route-id="@Model.PositionId">
         <input type="submit" value="Delete" class="btn btn-danger"/>
     </form>

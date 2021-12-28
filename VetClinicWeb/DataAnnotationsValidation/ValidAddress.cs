@@ -5,7 +5,7 @@ namespace VetClinic.DataAnnotationsValidations
 {
     public class ValidAddress : ValidationAttribute
     {
-        public ValidAddress() : base("{0} is not a valid address.") { }
+        public ValidAddress() : base("This is not a valid address.") { }
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
@@ -22,8 +22,7 @@ namespace VetClinic.DataAnnotationsValidations
                 if (Regex.IsMatch(strValue, @"^[A-Z][a-z]*[ ][A-Za-z1-9 ]*[a-z][ ][1-9][0-9]{0,2}[ ][0-9]{2}[-][0-9]{3}"))
                     return ValidationResult.Success;
 
-                var errorMessage = FormatErrorMessage(validationContext.DisplayName);
-                return new ValidationResult(errorMessage);
+                return new ValidationResult($"{strValue} is not a valid address");
             }
 
             return ValidationResult.Success;
