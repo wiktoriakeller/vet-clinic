@@ -1,0 +1,112 @@
+﻿using AutoMapper;
+using DataAccess.Access;
+using DataAccess.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using VetClinicWeb.Models;
+
+namespace VetClinicWeb.Controllers
+{
+    public class PositionController : BaseController
+    {
+        private readonly IPositionDataAccess _positionDataAccess;
+
+        public PositionController(IPositionDataAccess positionDataAccess, IMapper mapper) : base(mapper)
+        {
+            _positionDataAccess = positionDataAccess;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            IEnumerable<Position> dbPositions = await _positionDataAccess.GetPositions();
+            List<PositionViewModel> positions = new List<PositionViewModel>();
+
+            foreach (Position dbPosition in dbPositions)
+            {
+                positions.Add(_mapper.Map<PositionViewModel>(dbPosition));
+            }
+            return View(positions);
+        }
+
+        [HttpPost]
+        public IActionResult Create(PositionViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                _positionDataAccess.InsertPosition(_mapper.Map<Position>(model));
+                ModelState.Clear();
+                return RedirectToAction("Index");
+            }
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Update(int id)
+        {
+
+            Position position = await _positionDataAccess.GetPosition(id);
+            return View(_mapper.Map<PositionViewModel>(position));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(int id, PositionViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _positionDataAccess.UpdatePosition(_mapper.Map<Position>(model));
+                }
+                catch (Oracle.ManagedDataAccess.Client.OracleException ex)
+                {
+                    ViewBag.ErrorMessage = $"Position {GetExceptionMessage(ex.Number)}";
+                    return View(model);
+                }
+                ModelState.Clear();
+                return RedirectToAction("Index");
+            }
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            Position position = await _positionDataAccess.GetPosition(id);
+            return View(_mapper.Map<PositionViewModel>(position));
+        }
+
+        [HttpPost]
+        public IActionResult Delete(int id, PositionViewModel model)
+        {
+            try
+            {
+                _positionDataAccess.DeletePosition(id);
+            }
+            catch (Oracle.ManagedDataAccess.Client.OracleException ex)
+            {
+                ViewBag.ErrorMessage = $"Position {GetExceptionMessage(ex.Number)}";
+                return View(model);
+            }
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public IActionResult ShowDelete(int id)
+        {
+            return RedirectToAction("Delete", new { id = id });
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+
+    }
+}
