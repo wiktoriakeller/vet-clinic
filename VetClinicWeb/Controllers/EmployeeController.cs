@@ -35,7 +35,6 @@ namespace VetClinicWeb.Controllers
             List<Position> positions = (List<Position>)await _positionDataAccess.GetPositions();
             List<Facility> facilities= (List<Facility>)await _facilityDataAccess.GetFacilities();
 
-
             IDictionary<int, Position> positionsDic = positions.ToDictionary(p => p.PositionId);
             IDictionary<int, Facility> facilitiesDic = facilities.ToDictionary(p => p.FacilityId);
 
@@ -69,7 +68,6 @@ namespace VetClinicWeb.Controllers
             employee.FacilityAddress= facility.Address;
             return View(employee);
         }
-
 
         [HttpPost]
         public async Task<IActionResult> Create(EmployeeViewModel model)

@@ -6,6 +6,8 @@ using VetClinicWeb.Models;
 using System.Threading.Tasks;
 using AutoMapper;
 using System.Linq;
+using System;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace VetClinicWeb.Controllers
 {
@@ -19,13 +21,25 @@ namespace VetClinicWeb.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string search)
         {
             var dbFacilities = await _facilityDataAccess.GetFacilities();
             List<FacilityViewModel> facilities = new List<FacilityViewModel>();
 
             foreach (var dbFacility in dbFacilities)
                 facilities.Add(_mapper.Map<FacilityViewModel>(dbFacility));
+
+            if(!string.IsNullOrEmpty(search))
+            {
+                search = search.ToLower();
+                
+                var searched = facilities.Where(fac => fac.Address.ToLower().Contains(search));
+                if(searched.Any())
+                    return View(searched);
+                
+                searched = facilities.Where(fac => fac.PhoneNumber.Contains(search));
+                return View(searched);
+            }
 
             return View(facilities);
         }
