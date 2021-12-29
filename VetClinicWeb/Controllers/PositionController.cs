@@ -9,19 +9,15 @@ using System.Linq;
 
 namespace VetClinicWeb.Controllers
 {
-    public class PositionController : BaseController
+    public class PositionController : BaseOperationsController<Position, PositionViewModel>
     {
-        private readonly IDataAccess<Position> _positionDataAccess;
 
-        public PositionController(IDataAccess<Position> positionDataAccess, IMapper mapper) : base(mapper)
-        {
-            _positionDataAccess = positionDataAccess;
-        }
+        public PositionController(IDataAccess<Position> positionDataAccess, IMapper mapper) : base(mapper, positionDataAccess) { }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            IEnumerable<Position> dbPositions = await _positionDataAccess.Get();
+            IEnumerable<Position> dbPositions = await _dataAccess.Get();
             List<PositionViewModel> positions = new List<PositionViewModel>();
 
             foreach (Position dbPosition in dbPositions)
@@ -30,69 +26,17 @@ namespace VetClinicWeb.Controllers
             return View(positions);
         }
 
-        [HttpGet]
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Create(PositionViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                await _positionDataAccess.Insert(_mapper.Map<Position>(model));
-                ModelState.Clear();
-                return RedirectToAction("Index");
-            }
-
-            return View(model);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Update(int id)
-        {
-            Position position = await _positionDataAccess.Get(id);
-            return View(_mapper.Map<PositionViewModel>(position));
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Update(int id, PositionViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                await _positionDataAccess.Update(_mapper.Map<Position>(model));
-                ModelState.Clear();
-                return RedirectToAction("Index");
-            }
-
-            return View(model);
-        }
-
-        [HttpGet]
-        public IActionResult ShowDelete(int id)
-        {
-            return RedirectToAction("Delete", new { id = id });
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Delete(int id)
-        {
-            Position position = await _positionDataAccess.Get(id);
-            return View(_mapper.Map<PositionViewModel>(position));
-        }
-
         [HttpPost]
         public async Task<IActionResult> Delete(int id, PositionViewModel model)
         {
             try
             {
-                await _positionDataAccess.Delete(id);
+                await _dataAccess.Delete(id);
             }
             catch (Oracle.ManagedDataAccess.Client.OracleException ex)
             {
                 ViewBag.ErrorMessage = $"Position {GetExceptionMessage(ex.Number)}";
-                var facility = await _positionDataAccess.Get(id);
+                var facility = await _dataAccess.Get(id);
                 return View(_mapper.Map<PositionViewModel>(facility));
             }
             return RedirectToAction("Index");
