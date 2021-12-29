@@ -7,7 +7,7 @@ using Dapper;
 
 namespace DataAccess.Access
 {
-    public class FacilityDataAccess : Access, IFacilityDataAccess
+    public class FacilityDataAccess : Access, IDataAccess<Facility>
     {
         public FacilityDataAccess(ISQLDataAccess db) : base(db) { }
 

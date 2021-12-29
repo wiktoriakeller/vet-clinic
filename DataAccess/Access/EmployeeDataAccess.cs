@@ -7,11 +7,11 @@ using Dapper;
 
 namespace DataAccess.Access
 {
-    public class EmployeeDataAccess : Access, IEmployeeDataAccess
+    public class EmployeeDataAccess : Access, IDataAccess<Employee>
     {
         public EmployeeDataAccess(ISQLDataAccess db) : base(db) { }
 
-        public Task<IEnumerable<Employee>> GetEmployees()
+        public Task<IEnumerable<Employee>> Get()
         {
             string sql = "select * from employees";
             return _db.LoadData<Employee>(sql);

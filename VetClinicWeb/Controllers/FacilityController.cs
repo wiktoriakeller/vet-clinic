@@ -13,10 +13,10 @@ namespace VetClinicWeb.Controllers
 {
     public class FacilityController : BaseController
     {
-        private readonly IFacilityDataAccess _facilityDataAccess;
+        private readonly IDataAccess<Facility> _facilityDataAccess;
         private List<SelectListItem> _options;
 
-        public FacilityController(IFacilityDataAccess facilityDataAccess, IMapper mapper) : base(mapper)
+        public FacilityController(IDataAccess<Facility> facilityDataAccess, IMapper mapper) : base(mapper)
         {
             _facilityDataAccess = facilityDataAccess;
             var listOfFieldNames = typeof(Facility).GetProperties().Select(f => f.Name).ToList();

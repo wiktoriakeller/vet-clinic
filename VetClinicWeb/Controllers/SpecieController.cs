@@ -11,8 +11,8 @@ namespace VetClinicWeb.Controllers
 {
     public class SpecieController : BaseController
     {
-        private readonly ISpecieDataAccess _specieDataAccess;
-        public SpecieController(ISpecieDataAccess SpecieDataAccess, IMapper mapper) : base(mapper)
+        private readonly IDataAccess<Specie> _specieDataAccess;
+        public SpecieController(IDataAccess<Specie> SpecieDataAccess, IMapper mapper) : base(mapper)
         {
             _specieDataAccess = SpecieDataAccess;
         }

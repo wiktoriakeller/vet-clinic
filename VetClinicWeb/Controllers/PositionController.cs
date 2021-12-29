@@ -11,9 +11,9 @@ namespace VetClinicWeb.Controllers
 {
     public class PositionController : BaseController
     {
-        private readonly IPositionDataAccess _positionDataAccess;
+        private readonly IDataAccess<Position> _positionDataAccess;
 
-        public PositionController(IPositionDataAccess positionDataAccess, IMapper mapper) : base(mapper)
+        public PositionController(IDataAccess<Position> positionDataAccess, IMapper mapper) : base(mapper)
         {
             _positionDataAccess = positionDataAccess;
         }

@@ -13,13 +13,13 @@ namespace VetClinicWeb.Controllers
 {
     public class EmployeeController : BaseController
     {
-        private readonly IEmployeeDataAccess _employeeDataAccess;
-        private readonly IPositionDataAccess _positionDataAccess;
-        private readonly IFacilityDataAccess _facilityDataAccess;
+        private readonly IDataAccess<Employee> _employeeDataAccess;
+        private readonly IDataAccess<Position> _positionDataAccess;
+        private readonly IDataAccess<Facility> _facilityDataAccess;
 
-        public EmployeeController(IEmployeeDataAccess employeeDataAccess,
-            IPositionDataAccess positionDataAccess,
-            IFacilityDataAccess facilityDataAcces,
+        public EmployeeController(IDataAccess<Employee> employeeDataAccess,
+            IDataAccess<Position> positionDataAccess,
+            IDataAccess<Facility> facilityDataAcces,
             IMapper mapper) : base(mapper)
         {
             _employeeDataAccess = employeeDataAccess;
@@ -30,7 +30,7 @@ namespace VetClinicWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var dbEmployees = await _employeeDataAccess.GetEmployees();
+            var dbEmployees = await _employeeDataAccess.Get();
             List<EmployeeViewModel> employees = new List<EmployeeViewModel>();
             List<Position> positions = (List<Position>)await _positionDataAccess.Get();
             List<Facility> facilities= (List<Facility>)await _facilityDataAccess.Get();

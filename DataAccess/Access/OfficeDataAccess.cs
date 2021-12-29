@@ -7,10 +7,10 @@ using Dapper;
 
 namespace DataAccess.Access
 {
-    public class OfficeDataAccess : Access, IOfficeDataAccess
+    public class OfficeDataAccess : Access, IDataAccess<Office>
     {
         public OfficeDataAccess(ISQLDataAccess db) : base(db) { }
-        public Task<IEnumerable<Office>> GetOffices()
+        public Task<IEnumerable<Office>> Get()
         {
             string sql = "select * from offices";
             return _db.LoadData<Office>(sql);

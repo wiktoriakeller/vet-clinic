@@ -7,7 +7,7 @@ using Dapper;
 
 namespace DataAccess.Access
 {
-    public class PositionDataAccess : Access, IPositionDataAccess
+    public class PositionDataAccess : Access, IDataAccess<Position>
     {
         public PositionDataAccess(ISQLDataAccess db) : base(db) { }
 

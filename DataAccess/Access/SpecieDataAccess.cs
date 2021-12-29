@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Access
 {
-    public class SpecieDataAccess : Access, ISpecieDataAccess
+    public class SpecieDataAccess : Access, IDataAccess<Specie>
     {
         public SpecieDataAccess(ISQLDataAccess db) : base(db) { }
 
