@@ -6,7 +6,7 @@ using VetClinicWeb.Models;
 using System.Threading.Tasks;
 using AutoMapper;
 using System.Linq;
-using System;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace VetClinicWeb.Controllers
@@ -14,30 +14,47 @@ namespace VetClinicWeb.Controllers
     public class FacilityController : BaseController
     {
         private readonly IFacilityDataAccess _facilityDataAccess;
+        private List<SelectListItem> _options;
 
         public FacilityController(IFacilityDataAccess facilityDataAccess, IMapper mapper) : base(mapper)
         {
             _facilityDataAccess = facilityDataAccess;
+            var listOfFieldNames = typeof(Facility).GetProperties().Select(f => f.Name).ToList();
+            var restricted = new List<string> { "id" };
+            _options = new List<SelectListItem>();
+
+            foreach (var field in listOfFieldNames)
+            {
+                if(!restricted.Any(str => field.ToLower().Contains(str)))
+                    _options.Add(new SelectListItem { Text = string.Join(" ", Regex.Split(field, @"(?<!^)(?=[A-Z])")) });
+            }
+
+            _options.Add(new SelectListItem { Text = "Any" });
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(string search)
+        public async Task<IActionResult> Index(string option, string search)
         {
+            ViewBag.Options = _options;
+
             var dbFacilities = await _facilityDataAccess.GetFacilities();
-            List<FacilityViewModel> facilities = new List<FacilityViewModel>();
+            var facilities = new List<FacilityViewModel>();
 
             foreach (var dbFacility in dbFacilities)
                 facilities.Add(_mapper.Map<FacilityViewModel>(dbFacility));
 
-            if(!string.IsNullOrEmpty(search))
+            if(!string.IsNullOrEmpty(search) && !string.IsNullOrEmpty(option))
             {
                 search = search.ToLower();
-                
-                var searched = facilities.Where(fac => fac.Address.ToLower().Contains(search));
-                if(searched.Any())
-                    return View(searched);
-                
-                searched = facilities.Where(fac => fac.PhoneNumber.Contains(search));
+                option = option.ToLower();
+                var searched = new List<FacilityViewModel>();
+
+                if (option == "address" || option == "any")
+                    searched.AddRange(facilities.Where(fac => fac.Address.ToLower().Contains(search)));
+
+                if (option == "phone number" || option == "any")
+                    searched.AddRange(facilities.Where(fac => fac.PhoneNumber.ToLower().Contains(search)));
+
                 return View(searched);
             }
 
