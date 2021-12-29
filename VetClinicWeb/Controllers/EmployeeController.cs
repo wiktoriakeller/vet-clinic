@@ -155,5 +155,21 @@ namespace VetClinicWeb.Controllers
             employee.FacilityAddress = facility.Address;
             return employee;
         }
+
+        [AcceptVerbs("Get", "Post")]
+        public async Task<IActionResult> isSalaryInRangeAsync(EmployeeViewModel model)
+        {
+            Position position = await _positionDataAccess.GetPosition(model.Position);
+            if (model.Salary > position.SalaryMax)
+            {
+                return Json($"Salary is greater than the maximum salary for this position: {position.SalaryMax}");
+            }
+            else if(model.Salary < position.SalaryMin)
+            {
+                return Json($"Salary is less than the minimum salary for this position: {position.SalaryMin}");
+            }
+            else
+                return Json(true);
+        }
     }
 }
