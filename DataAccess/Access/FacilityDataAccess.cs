@@ -11,13 +11,13 @@ namespace DataAccess.Access
     {
         public FacilityDataAccess(ISQLDataAccess db) : base(db) { }
 
-        public Task<IEnumerable<Facility>> GetFacilities()
+        public Task<IEnumerable<Facility>> Get()
         {
             string sql = "select * from facilities";
             return _db.LoadData<Facility>(sql);
         }
 
-        public async Task<Facility> GetFacility(int facilityId)
+        public async Task<Facility> Get(int facilityId)
         {
             string sql = "select * from facilities where facilityId = :Id";
 
@@ -30,7 +30,7 @@ namespace DataAccess.Access
             return results.First();
         }
 
-        public Task InsertFacility(Facility facility)
+        public Task Insert(Facility facility)
         {
             string sql = "insert into facilities(address, phoneNumber) values(:Address, :PhoneNumber)";
 
@@ -43,7 +43,7 @@ namespace DataAccess.Access
             return _db.SaveData(sql, dynamicParameters);
         }
 
-        public Task UpdateFacility(Facility facility)
+        public Task Update(Facility facility)
         {
             string sql = "update facilities set address = :Address, phoneNumber = :PhoneNumber where facilityId = :Id";
 
@@ -57,7 +57,7 @@ namespace DataAccess.Access
             return _db.SaveData(sql, dynamicParameters);
         }
 
-        public Task DeleteFacility(int facilityId)
+        public Task Delete(int facilityId)
         {
             string sql = "delete from facilities where facilityId = :Id";
 

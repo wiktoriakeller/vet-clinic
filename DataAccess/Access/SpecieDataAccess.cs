@@ -13,13 +13,13 @@ namespace DataAccess.Access
     {
         public SpecieDataAccess(ISQLDataAccess db) : base(db) { }
 
-        public Task<IEnumerable<Specie>> GetSpecies()
+        public Task<IEnumerable<Specie>> Get()
         {
             string sql = "select * from Species";
             return _db.LoadData<Specie>(sql);
         }
 
-        public async Task<Specie> GetSpecie(int specieId)
+        public async Task<Specie> Get(int specieId)
         {
             string sql = "select * from Species where speciesId = :Id";
 
@@ -32,7 +32,7 @@ namespace DataAccess.Access
             return results.First();
         }
 
-        public Task InsertSpecie(Specie specie)
+        public Task Insert(Specie specie)
         {
             string sql = "insert into Species(Name) values(:Name)";
 
@@ -44,7 +44,7 @@ namespace DataAccess.Access
             return _db.SaveData(sql, dynamicParameters);
         }
 
-        public Task UpdateSpecie(Specie specie)
+        public Task Update(Specie specie)
         {
             string sql = "update Species set name = :name where SpeciesId = :Id";
 
@@ -57,7 +57,7 @@ namespace DataAccess.Access
             return _db.SaveData(sql, dynamicParameters);
         }
 
-        public Task DeleteSpecie(int specieId)
+        public Task Delete(int specieId)
         {
             string sql = "delete from Species where SpeciesId = :Id";
 

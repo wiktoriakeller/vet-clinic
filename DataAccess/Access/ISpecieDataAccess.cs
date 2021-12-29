@@ -6,10 +6,10 @@ namespace DataAccess.Access
 {
     public interface ISpecieDataAccess
     {
-        Task DeleteSpecie(int specieId);
-        Task<Specie> GetSpecie(int specieId);
-        Task<IEnumerable<Specie>> GetSpecies();
-        Task InsertSpecie(Specie specie);
-        Task UpdateSpecie(Specie specie);
+        Task Delete(int specieId);
+        Task<Specie> Get(int specieId);
+        Task<IEnumerable<Specie>> Get();
+        Task Insert(Specie specie);
+        Task Update(Specie specie);
     }
 }

@@ -37,7 +37,7 @@ namespace VetClinicWeb.Controllers
         {
             ViewBag.Options = _options;
 
-            var dbFacilities = await _facilityDataAccess.GetFacilities();
+            var dbFacilities = await _facilityDataAccess.Get();
             var facilities = new List<FacilityViewModel>();
 
             foreach (var dbFacility in dbFacilities)
@@ -72,7 +72,7 @@ namespace VetClinicWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _facilityDataAccess.InsertFacility(_mapper.Map<Facility>(model));
+                await _facilityDataAccess.Insert(_mapper.Map<Facility>(model));
                 ModelState.Clear();
                 return RedirectToAction("Index");
             }
@@ -83,7 +83,7 @@ namespace VetClinicWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Update(int id)
         {
-            var facility = await _facilityDataAccess.GetFacility(id);
+            var facility = await _facilityDataAccess.Get(id);
             return View(_mapper.Map<FacilityViewModel>(facility));
         }
 
@@ -92,7 +92,7 @@ namespace VetClinicWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _facilityDataAccess.UpdateFacility(_mapper.Map<Facility>(model));
+                await _facilityDataAccess.Update(_mapper.Map<Facility>(model));
                 ModelState.Clear();
                 return RedirectToAction("Index");
             }
@@ -109,7 +109,7 @@ namespace VetClinicWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            var facility = await _facilityDataAccess.GetFacility(id);
+            var facility = await _facilityDataAccess.Get(id);
             return View(_mapper.Map<FacilityViewModel>(facility));
         }
 
@@ -118,12 +118,12 @@ namespace VetClinicWeb.Controllers
         {
             try
             {
-                await _facilityDataAccess.DeleteFacility(id);
+                await _facilityDataAccess.Delete(id);
             }
             catch (Oracle.ManagedDataAccess.Client.OracleException ex)
             {
                 ViewBag.ErrorMessage = $"Facility {GetExceptionMessage(ex.Number)}";
-                var facility = await _facilityDataAccess.GetFacility(id);
+                var facility = await _facilityDataAccess.Get(id);
                 return View(_mapper.Map<FacilityViewModel>(facility));
             }
 
@@ -134,7 +134,7 @@ namespace VetClinicWeb.Controllers
         public async Task<IActionResult> IsAddressUnique(string address, int facilityId)
         {
             address = address.Trim();
-            var results = await _facilityDataAccess.GetFacilities();
+            var results = await _facilityDataAccess.Get();
             bool isAddressInUse = results.FirstOrDefault(x => (x.Address == address && x.FacilityId != facilityId)) == null;
 
             if (isAddressInUse == false)

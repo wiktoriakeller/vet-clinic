@@ -20,7 +20,7 @@ namespace VetClinicWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            IEnumerable<Specie> dbSpecies = await _specieDataAccess.GetSpecies();
+            IEnumerable<Specie> dbSpecies = await _specieDataAccess.Get();
             List<SpecieViewModel> species = new List<SpecieViewModel>();
 
             foreach (Specie dbSpecie in dbSpecies)
@@ -40,7 +40,7 @@ namespace VetClinicWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _specieDataAccess.InsertSpecie(_mapper.Map<Specie>(model));
+                await _specieDataAccess.Insert(_mapper.Map<Specie>(model));
                 ModelState.Clear();
                 return RedirectToAction("Index");
             }
@@ -51,7 +51,7 @@ namespace VetClinicWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Update(int id)
         {
-            Specie specie = await _specieDataAccess.GetSpecie(id);
+            Specie specie = await _specieDataAccess.Get(id);
             return View(_mapper.Map<SpecieViewModel>(specie));
         }
 
@@ -60,7 +60,7 @@ namespace VetClinicWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _specieDataAccess.UpdateSpecie(_mapper.Map<Specie>(model));
+                await _specieDataAccess.Update(_mapper.Map<Specie>(model));
                 ModelState.Clear();
                 return RedirectToAction("Index");
             }
@@ -77,7 +77,7 @@ namespace VetClinicWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            Specie specie = await _specieDataAccess.GetSpecie(id);
+            Specie specie = await _specieDataAccess.Get(id);
             return View(_mapper.Map<SpecieViewModel>(specie));
         }
 
@@ -86,12 +86,12 @@ namespace VetClinicWeb.Controllers
         {
             try
             {
-                await _specieDataAccess.DeleteSpecie(id);
+                await _specieDataAccess.Delete(id);
             }
             catch (Oracle.ManagedDataAccess.Client.OracleException ex)
             {
                 ViewBag.ErrorMessage = $"Specie {GetExceptionMessage(ex.Number)}";
-                var specie = await _specieDataAccess.GetSpecie(id);
+                var specie = await _specieDataAccess.Get(id);
                 return View(_mapper.Map<SpecieViewModel>(specie));
             }
             return RedirectToAction("Index");

@@ -21,7 +21,7 @@ namespace VetClinicWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            IEnumerable<Position> dbPositions = await _positionDataAccess.GetPositions();
+            IEnumerable<Position> dbPositions = await _positionDataAccess.Get();
             List<PositionViewModel> positions = new List<PositionViewModel>();
 
             foreach (Position dbPosition in dbPositions)
@@ -41,7 +41,7 @@ namespace VetClinicWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _positionDataAccess.InsertPosition(_mapper.Map<Position>(model));
+                await _positionDataAccess.Insert(_mapper.Map<Position>(model));
                 ModelState.Clear();
                 return RedirectToAction("Index");
             }
@@ -52,7 +52,7 @@ namespace VetClinicWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Update(int id)
         {
-            Position position = await _positionDataAccess.GetPosition(id);
+            Position position = await _positionDataAccess.Get(id);
             return View(_mapper.Map<PositionViewModel>(position));
         }
 
@@ -61,7 +61,7 @@ namespace VetClinicWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _positionDataAccess.UpdatePosition(_mapper.Map<Position>(model));
+                await _positionDataAccess.Update(_mapper.Map<Position>(model));
                 ModelState.Clear();
                 return RedirectToAction("Index");
             }
@@ -78,7 +78,7 @@ namespace VetClinicWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            Position position = await _positionDataAccess.GetPosition(id);
+            Position position = await _positionDataAccess.Get(id);
             return View(_mapper.Map<PositionViewModel>(position));
         }
 
@@ -87,12 +87,12 @@ namespace VetClinicWeb.Controllers
         {
             try
             {
-                await _positionDataAccess.DeletePosition(id);
+                await _positionDataAccess.Delete(id);
             }
             catch (Oracle.ManagedDataAccess.Client.OracleException ex)
             {
                 ViewBag.ErrorMessage = $"Position {GetExceptionMessage(ex.Number)}";
-                var facility = await _positionDataAccess.GetPosition(id);
+                var facility = await _positionDataAccess.Get(id);
                 return View(_mapper.Map<PositionViewModel>(facility));
             }
             return RedirectToAction("Index");

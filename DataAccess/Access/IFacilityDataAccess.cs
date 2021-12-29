@@ -6,10 +6,10 @@ namespace DataAccess.Access
 {
     public interface IFacilityDataAccess
     {
-        Task DeleteFacility(int facilityId);
-        Task<IEnumerable<Facility>> GetFacilities();
-        Task<Facility> GetFacility(int facilityId);
-        Task InsertFacility(Facility facility);
-        Task UpdateFacility(Facility facility);
+        Task Delete(int facilityId);
+        Task<IEnumerable<Facility>> Get();
+        Task<Facility> Get(int facilityId);
+        Task Insert(Facility facility);
+        Task Update(Facility facility);
     }
 }

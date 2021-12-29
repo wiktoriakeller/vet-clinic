@@ -6,10 +6,10 @@ namespace DataAccess.Access
 {
     public interface IPositionDataAccess
     {
-        Task DeletePosition(int positionId);
-        Task<Position> GetPosition(int positionId);
-        Task<IEnumerable<Position>> GetPositions();
-        Task InsertPosition(Position position);
-        Task UpdatePosition(Position position);
+        Task Delete(int positionId);
+        Task<Position> Get(int positionId);
+        Task<IEnumerable<Position>> Get();
+        Task Insert(Position position);
+        Task Update(Position position);
     }
 }

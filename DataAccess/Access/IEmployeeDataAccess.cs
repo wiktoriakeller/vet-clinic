@@ -6,10 +6,10 @@ namespace DataAccess.Access
 {
     public interface IEmployeeDataAccess
     {
-        Task DeleteEmployee(int EmployeeId);
-        Task<Employee> GetEmployee(int EmployeeId);
+        Task Delete(int EmployeeId);
+        Task<Employee> Get(int EmployeeId);
         Task<IEnumerable<Employee>> GetEmployees();
-        Task InsertEmployee(Employee Employee);
-        Task UpdateEmployee(Employee Employee);
+        Task Insert(Employee Employee);
+        Task Update(Employee Employee);
     }
 }

@@ -6,10 +6,10 @@ namespace DataAccess.Access
 {
     public interface IOfficeDataAccess
     {
-        Task DeleteOffice(int OfficeId);
-        Task<Office> GetOffice(int OfficeId);
+        Task Delete(int OfficeId);
+        Task<Office> Get(int OfficeId);
         Task<IEnumerable<Office>> GetOffices();
-        Task InsertOffice(Office Office);
-        Task UpdateOffice(Office Office);
+        Task Insert(Office Office);
+        Task Update(Office Office);
     }
 }
