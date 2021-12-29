@@ -30,6 +30,7 @@ namespace VetClinicWeb
             services.AddSingleton<IOfficeDataAccess, OfficeDataAccess>();
             services.AddSingleton<IPositionDataAccess, PositionDataAccess>();
             services.AddSingleton<IEmployeeDataAccess, EmployeeDataAccess>();
+            services.AddSingleton<ISpecieDataAccess, SpecieDataAccess>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddRazorPages();
             services.AddControllersWithViews();
