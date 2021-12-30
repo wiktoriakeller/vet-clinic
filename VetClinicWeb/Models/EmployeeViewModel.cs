@@ -19,12 +19,10 @@ namespace VetClinicWeb.Models
 		public string Surname { get; set; }
 		
 		[Required]
-		[DataType(DataType.Currency)]
 		[Remote(action: "isSalaryInRange", controller: "Employee", AdditionalFields = "Position")]
 		public double Salary { get; set; }
 
 		[Required]
-		[DataType(DataType.Currency)]
 		[DisplayName("Bonus salary")]
 		public double BonusSalary { get; set; }
 

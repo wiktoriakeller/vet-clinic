@@ -13,18 +13,6 @@ namespace VetClinicWeb.Controllers
     {
         public PositionController(IDataAccess<Position> positionDataAccess, IMapper mapper) : base(mapper, positionDataAccess) { }
 
-        [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            IEnumerable<Position> dbPositions = await _dataAccess.Get();
-            List<PositionViewModel> positions = new List<PositionViewModel>();
-
-            foreach (Position dbPosition in dbPositions)
-                positions.Add(_mapper.Map<PositionViewModel>(dbPosition));
-
-            return View(positions);
-        }
-
         [AcceptVerbs("Get", "Post")]
         public IActionResult IsSalaryValid(PositionViewModel model)
         {
