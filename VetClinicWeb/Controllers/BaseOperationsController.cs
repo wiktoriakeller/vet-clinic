@@ -8,15 +8,18 @@ using AutoMapper;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Reflection;
 
 namespace VetClinicWeb.Controllers
 {
     public class BaseOperationsController<T, U> : BaseController
     {
+        protected IDictionary<string, string> _propertiesNames;
         protected readonly IDataAccess<T> _dataAccess;
 
         public BaseOperationsController(IMapper mapper, IDataAccess<T> dataAccess) : base(mapper)
         {
+            _propertiesNames = new Dictionary<string, string>();
             _dataAccess = dataAccess;
         }
 

@@ -24,7 +24,11 @@ namespace VetClinicWeb.Controllers
             foreach (var field in listOfFieldNames)
             {
                 if(!restricted.Any(str => field.ToLower().Contains(str)))
-                    _options.Add(new SelectListItem { Text = string.Join(" ", Regex.Split(field, @"(?<!^)(?=[A-Z])")) });
+                {
+                    string name = string.Join(" ", Regex.Split(field, @"(?<!^)(?=[A-Z])"));
+                    _options.Add(new SelectListItem { Text = name });
+                    _propertiesNames[name] = field;
+                }
             }
 
             _options.Add(new SelectListItem { Text = "Any" });
@@ -34,29 +38,28 @@ namespace VetClinicWeb.Controllers
         public async Task<IActionResult> Index(string option, string search)
         {
             ViewBag.Options = _options;
+            var dbEntities = await _dataAccess.Get();
+            var entities = new List<FacilityViewModel>();
 
-            var dbFacilities = await _dataAccess.Get();
-            var facilities = new List<FacilityViewModel>();
-
-            foreach (var dbFacility in dbFacilities)
-                facilities.Add(_mapper.Map<FacilityViewModel>(dbFacility));
+            foreach (var dbFacility in dbEntities)
+                entities.Add(_mapper.Map<FacilityViewModel>(dbFacility));
 
             if(!string.IsNullOrEmpty(search) && !string.IsNullOrEmpty(option))
             {
                 search = search.ToLower();
-                option = option.ToLower();
+                option = option.ToLower().Trim();
                 var searched = new List<FacilityViewModel>();
-
-                if (option == "address" || option == "any")
-                    searched.AddRange(facilities.Where(fac => fac.Address.ToLower().Contains(search)));
-
-                if (option == "phone number" || option == "any")
-                    searched.AddRange(facilities.Where(fac => fac.PhoneNumber.ToLower().Contains(search)));
+                
+                foreach(var val in _propertiesNames)
+                {
+                    if(option == val.Key.ToLower() || option == "any")
+                        searched.AddRange(entities.Where(fac => fac.GetType().GetProperty(val.Value).GetValue(fac, null).ToString().ToLower().Contains(search)));
+                }
 
                 return View(searched);
             }
 
-            return View(facilities);
+            return View(entities);
         }
 
         [AcceptVerbs("Get", "Post")]

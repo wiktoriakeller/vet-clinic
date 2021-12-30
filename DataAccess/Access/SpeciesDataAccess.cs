@@ -9,17 +9,17 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Access
 {
-    public class SpecieDataAccess : Access, IDataAccess<Specie>
+    public class SpeciesDataAccess : Access, IDataAccess<Species>
     {
-        public SpecieDataAccess(ISQLDataAccess db) : base(db) { }
+        public SpeciesDataAccess(ISQLDataAccess db) : base(db) { }
 
-        public Task<IEnumerable<Specie>> Get()
+        public Task<IEnumerable<Species>> Get()
         {
             string sql = "select * from Species";
-            return _db.LoadData<Specie>(sql);
+            return _db.LoadData<Species>(sql);
         }
 
-        public async Task<Specie> Get(int specieId)
+        public async Task<Species> Get(int specieId)
         {
             string sql = "select * from Species where speciesId = :Id";
 
@@ -28,11 +28,11 @@ namespace DataAccess.Access
                 Id = specieId
             });
 
-            var results = await _db.LoadData<Specie, DynamicParameters>(sql, dynamicParameters);
+            var results = await _db.LoadData<Species, DynamicParameters>(sql, dynamicParameters);
             return results.First();
         }
 
-        public Task Insert(Specie specie)
+        public Task Insert(Species specie)
         {
             string sql = "insert into Species(Name) values(:Name)";
 
@@ -44,7 +44,7 @@ namespace DataAccess.Access
             return _db.SaveData(sql, dynamicParameters);
         }
 
-        public Task Update(Specie specie)
+        public Task Update(Species specie)
         {
             string sql = "update Species set name = :name where SpeciesId = :Id";
 

@@ -2,7 +2,7 @@
 
 namespace VetClinicWeb.Models
 {
-    public class SpecieViewModel
+    public class SpeciesViewModel
     {
         public int SpeciesId { get; set; }
         [Required]
