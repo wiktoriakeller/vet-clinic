@@ -163,7 +163,7 @@ namespace VetClinicWeb.Controllers
         }
 
         [AcceptVerbs("Get", "Post")]
-        public async Task<IActionResult> isSalaryInRangeAsync(EmployeeViewModel model)
+        public async Task<IActionResult> IsSalaryInRangeAsync(EmployeeViewModel model)
         {
             Position position = await _positionDataAccess.Get(model.Position);
             if (model.Salary > position.SalaryMax)

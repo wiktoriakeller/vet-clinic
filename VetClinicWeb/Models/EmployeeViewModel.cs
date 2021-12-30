@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using VetClinic.DataAnnotationsValidations;
 
 namespace VetClinicWeb.Models
 {
@@ -11,23 +12,30 @@ namespace VetClinicWeb.Models
 		public int EmployeeId { get; set; }
 
 		[Required]
+		[DataType(DataType.Text)]
+		[RegularExpression(@"[A-Za-z]*", ErrorMessage = "Employee name should only contain letters")]
 		[StringLength(50, ErrorMessage = "{0} length must be shorter than {1} characters")]
 		public string Name { get; set; }
 
 		[Required]
+		[DataType(DataType.Text)]
+		[RegularExpression(@"[A-Za-z]*", ErrorMessage = "Employee surname should only contain letters")]
 		[StringLength(50, ErrorMessage = "{0} length must be shorter than {1} characters")]
 		public string Surname { get; set; }
 		
 		[Required]
-		[Remote(action: "isSalaryInRange", controller: "Employee", AdditionalFields = "Position")]
+		[RegularExpression(@"[1-9]{0,1}[0-9]{0,4}[.]?(?=[0-9])[0-9]{0,2}", ErrorMessage = "Salary should be a positive number with no more then two decimal places in the range of 0.00 - 99999.99")]
+		[Remote(action: "IsSalaryInRange", controller: "Employee", AdditionalFields = "Position")]
 		public double Salary { get; set; }
 
 		[Required]
+		[RegularExpression(@"[1-9]{0,1}[0-9]{0,3}[.]?(?=[0-9])[0-9]{0,2}", ErrorMessage = "Bonus salary should be a positive number with no more then two decimal places in the range of 0.00 - 9999.99")]
 		[DisplayName("Bonus salary")]
 		public double BonusSalary { get; set; }
 
 		[Required]
-		[StringLength(150, ErrorMessage = "{0} length must be shorter than {1} characters")]
+		[StringLength(150, ErrorMessage = "{0} length must be between {2} and {1}", MinimumLength = 4)]
+		[ValidAddress] 
 		public string Address { get; set; }
 
 		[Required]

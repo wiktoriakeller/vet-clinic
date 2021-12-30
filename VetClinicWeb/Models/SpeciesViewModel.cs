@@ -5,8 +5,11 @@ namespace VetClinicWeb.Models
     public class SpeciesViewModel
     {
         public int SpeciesId { get; set; }
+
         [Required]
-        [StringLength(50, ErrorMessage = "{0} length must be between {2} and {1} characters", MinimumLength = 1)]
+        [DataType(DataType.Text)]
+        [RegularExpression(@"[A-Za-z]*", ErrorMessage = "Species name should only contain letters")]
+        [StringLength(50, ErrorMessage = "{0} length must be shorter than {1} characters")]
         public string Name { get; set; }
 
     }
