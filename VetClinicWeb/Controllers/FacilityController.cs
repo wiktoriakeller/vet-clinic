@@ -59,23 +59,6 @@ namespace VetClinicWeb.Controllers
             return View(facilities);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Delete(int id, FacilityViewModel model)
-        {
-            try
-            {
-                await _dataAccess.Delete(id);
-            }
-            catch (Oracle.ManagedDataAccess.Client.OracleException ex)
-            {
-                ViewBag.ErrorMessage = $"Facility {GetExceptionMessage(ex.Number)}";
-                var entity = await _dataAccess.Get(id);
-                return View(_mapper.Map<FacilityViewModel>(entity));
-            }
-
-            return RedirectToAction("Index");
-        }
-
         [AcceptVerbs("Get", "Post")]
         public async Task<IActionResult> IsAddressUnique(string address, int facilityId)
         {

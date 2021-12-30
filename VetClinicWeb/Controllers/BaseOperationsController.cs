@@ -65,6 +65,23 @@ namespace VetClinicWeb.Controllers
             return RedirectToAction("Delete", new { id = id });
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id, U model)
+        {
+            try
+            {
+                await _dataAccess.Delete(id);
+            }
+            catch (Oracle.ManagedDataAccess.Client.OracleException ex)
+            {
+                ViewBag.ErrorMessage = $"{typeof(T).Name} {GetExceptionMessage(ex.Number)}";
+                var entity = await _dataAccess.Get(id);
+                return View(_mapper.Map<U>(entity));
+            }
+
+            return RedirectToAction("Index");
+        }
+
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {

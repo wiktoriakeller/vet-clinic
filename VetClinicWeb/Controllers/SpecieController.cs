@@ -23,23 +23,5 @@ namespace VetClinicWeb.Controllers
 
             return View(species);
         }
-
-
-        [HttpPost]
-        public async Task<IActionResult> Delete(int id, SpecieViewModel model)
-        {
-            try
-            {
-                await _dataAccess.Delete(id);
-            }
-            catch (Oracle.ManagedDataAccess.Client.OracleException ex)
-            {
-                ViewBag.ErrorMessage = $"Specie {GetExceptionMessage(ex.Number)}";
-                var specie = await _dataAccess.Get(id);
-                return View(_mapper.Map<SpecieViewModel>(specie));
-            }
-
-            return RedirectToAction("Index");
-        }
     }
 }
