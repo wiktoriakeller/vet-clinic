@@ -12,38 +12,13 @@ using System.Reflection;
 
 namespace VetClinicWeb.Controllers
 {
-    public class BaseOperationsController<T, U> : BaseController
+    public class BaseOperationsController<T, U> : BaseController<U>
     {
-        protected IDictionary<string, string> _propertiesNames;
         protected readonly IDataAccess<T> _dataAccess;
-        protected List<SelectListItem> _options;
 
         public BaseOperationsController(IMapper mapper, IDataAccess<T> dataAccess) : base(mapper)
         {
-            _propertiesNames = new Dictionary<string, string>();
             _dataAccess = dataAccess;
-
-            var listOfFieldNames = typeof(U).GetProperties().Select(f => f.Name).ToList();
-            var restricted = new List<string> { "id" };
-            _options = new List<SelectListItem>();
-
-            foreach (var field in listOfFieldNames)
-            {
-                if (!restricted.Any(str => field.ToLower().Contains(str)))
-                {
-                    string name = string.Join(" ", Regex.Split(field, @"(?<!^)(?=[A-Z])"));
-                    if (name == "Salary Min")
-                        name = "Minimum Salary";
-
-                    if (name == "Salary Max")
-                        name = "Maximum Salary";
-
-                    _options.Add(new SelectListItem { Text = name });
-                    _propertiesNames[name] = field;
-                }
-            }
-
-            _options.Add(new SelectListItem { Text = "Any" });
         }
 
         [HttpGet]
@@ -58,7 +33,7 @@ namespace VetClinicWeb.Controllers
 
             if (!string.IsNullOrEmpty(search) && !string.IsNullOrEmpty(option))
             {
-                search = search.ToLower();
+                search = search.ToLower().Trim();
                 option = option.ToLower();
                 var searched = new List<U>();
 

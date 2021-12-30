@@ -1,10 +1,27 @@
 ﻿@model IEnumerable<VetClinicWeb.Models.EmployeeViewModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Employee";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Employees</h1>
+<h4>List of employees</h4>
+
+<form asp-controller="Employee" asp-action="Index" method="get">
+    <div class="container-md mt-3 mb-3" style="width:50%">
+        <div class="row">
+            <div class="col">
+                @Html.DropDownList("Option", (IEnumerable<SelectListItem>) ViewBag.Options, "Choose", new {@class="form-control"})
+            </div>
+            <div class="col-8">
+                <div class="input-group-append">
+                    <input type="text" name="search" placeholder="Search" class="form-control"/>
+                    <input type="submit" value="Search" class="btn btn-primary"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -57,7 +74,7 @@
             <td>
                 @Html.ActionLink("Update", "Update", new { id=item.EmployeeId }) |
                 @Html.ActionLink("Details", "Details", new { id=item.EmployeeId }) |
-                @Html.ActionLink("Delete", "Delete", new { id=item.EmployeeId })
+                @Html.ActionLink("Delete", "ShowDelete", new { id=item.EmployeeId })
             </td>
         </tr>
 }

@@ -11,7 +11,7 @@ using VetClinicWeb.Models;
 
 namespace VetClinicWeb.Controllers
 {
-    public class EmployeeController : BaseController
+    public class EmployeeController : BaseController<EmployeeViewModel>
     {
         private readonly IDataAccess<Employee> _employeeDataAccess;
         private readonly IDataAccess<Position> _positionDataAccess;
@@ -30,6 +30,8 @@ namespace VetClinicWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            ViewBag.Options = _options;
+
             var dbEmployees = await _employeeDataAccess.Get();
             List<EmployeeViewModel> employees = new List<EmployeeViewModel>();
             List<Position> positions = (List<Position>)await _positionDataAccess.Get();
@@ -120,6 +122,12 @@ namespace VetClinicWeb.Controllers
 
             }
             return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult ShowDelete(int id)
+        {
+            return RedirectToAction("Delete", new { id = id });
         }
 
         public async Task<IActionResult> Delete(int id)
