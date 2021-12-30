@@ -11,14 +11,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace VetClinicWeb.Controllers
 {
-    public class FacilityController : BaseController
+    public class FacilityController : BaseOperationsController<Facility, FacilityViewModel>
     {
-        private readonly IFacilityDataAccess _facilityDataAccess;
-        private List<SelectListItem> _options;
+        private readonly List<SelectListItem> _options;
 
-        public FacilityController(IFacilityDataAccess facilityDataAccess, IMapper mapper) : base(mapper)
+        public FacilityController(IDataAccess<Facility> facilityDataAccess, IMapper mapper) : base(mapper, facilityDataAccess)
         {
-            _facilityDataAccess = facilityDataAccess;
             var listOfFieldNames = typeof(Facility).GetProperties().Select(f => f.Name).ToList();
             var restricted = new List<string> { "id" };
             _options = new List<SelectListItem>();
@@ -37,7 +35,7 @@ namespace VetClinicWeb.Controllers
         {
             ViewBag.Options = _options;
 
-            var dbFacilities = await _facilityDataAccess.GetFacilities();
+            var dbFacilities = await _dataAccess.Get();
             var facilities = new List<FacilityViewModel>();
 
             foreach (var dbFacility in dbFacilities)
@@ -61,70 +59,18 @@ namespace VetClinicWeb.Controllers
             return View(facilities);
         }
 
-        [HttpGet]
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Create(FacilityViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                await _facilityDataAccess.InsertFacility(_mapper.Map<Facility>(model));
-                ModelState.Clear();
-                return RedirectToAction("Index");
-            }
-
-            return View(model);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Update(int id)
-        {
-            var facility = await _facilityDataAccess.GetFacility(id);
-            return View(_mapper.Map<FacilityViewModel>(facility));
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Update(int id, FacilityViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                await _facilityDataAccess.UpdateFacility(_mapper.Map<Facility>(model));
-                ModelState.Clear();
-                return RedirectToAction("Index");
-            }
-
-            return View(model);
-        }
-
-        [HttpGet]
-        public IActionResult ShowDelete(int id)
-        {
-            return RedirectToAction("Delete", new { id = id });
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var facility = await _facilityDataAccess.GetFacility(id);
-            return View(_mapper.Map<FacilityViewModel>(facility));
-        }
-
         [HttpPost]
         public async Task<IActionResult> Delete(int id, FacilityViewModel model)
         {
             try
             {
-                await _facilityDataAccess.DeleteFacility(id);
+                await _dataAccess.Delete(id);
             }
             catch (Oracle.ManagedDataAccess.Client.OracleException ex)
             {
                 ViewBag.ErrorMessage = $"Facility {GetExceptionMessage(ex.Number)}";
-                var facility = await _facilityDataAccess.GetFacility(id);
-                return View(_mapper.Map<FacilityViewModel>(facility));
+                var entity = await _dataAccess.Get(id);
+                return View(_mapper.Map<FacilityViewModel>(entity));
             }
 
             return RedirectToAction("Index");
@@ -134,7 +80,7 @@ namespace VetClinicWeb.Controllers
         public async Task<IActionResult> IsAddressUnique(string address, int facilityId)
         {
             address = address.Trim();
-            var results = await _facilityDataAccess.GetFacilities();
+            var results = await _dataAccess.Get();
             bool isAddressInUse = results.FirstOrDefault(x => (x.Address == address && x.FacilityId != facilityId)) == null;
 
             if (isAddressInUse == false)

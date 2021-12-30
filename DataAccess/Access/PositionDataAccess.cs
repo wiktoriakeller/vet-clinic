@@ -7,17 +7,17 @@ using Dapper;
 
 namespace DataAccess.Access
 {
-    public class PositionDataAccess : Access, IPositionDataAccess
+    public class PositionDataAccess : Access, IDataAccess<Position>
     {
         public PositionDataAccess(ISQLDataAccess db) : base(db) { }
 
-        public Task<IEnumerable<Position>> GetPositions()
+        public Task<IEnumerable<Position>> Get()
         {
             string sql = "select * from positions";
             return _db.LoadData<Position>(sql);
         }
 
-        public async Task<Position> GetPosition(int positionId)
+        public async Task<Position> Get(int positionId)
         {
             string sql = "select * from positions where positionId = :Id";
 
@@ -30,7 +30,7 @@ namespace DataAccess.Access
             return results.First();
         }
 
-        public Task InsertPosition(Position position)
+        public Task Insert(Position position)
         {
             string sql = "insert into positions(name, salaryMin, salaryMax) values(:Name, :SalaryMin, :SalaryMax)";
 
@@ -44,7 +44,7 @@ namespace DataAccess.Access
             return _db.SaveData(sql, dynamicParameters);
         }
 
-        public Task UpdatePosition(Position position)
+        public Task Update(Position position)
         {
             string sql = "update positions set name = :Name, salaryMin = :SalaryMin, salaryMax = :SalaryMax where positionId = :Id";
 
@@ -59,7 +59,7 @@ namespace DataAccess.Access
             return _db.SaveData(sql, dynamicParameters);
         }
 
-        public Task DeletePosition(int positionId)
+        public Task Delete(int positionId)
         {
             string sql = "delete from positions where positionId = :Id";
 

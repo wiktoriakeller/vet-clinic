@@ -7,17 +7,17 @@ using Dapper;
 
 namespace DataAccess.Access
 {
-    public class EmployeeDataAccess : Access, IEmployeeDataAccess
+    public class EmployeeDataAccess : Access, IDataAccess<Employee>
     {
         public EmployeeDataAccess(ISQLDataAccess db) : base(db) { }
 
-        public Task<IEnumerable<Employee>> GetEmployees()
+        public Task<IEnumerable<Employee>> Get()
         {
             string sql = "select * from employees";
             return _db.LoadData<Employee>(sql);
         }
 
-        public async Task<Employee> GetEmployee(int EmployeeId)
+        public async Task<Employee> Get(int EmployeeId)
         {
             string sql = "select * from employees where employeeId = :Id";
 
@@ -30,7 +30,7 @@ namespace DataAccess.Access
             return results.First();
         }
 
-        public Task InsertEmployee(Employee Employee)
+        public Task Insert(Employee Employee)
         {
             string sql = "insert into employees(name, surname, salary, bonusSalary, address, phoneNumber, position, facility) values(:Name, :Surname, :Salary, :BonusSalary, :Address, :PhoneNumber, :Position, :Facility)";
 
@@ -49,7 +49,7 @@ namespace DataAccess.Access
             return _db.SaveData(sql, dynamicParameters);
         }
 
-        public Task UpdateEmployee(Employee Employee)
+        public Task Update(Employee Employee)
         {
             string sql = "update employees set name = :Name, surname = :Surname, salary = :Salary, bonusSalary = :BonusSalary, address = :Address, phoneNumber = :PhoneNumber, position = :Position, facility = :Facility where employeeId = :Id";
 
@@ -69,7 +69,7 @@ namespace DataAccess.Access
             return _db.SaveData(sql, dynamicParameters);
         }
 
-        public Task DeleteEmployee(int EmployeeId)
+        public Task Delete(int EmployeeId)
         {
             string sql = "delete from employees where employeeId = :Id";
 

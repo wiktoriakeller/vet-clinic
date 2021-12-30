@@ -13,13 +13,13 @@ namespace VetClinicWeb.Controllers
 {
     public class EmployeeController : BaseController
     {
-        private readonly IEmployeeDataAccess _employeeDataAccess;
-        private readonly IPositionDataAccess _positionDataAccess;
-        private readonly IFacilityDataAccess _facilityDataAccess;
+        private readonly IDataAccess<Employee> _employeeDataAccess;
+        private readonly IDataAccess<Position> _positionDataAccess;
+        private readonly IDataAccess<Facility> _facilityDataAccess;
 
-        public EmployeeController(IEmployeeDataAccess employeeDataAccess,
-            IPositionDataAccess positionDataAccess,
-            IFacilityDataAccess facilityDataAcces,
+        public EmployeeController(IDataAccess<Employee> employeeDataAccess,
+            IDataAccess<Position> positionDataAccess,
+            IDataAccess<Facility> facilityDataAcces,
             IMapper mapper) : base(mapper)
         {
             _employeeDataAccess = employeeDataAccess;
@@ -30,10 +30,10 @@ namespace VetClinicWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var dbEmployees = await _employeeDataAccess.GetEmployees();
+            var dbEmployees = await _employeeDataAccess.Get();
             List<EmployeeViewModel> employees = new List<EmployeeViewModel>();
-            List<Position> positions = (List<Position>)await _positionDataAccess.GetPositions();
-            List<Facility> facilities= (List<Facility>)await _facilityDataAccess.GetFacilities();
+            List<Position> positions = (List<Position>)await _positionDataAccess.Get();
+            List<Facility> facilities= (List<Facility>)await _facilityDataAccess.Get();
 
             IDictionary<int, Position> positionsDic = positions.ToDictionary(p => p.PositionId);
             IDictionary<int, Facility> facilitiesDic = facilities.ToDictionary(p => p.FacilityId);
@@ -51,8 +51,8 @@ namespace VetClinicWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            List<Position> positions = (List<Position>)await _positionDataAccess.GetPositions();
-            List<Facility> facilities = (List<Facility>)await _facilityDataAccess.GetFacilities();
+            List<Position> positions = (List<Position>)await _positionDataAccess.Get();
+            List<Facility> facilities = (List<Facility>)await _facilityDataAccess.Get();
             ViewBag.positions = new SelectList(positions, "PositionId", "Name");
             ViewBag.facilities = new SelectList(facilities, "FacilityId", "Address");
             return View();
@@ -60,11 +60,11 @@ namespace VetClinicWeb.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
-            var dbEmployee = await _employeeDataAccess.GetEmployee(id);
+            var dbEmployee = await _employeeDataAccess.Get(id);
             EmployeeViewModel employee = _mapper.Map<EmployeeViewModel>(dbEmployee);
-            Position position = await _positionDataAccess.GetPosition(employee.Position);
+            Position position = await _positionDataAccess.Get(employee.Position);
             employee.PositionName = position.Name;
-            Facility facility = await _facilityDataAccess.GetFacility(employee.Facility);
+            Facility facility = await _facilityDataAccess.Get(employee.Facility);
             employee.FacilityAddress= facility.Address;
             return View(employee);
         }
@@ -76,7 +76,7 @@ namespace VetClinicWeb.Controllers
             {
                 try
                 {
-                    await _employeeDataAccess.InsertEmployee(_mapper.Map<Employee>(model));
+                    await _employeeDataAccess.Insert(_mapper.Map<Employee>(model));
                     ModelState.Clear();
                     return RedirectToAction("Index");
                 }
@@ -94,8 +94,8 @@ namespace VetClinicWeb.Controllers
         {
             var employee = await GetFullEmployee(id);
 
-            List<Position> positions = (List<Position>)await _positionDataAccess.GetPositions();
-            List<Facility> facilities = (List<Facility>)await _facilityDataAccess.GetFacilities();
+            List<Position> positions = (List<Position>)await _positionDataAccess.Get();
+            List<Facility> facilities = (List<Facility>)await _facilityDataAccess.Get();
             ViewBag.positions = new SelectList(positions, "PositionId", "Name");
             ViewBag.facilities = new SelectList(facilities, "FacilityId", "Address");
 
@@ -109,7 +109,7 @@ namespace VetClinicWeb.Controllers
             {
                 try
                 {
-                    await _employeeDataAccess.UpdateEmployee(_mapper.Map<Employee>(model));
+                    await _employeeDataAccess.Update(_mapper.Map<Employee>(model));
                     ModelState.Clear();
                     return RedirectToAction("Index");
                 }
@@ -132,7 +132,7 @@ namespace VetClinicWeb.Controllers
         {
             try
             {
-                await _employeeDataAccess.DeleteEmployee(id);
+                await _employeeDataAccess.Delete(id);
             }
             catch (Oracle.ManagedDataAccess.Client.OracleException ex)
             {
@@ -145,11 +145,11 @@ namespace VetClinicWeb.Controllers
 
         public async Task<EmployeeViewModel> GetFullEmployee(int id)
         {
-            var dbEmployee = await _employeeDataAccess.GetEmployee(id);
+            var dbEmployee = await _employeeDataAccess.Get(id);
             EmployeeViewModel employee = _mapper.Map<EmployeeViewModel>(dbEmployee);
-            Position position = await _positionDataAccess.GetPosition(employee.Position);
+            Position position = await _positionDataAccess.Get(employee.Position);
             employee.PositionName = position.Name;
-            Facility facility = await _facilityDataAccess.GetFacility(employee.Facility);
+            Facility facility = await _facilityDataAccess.Get(employee.Facility);
             employee.FacilityAddress = facility.Address;
             return employee;
         }
@@ -157,7 +157,7 @@ namespace VetClinicWeb.Controllers
         [AcceptVerbs("Get", "Post")]
         public async Task<IActionResult> isSalaryInRangeAsync(EmployeeViewModel model)
         {
-            Position position = await _positionDataAccess.GetPosition(model.Position);
+            Position position = await _positionDataAccess.Get(model.Position);
             if (model.Salary > position.SalaryMax)
             {
                 return Json($"Salary is greater than the maximum salary for this position: {position.SalaryMax}");

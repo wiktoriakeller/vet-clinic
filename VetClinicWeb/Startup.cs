@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using DataAccess.DbAccess;
 using DataAccess.Access;
 using System.Globalization;
+using DataAccess.Models;
 
 namespace VetClinicWeb
 {
@@ -26,11 +27,11 @@ namespace VetClinicWeb
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<ISQLDataAccess, SQLDataAccess>();
-            services.AddSingleton<IFacilityDataAccess, FacilityDataAccess>();
-            services.AddSingleton<IOfficeDataAccess, OfficeDataAccess>();
-            services.AddSingleton<IPositionDataAccess, PositionDataAccess>();
-            services.AddSingleton<IEmployeeDataAccess, EmployeeDataAccess>();
-            services.AddSingleton<ISpecieDataAccess, SpecieDataAccess>();
+            services.AddSingleton<IDataAccess<Facility>, FacilityDataAccess>();
+            services.AddSingleton<IDataAccess<Office>, OfficeDataAccess>();
+            services.AddSingleton<IDataAccess<Position>, PositionDataAccess>();
+            services.AddSingleton<IDataAccess<Employee>, EmployeeDataAccess>();
+            services.AddSingleton<IDataAccess<Specie>, SpecieDataAccess>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddRazorPages();
             services.AddControllersWithViews();

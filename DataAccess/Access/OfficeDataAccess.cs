@@ -7,16 +7,16 @@ using Dapper;
 
 namespace DataAccess.Access
 {
-    public class OfficeDataAccess : Access, IOfficeDataAccess
+    public class OfficeDataAccess : Access, IDataAccess<Office>
     {
         public OfficeDataAccess(ISQLDataAccess db) : base(db) { }
-        public Task<IEnumerable<Office>> GetOffices()
+        public Task<IEnumerable<Office>> Get()
         {
             string sql = "select * from offices";
             return _db.LoadData<Office>(sql);
         }
 
-        public async Task<Office> GetOffice(int OfficeId)
+        public async Task<Office> Get(int OfficeId)
         {
             string sql = "select * from offices where officeId = :Id";
 
@@ -29,7 +29,7 @@ namespace DataAccess.Access
             return results.First();
         }
 
-        public Task InsertOffice(Office Office)
+        public Task Insert(Office Office)
         {
             string sql = "insert into offices(officeNumber, facility) values(:OfficeNumber, :Facility)";
 
@@ -42,7 +42,7 @@ namespace DataAccess.Access
             return _db.SaveData(sql, dynamicParameters);
         }
 
-        public Task UpdateOffice(Office Office)
+        public Task Update(Office Office)
         {
             string sql = "update Offices set officeNumber = :OfficeNumber, facility = :Facility where officeId = :Id";
 
@@ -56,7 +56,7 @@ namespace DataAccess.Access
             return _db.SaveData(sql, dynamicParameters);
         }
 
-        public Task DeleteOffice(int OfficeId)
+        public Task Delete(int OfficeId)
         {
             string sql = "delete from offices where officeId = :Id";
 
