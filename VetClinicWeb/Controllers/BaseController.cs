@@ -13,26 +13,33 @@ namespace VetClinicWeb.Controllers
         protected readonly IMapper _mapper;
         protected IDictionary<string, Tuple<string, Type>> _propertiesNames;
         protected List<SelectListItem> _options;
+        protected List<string> _restrictedInDropdown;
 
         public BaseController(IMapper mapper)
         {
             _mapper = mapper;
+        }
 
+        protected void AddPropertiesNamesToDropdown()
+        {
             _propertiesNames = new Dictionary<string, Tuple<string, Type>>();
             var listOfFields = typeof(T).GetProperties();
-            var restricted = new List<string> { "id" };
             _options = new List<SelectListItem>();
 
             foreach (var field in listOfFields)
             {
-                if (!restricted.Any(str => field.Name.ToLower().Contains(str)))
+                if (!_restrictedInDropdown.Any(str => field.Name.ToLower() == str))
                 {
                     string name = string.Join(" ", Regex.Split(field.Name, @"(?<!^)(?=[A-Z])"));
+                    
                     if (name == "Salary Min")
                         name = "Minimum Salary";
-
-                    if (name == "Salary Max")
+                    else if (name == "Salary Max")
                         name = "Maximum Salary";
+                    else if (name == "Position Name")
+                        name = "Position";
+                    else if (name == "Facility Address")
+                        name = "Facility";
 
                     _options.Add(new SelectListItem { Text = name });
                     _propertiesNames[name] = Tuple.Create(field.Name, field.PropertyType);

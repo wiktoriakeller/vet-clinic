@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using DataAccess.Access;
 using DataAccess.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
@@ -25,6 +24,9 @@ namespace VetClinicWeb.Controllers
             _employeeDataAccess = employeeDataAccess;
             _positionDataAccess = positionDataAccess;
             _facilityDataAccess = facilityDataAcces;
+
+            _restrictedInDropdown = new List<string> { "employeeid", "position", "facility", "phonenumber", "address" };
+            AddPropertiesNamesToDropdown();
         }
 
         [HttpGet]
@@ -73,7 +75,7 @@ namespace VetClinicWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            await UpdateDropDownLists();
+            await UpdateDropdownLists();
             return View();
         }
 
@@ -103,14 +105,14 @@ namespace VetClinicWeb.Controllers
                 }
                 catch (Oracle.ManagedDataAccess.Client.OracleException ex)
                 {
-                    await UpdateDropDownLists();
+                    await UpdateDropdownLists();
                     ModelState.AddModelError("Custom error", $"Employee {GetExceptionMessage(ex.Number)}");
                     return View(model);
                 }
 
             }
 
-            await UpdateDropDownLists();
+            await UpdateDropdownLists();
             return View(model);
         }
 
@@ -118,7 +120,7 @@ namespace VetClinicWeb.Controllers
         public async Task<IActionResult> Update(int id)
         {
             var employee = await GetFullEmployee(id);
-            await UpdateDropDownLists();
+            await UpdateDropdownLists();
             return View(employee);
         }
 
@@ -135,13 +137,13 @@ namespace VetClinicWeb.Controllers
                 }
                 catch (Oracle.ManagedDataAccess.Client.OracleException ex)
                 {
-                    await UpdateDropDownLists();
+                    await UpdateDropdownLists();
                     ModelState.AddModelError("Custom error", $"Employee {GetExceptionMessage(ex.Number)}");
                     return View(model);
                 } 
             }
 
-            await UpdateDropDownLists();
+            await UpdateDropdownLists();
             return View(model);
         }
 
@@ -199,7 +201,7 @@ namespace VetClinicWeb.Controllers
                 return Json(true);
         }
 
-        private async Task UpdateDropDownLists()
+        private async Task UpdateDropdownLists()
         {
             List<Position> positions = (List<Position>)await _positionDataAccess.Get();
             List<Facility> facilities = (List<Facility>)await _facilityDataAccess.Get();

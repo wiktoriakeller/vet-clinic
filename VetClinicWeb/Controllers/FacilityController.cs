@@ -13,7 +13,11 @@ namespace VetClinicWeb.Controllers
 {
     public class FacilityController : BaseOperationsController<Facility, FacilityViewModel>
     {
-        public FacilityController(IDataAccess<Facility> facilityDataAccess, IMapper mapper) : base(mapper, facilityDataAccess) { }
+        public FacilityController(IDataAccess<Facility> facilityDataAccess, IMapper mapper) : base(mapper, facilityDataAccess) 
+        {
+            _restrictedInDropdown = new List<string> { "facilityid" };
+            AddPropertiesNamesToDropdown();
+        }
 
         [AcceptVerbs("Get", "Post")]
         public async Task<IActionResult> IsAddressUnique(string address, int facilityId)

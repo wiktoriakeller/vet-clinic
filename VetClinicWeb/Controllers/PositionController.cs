@@ -11,7 +11,11 @@ namespace VetClinicWeb.Controllers
 {
     public class PositionController : BaseOperationsController<Position, PositionViewModel>
     {
-        public PositionController(IDataAccess<Position> positionDataAccess, IMapper mapper) : base(mapper, positionDataAccess) { }
+        public PositionController(IDataAccess<Position> positionDataAccess, IMapper mapper) : base(mapper, positionDataAccess) 
+        {
+            _restrictedInDropdown = new List<string> { "positionid" };
+            AddPropertiesNamesToDropdown();
+        }
 
         [AcceptVerbs("Get", "Post")]
         public IActionResult IsSalaryValid(PositionViewModel model)

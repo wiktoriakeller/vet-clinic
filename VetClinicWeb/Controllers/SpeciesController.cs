@@ -10,6 +10,10 @@ namespace VetClinicWeb.Controllers
 {
     public class SpeciesController : BaseOperationsController<Species, SpeciesViewModel>
     {
-        public SpeciesController(IDataAccess<Species> specieDataAccess, IMapper mapper) : base(mapper, specieDataAccess) { }
+        public SpeciesController(IDataAccess<Species> specieDataAccess, IMapper mapper) : base(mapper, specieDataAccess) 
+        {
+            _restrictedInDropdown = new List<string> { "speciesid" };
+            AddPropertiesNamesToDropdown();
+        }
     }
 }
