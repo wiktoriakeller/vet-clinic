@@ -73,10 +73,7 @@ namespace VetClinicWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            List<Position> positions = (List<Position>)await _positionDataAccess.Get();
-            List<Facility> facilities = (List<Facility>)await _facilityDataAccess.Get();
-            ViewBag.positions = new SelectList(positions, "PositionId", "Name");
-            ViewBag.facilities = new SelectList(facilities, "FacilityId", "Address");
+            await UpdateDropDownLists();
             return View();
         }
 
@@ -84,10 +81,12 @@ namespace VetClinicWeb.Controllers
         {
             var dbEmployee = await _employeeDataAccess.Get(id);
             EmployeeViewModel employee = _mapper.Map<EmployeeViewModel>(dbEmployee);
+            
             Position position = await _positionDataAccess.Get(employee.Position);
             employee.PositionName = position.Name;
+            
             Facility facility = await _facilityDataAccess.Get(employee.Facility);
-            employee.FacilityAddress= facility.Address;
+            employee.FacilityAddress = facility.Address;
             return View(employee);
         }
 
@@ -102,12 +101,16 @@ namespace VetClinicWeb.Controllers
                     ModelState.Clear();
                     return RedirectToAction("Index");
                 }
-                catch
+                catch (Oracle.ManagedDataAccess.Client.OracleException ex)
                 {
-                    return View();
+                    await UpdateDropDownLists();
+                    ModelState.AddModelError("Custom error", $"Employee {GetExceptionMessage(ex.Number)}");
+                    return View(model);
                 }
 
             }
+
+            await UpdateDropDownLists();
             return View(model);
         }
 
@@ -115,12 +118,7 @@ namespace VetClinicWeb.Controllers
         public async Task<IActionResult> Update(int id)
         {
             var employee = await GetFullEmployee(id);
-
-            List<Position> positions = (List<Position>)await _positionDataAccess.Get();
-            List<Facility> facilities = (List<Facility>)await _facilityDataAccess.Get();
-            ViewBag.positions = new SelectList(positions, "PositionId", "Name");
-            ViewBag.facilities = new SelectList(facilities, "FacilityId", "Address");
-
+            await UpdateDropDownLists();
             return View(employee);
         }
 
@@ -135,12 +133,15 @@ namespace VetClinicWeb.Controllers
                     ModelState.Clear();
                     return RedirectToAction("Index");
                 }
-                catch
+                catch (Oracle.ManagedDataAccess.Client.OracleException ex)
                 {
-                    return View();
+                    await UpdateDropDownLists();
+                    ModelState.AddModelError("Custom error", $"Employee {GetExceptionMessage(ex.Number)}");
+                    return View(model);
                 } 
             }
 
+            await UpdateDropDownLists();
             return View(model);
         }
 
@@ -196,6 +197,14 @@ namespace VetClinicWeb.Controllers
                 return Json($"Salary is less than the minimum salary for this position: {position.SalaryMin}");
             else
                 return Json(true);
+        }
+
+        private async Task UpdateDropDownLists()
+        {
+            List<Position> positions = (List<Position>)await _positionDataAccess.Get();
+            List<Facility> facilities = (List<Facility>)await _facilityDataAccess.Get();
+            ViewBag.positions = new SelectList(positions, "PositionId", "Name");
+            ViewBag.facilities = new SelectList(facilities, "FacilityId", "Address");
         }
     }
 }

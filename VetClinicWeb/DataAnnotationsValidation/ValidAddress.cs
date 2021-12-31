@@ -16,10 +16,10 @@ namespace VetClinic.DataAnnotationsValidations
                 if (Regex.IsMatch(strValue, @"^[A-Z][a-z]*[ ][1-9]{1,2}[a-z]?[ ][0-9]{2}[-][0-9]{3}"))
                     return ValidationResult.Success;
 
-                if (Regex.IsMatch(strValue, @"^[A-Z][a-z]*[ ][A-Za-z1-9 ]*[a-z][ ][1-9][0-9]{0,2}[ ]m.[1-9][0-9]{0,2}[ ][0-9]{2}[-][0-9]{3}"))
+                if (Regex.IsMatch(strValue, @"^[A-Z][a-z]*[ ][A-Za-z][A-Za-z1-9]*[a-z][ ][1-9][0-9]{0,2}[ ]m.[1-9][0-9]{0,2}[ ][0-9]{2}[-][0-9]{3}"))
                     return ValidationResult.Success;
 
-                if (Regex.IsMatch(strValue, @"^[A-Z][a-z]*[ ][A-Za-z1-9 ]*[a-z][ ][1-9][0-9]{0,2}[ ][0-9]{2}[-][0-9]{3}"))
+                if (Regex.IsMatch(strValue, @"^[A-Z][a-z]*[ ][A-Za-z][A-Za-z1-9]*[a-z][ ][1-9][0-9]{0,2}[ ][0-9]{2}[-][0-9]{3}"))
                     return ValidationResult.Success;
 
                 return new ValidationResult($"{strValue} is not a valid address");

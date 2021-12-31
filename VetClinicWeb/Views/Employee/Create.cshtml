@@ -61,6 +61,14 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
+<br />
+<h6>Examples of valid addresses:</h6>
+<ul>
+    <li>Poznan Kwiatowa 2 61-386</li>
+    <li>Poznan Kwiatowa 2 m.12 61-386</li>
+    <li>Bukow 12c 65-040</li>
+</ul>
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
