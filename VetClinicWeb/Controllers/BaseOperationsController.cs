@@ -40,7 +40,12 @@ namespace VetClinicWeb.Controllers
                 foreach (var val in _propertiesNames)
                 {
                     if (option == val.Key.ToLower() || option == "any")
-                        searched.AddRange(entities.Where(entity => entity.GetType().GetProperty(val.Value).GetValue(entity, null).ToString().ToLower().Contains(search)));
+                    {
+                        if(val.Value.Item2 == typeof(string))
+                            searched.AddRange(entities.Where(entity => entity.GetType().GetProperty(val.Value.Item1).GetValue(entity, null).ToString().ToLower().Contains(search)));
+                        else
+                            searched.AddRange(entities.Where(entity => entity.GetType().GetProperty(val.Value.Item1).GetValue(entity, null).ToString().ToLower() == search));
+                    }
                 }
 
                 return View(searched);

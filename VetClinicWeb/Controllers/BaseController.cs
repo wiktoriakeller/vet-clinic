@@ -1,37 +1,33 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using DataAccess.Access;
-using DataAccess.Models;
 using System.Collections.Generic;
-using VetClinicWeb.Models;
-using System.Threading.Tasks;
 using AutoMapper;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Reflection;
+using System;
 
 namespace VetClinicWeb.Controllers
 {
     public abstract class BaseController<T> : Controller
     {
         protected readonly IMapper _mapper;
-        protected IDictionary<string, string> _propertiesNames;
+        protected IDictionary<string, Tuple<string, Type>> _propertiesNames;
         protected List<SelectListItem> _options;
 
         public BaseController(IMapper mapper)
         {
             _mapper = mapper;
 
-            _propertiesNames = new Dictionary<string, string>();
-            var listOfFieldNames = typeof(T).GetProperties().Select(f => f.Name).ToList();
+            _propertiesNames = new Dictionary<string, Tuple<string, Type>>();
+            var listOfFields = typeof(T).GetProperties();
             var restricted = new List<string> { "id" };
             _options = new List<SelectListItem>();
 
-            foreach (var field in listOfFieldNames)
+            foreach (var field in listOfFields)
             {
-                if (!restricted.Any(str => field.ToLower().Contains(str)))
+                if (!restricted.Any(str => field.Name.ToLower().Contains(str)))
                 {
-                    string name = string.Join(" ", Regex.Split(field, @"(?<!^)(?=[A-Z])"));
+                    string name = string.Join(" ", Regex.Split(field.Name, @"(?<!^)(?=[A-Z])"));
                     if (name == "Salary Min")
                         name = "Minimum Salary";
 
@@ -39,7 +35,7 @@ namespace VetClinicWeb.Controllers
                         name = "Maximum Salary";
 
                     _options.Add(new SelectListItem { Text = name });
-                    _propertiesNames[name] = field;
+                    _propertiesNames[name] = Tuple.Create(field.Name, field.PropertyType);
                 }
             }
 

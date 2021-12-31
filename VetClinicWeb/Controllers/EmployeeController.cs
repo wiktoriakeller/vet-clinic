@@ -28,7 +28,7 @@ namespace VetClinicWeb.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string option, string search)
         {
             ViewBag.Options = _options;
 
@@ -45,6 +45,26 @@ namespace VetClinicWeb.Controllers
                 employees.Add(_mapper.Map<EmployeeViewModel>(dbEmployee));
                 employees.Last().PositionName = positionsDic[employees.Last().Position].Name;
                 employees.Last().FacilityAddress = facilitiesDic[employees.Last().Facility].Address;
+            }
+
+            if (!string.IsNullOrEmpty(search) && !string.IsNullOrEmpty(option))
+            {
+                search = search.ToLower().Trim();
+                option = option.ToLower();
+                var searched = new List<EmployeeViewModel>();
+
+                foreach (var val in _propertiesNames)
+                {
+                    if (option == val.Key.ToLower() || option == "any")
+                    {
+                        if (val.Value.Item2 == typeof(string))
+                            searched.AddRange(employees.Where(entity => entity.GetType().GetProperty(val.Value.Item1).GetValue(entity, null).ToString().ToLower().Contains(search)));
+                        else
+                            searched.AddRange(employees.Where(entity => entity.GetType().GetProperty(val.Value.Item1).GetValue(entity, null).ToString().ToLower() == search));
+                    }
+                }
+
+                return View(searched);
             }
 
             return View(employees);
@@ -117,10 +137,10 @@ namespace VetClinicWeb.Controllers
                 }
                 catch
                 {
-                    //return View();
+                    return View();
                 } 
-
             }
+
             return View(model);
         }
 
@@ -155,10 +175,13 @@ namespace VetClinicWeb.Controllers
         {
             var dbEmployee = await _employeeDataAccess.Get(id);
             EmployeeViewModel employee = _mapper.Map<EmployeeViewModel>(dbEmployee);
+            
             Position position = await _positionDataAccess.Get(employee.Position);
             employee.PositionName = position.Name;
+            
             Facility facility = await _facilityDataAccess.Get(employee.Facility);
             employee.FacilityAddress = facility.Address;
+            
             return employee;
         }
 
@@ -166,14 +189,11 @@ namespace VetClinicWeb.Controllers
         public async Task<IActionResult> IsSalaryInRangeAsync(EmployeeViewModel model)
         {
             Position position = await _positionDataAccess.Get(model.Position);
+
             if (model.Salary > position.SalaryMax)
-            {
                 return Json($"Salary is greater than the maximum salary for this position: {position.SalaryMax}");
-            }
-            else if(model.Salary < position.SalaryMin)
-            {
+            else if (model.Salary < position.SalaryMin)
                 return Json($"Salary is less than the minimum salary for this position: {position.SalaryMin}");
-            }
             else
                 return Json(true);
         }
