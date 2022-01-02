@@ -1,5 +1,4 @@
-﻿using DataAccess.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using VetClinic.DataAnnotationsValidations;

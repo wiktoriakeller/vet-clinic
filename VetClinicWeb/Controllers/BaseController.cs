@@ -30,8 +30,11 @@ namespace VetClinicWeb.Controllers
             {
                 if (!_restrictedInDropdown.Any(str => field.Name.ToLower() == str))
                 {
-                    string name = string.Join(" ", Regex.Split(field.Name, @"(?<!^)(?=[A-Z])"));
-                    
+                    var name = field.Name;
+
+                    if (field.Name != "PESEL" && field.Name != "NIP")
+                        name = string.Join(" ", Regex.Split(field.Name, @"(?<!^)(?=[A-Z])"));
+
                     if (name == "Salary Min")
                         name = "Minimum Salary";
                     else if (name == "Salary Max")
