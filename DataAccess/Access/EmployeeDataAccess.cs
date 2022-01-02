@@ -17,65 +17,65 @@ namespace DataAccess.Access
             return _db.LoadData<Employee>(sql);
         }
 
-        public async Task<Employee> Get(int EmployeeId)
+        public async Task<Employee> Get(int employeeId)
         {
             string sql = "select * from employees where employeeId = :Id";
 
             DynamicParameters dynamicParameters = new DynamicParameters(new
             {
-                Id = EmployeeId
+                Id = employeeId
             });
 
             var results = await _db.LoadData<Employee, DynamicParameters>(sql, dynamicParameters);
             return results.First();
         }
 
-        public Task Insert(Employee Employee)
+        public Task Insert(Employee employee)
         {
             string sql = "insert into employees(name, surname, salary, bonusSalary, address, phoneNumber, position, facility) values(:Name, :Surname, :Salary, :BonusSalary, :Address, :PhoneNumber, :Position, :Facility)";
 
             DynamicParameters dynamicParameters = new DynamicParameters(new
             {
-                Name = Employee.Name,
-                Surname = Employee.Surname,
-                Salary = Employee.Salary,
-                BonusSalary = Employee.BonusSalary,
-                Address = Employee.Address,
-                PhoneNumber = Employee.PhoneNumber,
-                Position = Employee.Position,
-                Facility = Employee.Facility
+                Name = employee.Name,
+                Surname = employee.Surname,
+                Salary = employee.Salary,
+                BonusSalary = employee.BonusSalary,
+                Address = employee.Address,
+                PhoneNumber = employee.PhoneNumber,
+                Position = employee.Position,
+                Facility = employee.Facility
             });
 
             return _db.SaveData(sql, dynamicParameters);
         }
 
-        public Task Update(Employee Employee)
+        public Task Update(Employee employee)
         {
             string sql = "update employees set name = :Name, surname = :Surname, salary = :Salary, bonusSalary = :BonusSalary, address = :Address, phoneNumber = :PhoneNumber, position = :Position, facility = :Facility where employeeId = :Id";
 
             DynamicParameters dynamicParameters = new DynamicParameters(new
             {
-                Id = Employee.EmployeeId,
-                Name = Employee.Name,
-                Surname = Employee.Surname,
-                Salary = Employee.Salary,
-                BonusSalary = Employee.BonusSalary,
-                Address = Employee.Address,
-                PhoneNumber = Employee.PhoneNumber,
-                Position = Employee.Position,
-                Facility = Employee.Facility
+                Id = employee.EmployeeId,
+                Name = employee.Name,
+                Surname = employee.Surname,
+                Salary = employee.Salary,
+                BonusSalary = employee.BonusSalary,
+                Address = employee.Address,
+                PhoneNumber = employee.PhoneNumber,
+                Position = employee.Position,
+                Facility = employee.Facility
             });
 
             return _db.SaveData(sql, dynamicParameters);
         }
 
-        public Task Delete(int EmployeeId)
+        public Task Delete(int employeeId)
         {
             string sql = "delete from employees where employeeId = :Id";
 
             DynamicParameters dynamicParameters = new DynamicParameters(new
             {
-                Id = EmployeeId
+                Id = employeeId
             });
 
             return _db.SaveData(sql, dynamicParameters);
