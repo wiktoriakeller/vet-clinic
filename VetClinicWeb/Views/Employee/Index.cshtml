@@ -7,21 +7,7 @@
 
 <h4>List of employees</h4>
 
-<form asp-controller="Employee" asp-action="Index" method="get">
-    <div class="container-md mt-3 mb-3" style="width:50%">
-        <div class="row">
-            <div class="col">
-                @Html.DropDownList("Option", (IEnumerable<SelectListItem>) ViewBag.Options, "Choose", new {@class="form-control"})
-            </div>
-            <div class="col-8">
-                <div class="input-group-append">
-                    <input type="text" name="search" placeholder="Search" class="form-control"/>
-                    <input type="submit" value="Search" class="btn btn-primary"/>
-                </div>
-            </div>
-        </div>
-    </div>
-</form>
+@Html.Partial("SearchBoxPartialView")
 
 <p>
     <a asp-action="Create">Create New</a>
