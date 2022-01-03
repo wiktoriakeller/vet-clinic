@@ -1,0 +1,42 @@
+﻿@model IEnumerable<VetClinicWeb.Models.OfficeViewModel>
+
+@{
+    ViewData["Title"] = "Office";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>List of offices</h1>
+@Html.Partial("SearchBoxPartialView")
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.OfficeNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.OfficeNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.ActionLink("Update", "Update", new { id=item.OfficeId }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.OfficeId })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
