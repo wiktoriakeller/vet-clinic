@@ -96,7 +96,9 @@ CREATE TABLE Appointments(
     Office REFERENCES Offices(OfficeId) NOT NULL,
 	Employee REFERENCES Employees(EmployeeId) NOT NULL,
 	Patient REFERENCES Patients(PatientId) NOT NULL,
-	CONSTRAINT UniqueAppointment UNIQUE(AppointmentDate, Patient)
+	CONSTRAINT UniqueAppointment UNIQUE(AppointmentDate, Patient),
+    CONSTRAINT UniqueAppointmentEmployee UNIQUE(AppointmentDate, Employee),
+    CONSTRAINT UniqueAppointmentOffice UNIQUE(AppointmentDate, Office)
 	);
 	
 CREATE TABLE ServicesInAppointment(
@@ -117,26 +119,27 @@ INSERT INTO Positions(Name, SalaryMin, SalaryMax) VALUES('Veterinarian', 3000, 1
 INSERT INTO Positions(Name, SalaryMin, SalaryMax) VALUES('Technician', 2000, 6000);
 
 INSERT INTO Facilities(Address, PhoneNumber)
-VALUES('Os. Powstancow Narodowych 31 61-215 Poznan', '456123789');
+VALUES('Poznan Szklana 16 62-389', '397415673');
 
 INSERT INTO Offices(OfficeNumber, Facility) VALUES(1, 1);
 INSERT INTO Offices(OfficeNumber, Facility) VALUES(2, 1);
-INSERT INTO Offices(OfficeNumber, Facility) VALUES(7, 1);    
-INSERT INTO Offices(OfficeNumber, Facility) VALUES(10, 1);
-INSERT INTO Offices(OfficeNumber, Facility) VALUES(12, 1);
+INSERT INTO Offices(OfficeNumber, Facility) VALUES(3, 1);    
+INSERT INTO Offices(OfficeNumber, Facility) VALUES(1, 2);
+INSERT INTO Offices(OfficeNumber, Facility) VALUES(2, 2);
 
 INSERT INTO Species(Name) VALUES('Dog');
 INSERT INTO Species(Name) VALUES('Cat');
-INSERT INTO Species(Name) VALUES('Chamster');
+INSERT INTO Species(Name) VALUES('Hamster');
+INSERT INTO Species(Name) VALUES('Guinea pig');
 
 INSERT INTO Owners(PESEL, Name, Surname, Address, PhoneNumber)
-VALUES('89073133411', 'Jan', 'Kowalski', 'Osiedle Kwiatkowskie 32/39 60-365 Poznan', '345890567');
+VALUES('89073133411', 'Jan', 'Kowalski', 'Poznan Polna 23 61-345', '345890567');
 
 INSERT INTO Owners(PESEL, Name, Surname, Address, PhoneNumber)
-VALUES('55020465942', 'Agata', 'Kowalska', 'Osiedle Kwiatkowskie 32/39 60-365 Poznan', '345789012');
+VALUES('55020465942', 'Agata', 'Kowalska', 'Poznan Szkolna 17 61-356', '298765190');
 
 INSERT INTO Owners(PESEL, Name, Surname, Address, PhoneNumber)
-VALUES('60042919919', 'Ryszard', 'Kowalska', 'Osiedle Kwiatkowskie 32/39 60-365 Poznan', '123456123');
+VALUES('60042919919', 'Ryszard', 'Kowalski', 'Poznan Lipowa 9 62-123', '275413678');
 
 INSERT INTO Patients(Name, Species, Organization, Owner)
 VALUES('Max', 1, NULL, 1);
@@ -148,13 +151,13 @@ INSERT INTO Patients(Name, Species, Organization, Owner)
 VALUES('Zelda', 2, NULL, 3);
 
 INSERT INTO Employees(Name, Surname, Salary, BonusSalary, Address, PhoneNumber, Position, Facility)
-VALUES('Anna', 'Nowak', 6000, 0, 'Poznan', '367289999', 1, 1);
+VALUES('Anna', 'Nowak', 6000, 0, 'Poznan Brzozowa 23 61-329', '367289999', 1, 1);
 
 INSERT INTO Employees(Name, Surname, Salary, BonusSalary, Address, PhoneNumber, Position, Facility)
-VALUES('Grzegorz', 'Kowalski', 4000, 0, 'Poznan', '456890345', 2, 1);
+VALUES('Grzegorz', 'Kowalski', 4000, 0, 'Poznan Polna 15 61-345', '456890345', 2, 1);
 
 INSERT INTO Employees(Name, Surname, Salary, BonusSalary, Address, PhoneNumber, Position, Facility)
-VALUES('Ryszard', 'Kowalski', 6500, 0, 'Poznan', '123456789', 1, 1);
+VALUES('Ryszard', 'Kowalski', 6500, 0, 'Poznan Polna 32 61-345', '123456789', 1, 1);
 
 INSERT INTO Services(Name, Price, Description, ServiceType)
 VALUES('USG', 150, NULL, 'E');
@@ -234,7 +237,7 @@ EXCEPTION
         RAISE_APPLICATION_ERROR(-20002, 'There are not enough offices or veterinarians to attend to a patient');
 END BookAppointment;
 
-call BookAppointment(to_timestamp('28/01/2022 15:30', 'DD/MM/YYYY HH24:MI'), 'aaa', 1, 5);
+exec BookAppointment(to_timestamp('28/01/2022 15:30', 'DD/MM/YYYY HH24:MI'), 'Bol brzucha', 1, 1);
 
 select AppointmentId, extract(month from appointmentDate) from appointments;
 
