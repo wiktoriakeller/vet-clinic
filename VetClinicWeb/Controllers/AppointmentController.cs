@@ -190,5 +190,31 @@ namespace VetClinicWeb.Controllers
             ViewBag.facilities = new SelectList(facilities, "FacilityId", "Address");
             ViewBag.patients = new SelectList(patients, "PatientId", "Name");
         }
+
+        [AcceptVerbs("Get", "Post")]
+        public JsonResult IsTimeValid(string time)
+        {
+            int startHour = 7;
+            int endHour = 18;
+            var availableHours = new List<string>();
+            for(int i = startHour; i <= endHour; i++)
+            {
+                if(startHour <= 9)
+                {
+                    availableHours.Add($"0{i}:00");
+                    availableHours.Add($"0{i}:30");
+                }
+                else
+                {
+                    availableHours.Add($"{i}:00");
+                    availableHours.Add($"{i}:30");
+                }
+            }
+
+            if (!availableHours.Contains(time))
+                return Json($"Time {time} is invalid.");
+            else
+                return Json(true);
+        }
     }
 }
