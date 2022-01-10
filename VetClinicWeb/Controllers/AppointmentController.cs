@@ -204,7 +204,7 @@ namespace VetClinicWeb.Controllers
             var availableHours = new List<string>();
             for(int i = startHour; i <= endHour; i++)
             {
-                if(startHour <= 9)
+                if(i <= 9)
                 {
                     availableHours.Add($"0{i}:00");
                     availableHours.Add($"0{i}:30");

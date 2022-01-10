@@ -18,7 +18,7 @@ namespace VetClinicWeb.Models
         public string Time { get; set; }
 
         [DataType(DataType.Text)]
-        [RegularExpression(@"[A-Za-z0-9.,?()]*", ErrorMessage = "Cause can only contain letters, numbers or punctuation marks.")]
+        [RegularExpression(@"[A-Za-z0-9.,?() ]*", ErrorMessage = "Cause can only contain letters, numbers or punctuation marks.")]
         [StringLength(150, ErrorMessage = "{0} length must be between {2} and {1}", MinimumLength = 0)]
         public string Cause { get; set; }
 
