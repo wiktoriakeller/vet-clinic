@@ -229,12 +229,14 @@ BEGIN
     END IF;
 EXCEPTION
     WHEN exPatientAlreadyBookedVisit THEN
-        DBMS_OUTPUT.PUT_LINE('Patient has already booked visit at that date');
+        RAISE_APPLICATION_ERROR(-20001, 'Patient has already booked visit at that date');
     WHEN exNoFreeAppointment THEN
-        DBMS_OUTPUT.PUT_LINE('You cant book an appointment at that date');
+        RAISE_APPLICATION_ERROR(-20002, 'There are not enough offices or veterinarians to attend to a patient');
 END BookAppointment;
 
-exec BookAppointment('2021-12-09 12:30', 'aaa', 1, 5);
+call BookAppointment(to_timestamp('28/01/2022 15:30', 'DD/MM/YYYY HH24:MI'), 'aaa', 1, 5);
+
+select AppointmentId, extract(month from appointmentDate) from appointments;
 
 SELECT * FROM appointments;
 SELECT * FROM patients;

@@ -35,6 +35,7 @@ namespace VetClinicWeb
             services.AddSingleton<IDataAccess<Owner>, OwnerDataAccess>();
             services.AddSingleton<IDataAccess<Organization>, OrganizationDataAccess>();
             services.AddSingleton<IDataAccess<Patient>, PatientDataAccess>();
+            services.AddSingleton<IDataAccess<Appointment>, AppointmentDataAccess>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddRazorPages();
             services.AddControllersWithViews();
@@ -42,7 +43,6 @@ namespace VetClinicWeb
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-
             var cultureInfo = new CultureInfo("en-EN", false);
 
             CultureInfo.DefaultThreadCurrentCulture = cultureInfo;

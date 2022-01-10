@@ -28,6 +28,12 @@ namespace DataAccess.DbAccess
             return await connection.QueryAsync<T>(sql, data);
         }
 
+        public async Task ExecuteProcedure(string sql, string connectionId = "DefaultConnection")
+        {
+            using IDbConnection connection = new OracleConnection(_config.GetConnectionString(connectionId));
+            await connection.QueryAsync(sql);
+        }
+
         public async Task SaveData<T>(string sql, T data, string connectionId = "DefaultConnection")
         {
             using IDbConnection connection = new OracleConnection(_config.GetConnectionString(connectionId));

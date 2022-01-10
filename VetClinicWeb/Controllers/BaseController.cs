@@ -52,14 +52,39 @@ namespace VetClinicWeb.Controllers
             _options.Add(new SelectListItem { Text = "Any" });
         }
 
+        protected List<T> Search(string search, string option, List<T> entities)
+        {
+            search = search.ToLower().Trim();
+            option = option.ToLower();
+            var searched = new List<T>();
+
+            foreach (var val in _propertiesNames)
+            {
+                if (option == val.Key.ToLower() || option == "any")
+                {
+                    if (val.Value.Item2 == typeof(string))
+                        searched.AddRange(entities.Where(entity => entity.GetType().GetProperty(val.Value.Item1).GetValue(entity, null).ToString().ToLower().Contains(search)));
+                    else
+                        searched.AddRange(entities.Where(entity => entity.GetType().GetProperty(val.Value.Item1).GetValue(entity, null).ToString().ToLower() == search));
+                }
+            }
+
+            return searched;
+        }
+
         protected string GetExceptionMessage(int number)
         {
+            var genericClassName = typeof(T).Name.Replace("ViewModel", "");
             switch (number)
             {
                 case 2292:
-                    return "is used in diffrent table";
+                    return  $"{genericClassName} is used in diffrent table.";
+                case 20001:
+                    return "Appointment for this patient for this date and time is already booked.";
+                case 20002:
+                    return "There are not enough offices or veterinarians to attend to the patient.";
                 default:
-                    return "can't be modified or deleted";
+                    return $"Operation did not complete successfully.";
             }
         }
     }

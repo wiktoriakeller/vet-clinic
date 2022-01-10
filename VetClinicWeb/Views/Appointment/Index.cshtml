@@ -1,0 +1,68 @@
+﻿@model IEnumerable<VetClinicWeb.Models.AppointmentViewModel>
+
+@{
+    ViewData["Title"] = "Appointment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h4>List of appointments</h4>
+
+@Html.Partial("SearchBoxPartialView")
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.AppointmentDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FacilityAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OfficeNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmployeeName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PatientName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cause)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.AppointmentDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FacilityAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OfficeNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmployeeName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PatientName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cause)
+            </td>
+            <td>
+                @Html.ActionLink("Update", "Update", new { id=item.AppointmentId }) |
+                @Html.ActionLink("Delete", "ShowDelete", new { id=item.AppointmentId })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
