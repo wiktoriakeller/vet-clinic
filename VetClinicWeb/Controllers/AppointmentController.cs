@@ -70,6 +70,11 @@ namespace VetClinicWeb.Controllers
             return View(appointments);
         }
 
+        public async Task<IActionResult> Details(int id)
+        {
+            return View(await GetFullAppointment(id));
+        }
+
         [HttpGet]
         public async Task<IActionResult> Create()
         {
@@ -176,7 +181,7 @@ namespace VetClinicWeb.Controllers
             var office = await _officeDataAccess.Get(appointment.Office);
             appointment.OfficeNumber = office.OfficeNumber;
 
-            var facility = await _facilityDataAccess.Get(appointment.Facility);
+            var facility = await _facilityDataAccess.Get(office.Facility);
             appointment.FacilityAddress = facility.Address;
 
             return appointment;

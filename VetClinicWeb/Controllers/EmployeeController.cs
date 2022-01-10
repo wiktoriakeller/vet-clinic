@@ -25,7 +25,7 @@ namespace VetClinicWeb.Controllers
             _positionDataAccess = positionDataAccess;
             _facilityDataAccess = facilityDataAcces;
 
-            _restrictedInDropdown = new List<string> { "employeeid", "position", "facility", "phonenumber", "address" };
+            _restrictedInDropdown = new List<string> { "employeeid", "position", "facility", "phonenumber", "address", "officenumber", "cause" };
             AddPropertiesNamesToDropdown();
         }
 

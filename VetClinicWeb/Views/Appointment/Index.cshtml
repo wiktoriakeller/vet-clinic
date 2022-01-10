@@ -23,16 +23,10 @@
                 @Html.DisplayNameFor(model => model.FacilityAddress)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.OfficeNumber)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.EmployeeName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.PatientName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Cause)
             </th>
             <th></th>
         </tr>
@@ -47,19 +41,14 @@
                 @Html.DisplayFor(modelItem => item.FacilityAddress)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.OfficeNumber)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.EmployeeName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.PatientName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Cause)
-            </td>
-            <td>
                 @Html.ActionLink("Update", "Update", new { id=item.AppointmentId }) |
+                @Html.ActionLink("Details", "Details", new { id=item.AppointmentId }) |
                 @Html.ActionLink("Delete", "ShowDelete", new { id=item.AppointmentId })
             </td>
         </tr>
