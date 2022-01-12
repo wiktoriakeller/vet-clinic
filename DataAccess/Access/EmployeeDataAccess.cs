@@ -7,7 +7,7 @@ using Dapper;
 
 namespace DataAccess.Access
 {
-    public class EmployeeDataAccess : Access, IDataAccess<Employee>
+    public class EmployeeDataAccess : Access, IDataAccess<Employee>, IVeterinariansAccess
     {
         public EmployeeDataAccess(ISQLDataAccess db) : base(db) { }
 
@@ -79,6 +79,13 @@ namespace DataAccess.Access
             });
 
             return _db.SaveData(sql, dynamicParameters);
+        }
+
+        public Task<IEnumerable<Employee>> GetVeterinarians()
+        {
+            string sql = @"select e.employeeId, e.name, e.surname, e.salary, e.bonusSalary, e.address, e.phoneNumber, e.position, e.facility
+                        from employees e inner join positions p on e.position = p.positionId where p.NAME = 'Veterinarian'";
+            return _db.LoadData<Employee>(sql);
         }
     }
 }

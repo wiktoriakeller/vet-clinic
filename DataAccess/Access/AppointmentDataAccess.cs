@@ -59,10 +59,10 @@ namespace DataAccess.Access
         {
             string sql = @"
                 update appointments
-                set appointmentDate = :AppointmentDate,
-                    c asue = :Casue,
+                set appointmentDate = to_timestamp('" + appointment.AppointmentDate + @"', 'DD/MM/YYYY HH24:MI'),
+                    cause = :Casue,
                     office = :Office,
-                    employee = :Employee
+                    employee = :Employee,
                     patient = :Patient
                 where appointmentId = :Id";
 

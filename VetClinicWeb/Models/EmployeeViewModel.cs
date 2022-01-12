@@ -21,6 +21,8 @@ namespace VetClinicWeb.Models
 		[RegularExpression(@"[A-Za-z]*", ErrorMessage = "Employee surname should only contain letters")]
 		[StringLength(50, ErrorMessage = "{0} length must be shorter than {1} characters")]
 		public string Surname { get; set; }
+
+		public string Fullname { get; set; }
 		
 		[Required]
 		[RegularExpression(@"[1-9]{0,1}[0-9]{0,4}[.]?(?=[0-9])[0-9]{0,2}", ErrorMessage = "Salary should be a positive number with no more then two decimal places in the range of 0.00 - 99999.99")]

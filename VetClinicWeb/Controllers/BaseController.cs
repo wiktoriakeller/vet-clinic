@@ -72,11 +72,13 @@ namespace VetClinicWeb.Controllers
             return searched;
         }
 
-        protected string GetExceptionMessage(int number)
+        protected string GetExceptionMessage(int number, string message="")
         {
             var genericClassName = typeof(T).Name.Replace("ViewModel", "");
             switch (number)
             {
+                case 2291:
+                    return "Operation did not complete successfully due to empty values in forms.";
                 case 2292:
                     return  $"{genericClassName} is used in diffrent table.";
                 case 20001:

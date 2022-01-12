@@ -5,16 +5,17 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h4>Create new appointment</h4>
+<h4>Update appointment</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Update">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @Html.HiddenFor(model => model.AppointmentId, new {id = "appointmentId" })
             <div class="form-group">
                 <label asp-for="Date" class="control-label"></label>
                 <div class="input-group date" id="datetimepicker4" data-target-input="nearest">
-                    <input asp-for="Date" type="text" class="form-control datetimepicker-input" data-target="#datetimepicker4"/>
+                    <input asp-for="Date" type="text" class="form-control datetimepicker-input" data-target="#datetimepicker4" id="Date"/>
                     <div class="input-group-append" data-target="#datetimepicker4" data-toggle="datetimepicker">
                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                     </div>
@@ -24,7 +25,7 @@
             <div class="form-group">
                 <label asp-for="Time" class="control-label"></label>
                 <div class="input-group date" id="datetimepicker3" data-target-input="nearest">
-                    <input asp-for="Time" type="text" class="form-control datetimepicker-input" data-target="#datetimepicker3"/>
+                    <input asp-for="Time" type="text" class="form-control datetimepicker-input" data-target="#datetimepicker3" id="Time"/>
                     <div class="input-group-append" data-target="#datetimepicker3" data-toggle="datetimepicker">
                         <div class="input-group-text"><i class="fa fa-clock-four" aria-hidden="true"></i></div>
                     </div>
@@ -37,17 +38,29 @@
                 <span asp-validation-for="Cause" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Facility" class="control-label"></label>
-                @Html.DropDownListFor(model => model.Facility, ViewBag.facilities as SelectList, "-- facility --", new {@class="form-control"})
-            </div>
-            <div class="form-group">
                 <label asp-for="Patient" class="control-label"></label>
                 @Html.DropDownListFor(model => model.Patient, ViewBag.patients as SelectList, "-- patient --", new {@class="form-control"})
             </div>
+            <div class="form-group">
+                <label asp-for="Facility" class="control-label"></label>
+                @Html.DropDownListFor(model => model.Facility, ViewBag.facilities as SelectList, "-- facility --", new {@class="form-control", id="facilityId"})
+            </div>
+            <div class="form-group">
+                <label asp-for="Office" class="control-label"></label>
+                <div>
+                    <select asp-for="Office" class="form-control" id="OfficesFormDropdown"></select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Veterinarian</label>
+                <div>
+                    <select asp-for="Employee" class="form-control" id="VeterinariansFormDropdown"></select>
+                </div>
+            </div>
             <p class="text-danger">@ViewBag.ErrorMessage</p>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>      
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
         </form>
     </div>
 </div>
