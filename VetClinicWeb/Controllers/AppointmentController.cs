@@ -240,6 +240,22 @@ namespace VetClinicWeb.Controllers
                 return Json(true);
         }
 
+
+        [AcceptVerbs("Get", "Post")]
+        public async Task<JsonResult> IsEmployeeFree(AppointmentViewModel model)
+        {
+            var dbAppointments = (List<Appointment>) await _appointmentDataAccess.Get();
+            var fullDate = $"{model.Date} {model.Time}";
+
+            foreach (var dbApp in dbAppointments)
+            {
+                if (dbApp.Employee == model.Employee && dbApp.AppointmentDate == fullDate)
+                    return Json("This employee has another appointment at the same time.");
+            }
+
+            return Json(true);
+        }
+
         [HttpPost]
         public async Task<IActionResult> GetOfficesAndVeterinarians(int facilityId, int appointmentId)
         {

@@ -40,22 +40,26 @@
             <div class="form-group">
                 <label asp-for="Patient" class="control-label"></label>
                 @Html.DropDownListFor(model => model.Patient, ViewBag.patients as SelectList, "-- patient --", new {@class="form-control"})
+                <span asp-validation-for="Patient" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Facility" class="control-label"></label>
                 @Html.DropDownListFor(model => model.Facility, ViewBag.facilities as SelectList, "-- facility --", new {@class="form-control", id="facilityId"})
+                <span asp-validation-for="Facility" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Office" class="control-label"></label>
                 <div>
                     <select asp-for="Office" class="form-control" id="OfficesFormDropdown"></select>
                 </div>
+                <span asp-validation-for="Office" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label class="control-label">Veterinarian</label>
                 <div>
                     <select asp-for="Employee" class="form-control" id="VeterinariansFormDropdown"></select>
                 </div>
+                <span asp-validation-for="Employee" class="text-danger"></span>
             </div>
             <p class="text-danger">@ViewBag.ErrorMessage</p>
             <div class="form-group">

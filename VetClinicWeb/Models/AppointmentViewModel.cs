@@ -23,6 +23,7 @@ namespace VetClinicWeb.Models
         public string Cause { get; set; }
 
         [Required]
+        [Remote(action: "IsEmployeeFree", controller: "Appointment", AdditionalFields = "Employee, Date, Time")]
         public int Employee { get; set; }
         
         [Display(Name = "Employee Name")]
