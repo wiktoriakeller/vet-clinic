@@ -72,17 +72,17 @@ namespace VetClinicWeb.Controllers
             return searched;
         }
 
-        protected string GetExceptionMessage(int number, string message="")
+        protected string GetExceptionMessage(int number)
         {
             var genericClassName = typeof(T).Name.Replace("ViewModel", "");
             switch (number)
             {
                 case 2291:
-                    return "Operation did not complete successfully due to empty values in forms.";
+                    return "Operation did not complete successfully due to the empty values in forms.";
                 case 2292:
                     return  $"{genericClassName} is used in diffrent table.";
                 case 20001:
-                    return "Appointment for this patient for this date and time is already booked.";
+                    return "This patient has another appointment at the same time.";
                 case 20002:
                     return "There are not enough offices or veterinarians to attend to the patient.";
                 default:

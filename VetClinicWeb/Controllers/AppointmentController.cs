@@ -269,7 +269,7 @@ namespace VetClinicWeb.Controllers
                 {
                     var office = dbOffices.FirstOrDefault(o => o.OfficeId == model.Office && o.Facility == model.Facility);
                     if (office != null)
-                        return Json("There is another appointment at the same time.");
+                        return Json("There is another appointment in this office at the same time.");
                 }
             }
 
@@ -286,7 +286,7 @@ namespace VetClinicWeb.Controllers
             foreach (var dbApp in dbAppointments)
             {
                 if (dbApp.Patient == model.Patient && dbApp.AppointmentDate == fullDate)
-                    return Json("This patient has another visit at the same time.");
+                    return Json("This patient has another appointment at the same time.");
             }
 
             return Json(true);
@@ -314,14 +314,6 @@ namespace VetClinicWeb.Controllers
             var selectedVetId = dbAppointment.Employee;
 
             return Json(new {offices = offices, veterinarians = employees, selectedOffice = selectedOfficeId, selectedVet = selectedVetId });
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> GetAppointmentDayAndTime(int appointmentId)
-        {
-            var dbAppointment = await _appointmentDataAccess.Get(appointmentId);
-            var splitted = GetDateAndTime(dbAppointment.AppointmentDate);
-            return Json(new { time = splitted.Item2 });
         }
     }
 }

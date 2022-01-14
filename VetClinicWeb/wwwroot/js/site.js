@@ -6,25 +6,88 @@ $("#datetimepicker4").datetimepicker({
     daysOfWeekDisabled: [0, 6]
 });
 
-$("#datetimepicker3").datetimepicker({
-    format: "HH:mm",
-    stepping: 30,
-    enabledHours: [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
-});
-
 $(document).ready(function () {
     var selectedValue = $("#facilityId").val();
     var appointmentId = $("#appointmentId").val();
 
     let names = GetActionAndController();
     const action = names[0], controller = names[1];
-    console.log(action, controller);
 
     if (action == "Update" && controller == "Appointment") {
+        UpdateTime(true);
         updateAppointmentDropdowns(selectedValue, appointmentId, true);
-        updateDateAndTime(appointmentId);
     }
 });
+
+$("#datetimepicker4").on("change.datetimepicker", function () {
+    let names = GetActionAndController();
+    const action = names[0], controller = names[1];
+    console.log("changed");
+
+    if (action == "Update" && controller == "Appointment") {
+        UpdateTime(false);
+    }
+});
+
+function UpdateTime(initialize) {
+    var selectedDate = $("#Datetimepicker").val();
+    var currentDate = new Date();
+
+    var day = currentDate.getDate();
+    if (day <= 9)
+        day = "0" + day.toString();
+
+    var month = currentDate.getMonth() + 1;
+    if (month <= 9)
+        month = "0" + month.toString();
+
+    var year = currentDate.getFullYear().toString();
+    var currentDateStr = day + "/" + month + "/" + year;
+    var currentHour = currentDate.getHours();
+    var currentMinutes = currentDate.getMinutes();
+    var time;
+
+    if (currentMinutes <= 30) {
+        if (currentHour <= 10)
+            currentHour = "0" + currentHour.toString();
+        time = currentHour + ":" + "30";
+    }
+    else {
+        currentHour += 1;
+        if (currentHour <= 10)
+            currentHour = "0" + currentHour.toString();
+        time = currentHour + ":" + "00";
+    }
+
+    var dateFormat = "DD/MM/YYYY HH:mm";
+    var minDate = moment(currentDateStr + " " + time, dateFormat);
+
+    if (selectedDate == currentDateStr && initialize) {
+        $("#datetimepicker3").datetimepicker({
+            format: "HH:mm",
+            stepping: 30,
+            enabledHours: [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
+            minDate: minDate
+        });
+    }
+    else if (initialize) {
+        $("#datetimepicker3").datetimepicker({
+            format: "HH:mm",
+            stepping: 30,
+            enabledHours: [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
+            minDate: moment(selectedDate + " " + "05:00", dateFormat)
+        });
+    }
+
+    if (selectedDate == currentDateStr && !initialize) {
+        var newMinDate = $(this).datetimepicker('date');
+        $("#datetimepicker3").datetimepicker("minDate", minDate);
+    }
+    else if (!initialize) {
+        var newMinDate = $(this).datetimepicker('date');
+        $("#datetimepicker3").datetimepicker("minDate", moment(selectedDate + " " + "07:00", dateFormat));
+    }
+}
 
 $("#facilityId").change(function () {
     var selectedValue = $(this).val();
@@ -88,19 +151,6 @@ function updateAppointmentDropdowns(selectedValue, appointmentId, setSelected) {
 
                 $("#OfficesFormDropdown").html(officesMarkup);
                 $("#VeterinariansFormDropdown").html(vetMarkup);
-            }
-    });
-}
-
-function updateDateAndTime(appointmentId) {
-    $.ajax({
-        type: 'POST',
-        dataType: 'JSON',
-        url: '/Appointment/GetAppointmentDayAndTime',
-        data: { appointmentId: appointmentId },
-        success:
-            function (response) {
-                $("#Time").val(response.time);
             }
     });
 }
