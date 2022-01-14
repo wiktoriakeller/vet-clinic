@@ -94,7 +94,7 @@ function updateTime(useFullDate) {
     var minTime;
     var change = false;
 
-    console.log(selectedDate);
+    console.log(selectedTime);
 
     if (selectedDate == currentDateStr && !(hour >= 19 || (hour == 18 && minutes > 30))) {
         $("#datetimepicker3").datetimepicker("minDate", time);
