@@ -5,6 +5,9 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
+using System.Reflection;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 
 namespace VetClinicWeb.Controllers
 {
@@ -26,26 +29,23 @@ namespace VetClinicWeb.Controllers
             var listOfFields = typeof(T).GetProperties();
             _options = new List<SelectListItem>();
 
+            Console.WriteLine(typeof(T));
+
             foreach (var field in listOfFields)
             {
                 if (!_restrictedInDropdown.Any(str => field.Name.ToLower() == str))
                 {
-                    var name = field.Name;
+                    string fieldName;
+                    MemberInfo property = typeof(T).GetProperty(field.Name);
+                    var displayName = property.GetCustomAttribute<DisplayNameAttribute>()?.DisplayName;
 
-                    if (field.Name != "PESEL" && field.Name != "NIP")
-                        name = string.Join(" ", Regex.Split(field.Name, @"(?<!^)(?=[A-Z])"));
+                    if (displayName != null)
+                        fieldName = displayName;
+                    else
+                        fieldName = field.Name;
 
-                    if (name == "Salary Min")
-                        name = "Minimum Salary";
-                    else if (name == "Salary Max")
-                        name = "Maximum Salary";
-                    else if (name == "Position Name")
-                        name = "Position";
-                    else if (name == "Facility Address")
-                        name = "Facility";
-
-                    _options.Add(new SelectListItem { Text = name });
-                    _propertiesNames[name] = Tuple.Create(field.Name, field.PropertyType);
+                    _options.Add(new SelectListItem { Text = fieldName });
+                    _propertiesNames[fieldName] = Tuple.Create(field.Name, field.PropertyType);
                 }
             }
 
@@ -57,15 +57,35 @@ namespace VetClinicWeb.Controllers
             search = search.ToLower().Trim();
             option = option.ToLower();
             var searched = new List<T>();
+            string idPropertyName = "";
 
-            foreach (var val in _propertiesNames)
+            if(entities.Count > 0)
             {
-                if (option == val.Key.ToLower() || option == "any")
+                var listOfFields = typeof(T).GetProperties();
+                idPropertyName = listOfFields.SingleOrDefault(field => field.Name.ToLower().Contains("id")).Name;
+            }
+
+            if(idPropertyName != "")
+            {
+                foreach(var entity in entities)
                 {
-                    if (val.Value.Item2 == typeof(string))
-                        searched.AddRange(entities.Where(entity => entity.GetType().GetProperty(val.Value.Item1).GetValue(entity, null).ToString().ToLower().Contains(search)));
-                    else
-                        searched.AddRange(entities.Where(entity => entity.GetType().GetProperty(val.Value.Item1).GetValue(entity, null).ToString().ToLower() == search));
+                    foreach(var val in _propertiesNames)
+                    {
+                        if(option == val.Key.ToLower() || option == "any")
+                        {
+                            var propertyVal = entity.GetType().GetProperty(val.Value.Item1).GetValue(entity, null).ToString().ToLower();
+                            var contains = searched.Any(s => s.GetType().GetProperty(idPropertyName).GetValue(s, null).ToString() == entity.GetType().GetProperty(idPropertyName).GetValue(entity, null).ToString());
+
+
+                            if ((val.Value.Item2 == typeof(string) && propertyVal.Contains(search)) 
+                                || (val.Value.Item2 != typeof(string) && propertyVal == search) 
+                                && !contains)
+                            {
+                                searched.Add(entity);
+                                break;
+                            }
+                        }
+                    }
                 }
             }
 
