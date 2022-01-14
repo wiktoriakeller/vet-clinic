@@ -41,6 +41,7 @@ namespace VetClinicWeb.Models
         [Display(Name = "Facility")]
         public string FacilityAddress { get; set; }
 
+        [Remote(action: "IsOfficeFree", controller: "Appointment", AdditionalFields = "Office, Date, Time, Facility")]
         public int Office { get; set; }
 
         [Display(Name = "Office Number")]

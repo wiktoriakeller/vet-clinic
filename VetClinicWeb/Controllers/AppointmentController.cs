@@ -244,13 +244,33 @@ namespace VetClinicWeb.Controllers
         [AcceptVerbs("Get", "Post")]
         public async Task<JsonResult> IsEmployeeFree(AppointmentViewModel model)
         {
-            var dbAppointments = (List<Appointment>) await _appointmentDataAccess.Get();
+            var dbAppointments = await _appointmentDataAccess.Get();
             var fullDate = $"{model.Date} {model.Time}";
 
             foreach (var dbApp in dbAppointments)
             {
-                if (dbApp.Employee == model.Employee && dbApp.AppointmentDate == fullDate)
+                if (dbApp.Employee == model.Employee && dbApp.AppointmentDate == fullDate && dbApp.AppointmentId != model.AppointmentId)
                     return Json("This employee has another appointment at the same time.");
+            }
+
+            return Json(true);
+        }
+
+        [AcceptVerbs("Get", "Post")]
+        public async Task<JsonResult> IsOfficeFree(AppointmentViewModel model)
+        {
+            var dbAppointments = await _appointmentDataAccess.Get();
+            var dbOffices = await _officeDataAccess.Get();
+            var fullDate = $"{model.Date} {model.Time}";
+
+            foreach (var dbApp in dbAppointments)
+            {
+                if (dbApp.Office == model.Office && dbApp.AppointmentDate == fullDate)
+                {
+                    var office = dbOffices.FirstOrDefault(o => o.OfficeId == model.Office && o.Facility == model.Facility);
+                    if (office != null)
+                        return Json("There is another appointment at the same time.");
+                }
             }
 
             return Json(true);
