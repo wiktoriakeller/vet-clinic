@@ -276,6 +276,22 @@ namespace VetClinicWeb.Controllers
             return Json(true);
         }
 
+
+        [AcceptVerbs("Get", "Post")]
+        public async Task<JsonResult> IsPatientFree(AppointmentViewModel model)
+        {
+            var dbAppointments = await _appointmentDataAccess.Get();
+            var fullDate = $"{model.Date} {model.Time}";
+
+            foreach (var dbApp in dbAppointments)
+            {
+                if (dbApp.Patient == model.Patient && dbApp.AppointmentDate == fullDate)
+                    return Json("This patient has another visit at the same time.");
+            }
+
+            return Json(true);
+        }
+
         [HttpPost]
         public async Task<IActionResult> GetOfficesAndVeterinarians(int facilityId, int appointmentId)
         {
