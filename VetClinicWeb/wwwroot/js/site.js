@@ -15,15 +15,50 @@ $("#datetimepicker3").datetimepicker({
 $(document).ready(function () {
     var selectedValue = $("#facilityId").val();
     var appointmentId = $("#appointmentId").val();
-    updateAppointmentDropdowns(selectedValue, appointmentId, true);
-    updateDateAndTime(appointmentId);
+
+    let names = GetActionAndController();
+    const action = names[0], controller = names[1];
+    console.log(action, controller);
+
+    if (action == "Update" && controller == "Appointment") {
+        updateAppointmentDropdowns(selectedValue, appointmentId, true);
+        updateDateAndTime(appointmentId);
+    }
 });
 
 $("#facilityId").change(function () {
     var selectedValue = $(this).val();
     var appointmentId = $("#appointmentId").val();
-    updateAppointmentDropdowns(selectedValue, appointmentId, false);
+
+    let names = GetActionAndController();
+    const action = names[0], controller = names[1];
+
+    if (action == "Update" && controller == "Appointment") {
+        updateAppointmentDropdowns(selectedValue, appointmentId, false);
+    }
 });
+
+function GetActionAndController() {
+    var url = window.location.pathname;
+    var indexes = getAllIndexes(url, "/");
+
+    if (indexes.length == 3) {
+        var controller = url.substring(indexes[0] + 1, indexes[1]);
+        var action = url.substring(indexes[1] + 1, indexes[2]);
+
+        return [action, controller];
+    }
+
+    return ["", ""];
+}
+
+function getAllIndexes(str, val) {
+    var indexes = [], i;
+    for (i = 0; i < str.length; i++)
+        if (str[i] === val)
+            indexes.push(i);
+    return indexes;
+}
 
 function updateAppointmentDropdowns(selectedValue, appointmentId, setSelected) {
     $.ajax({
