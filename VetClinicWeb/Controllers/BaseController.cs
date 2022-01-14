@@ -76,7 +76,6 @@ namespace VetClinicWeb.Controllers
                             var propertyVal = entity.GetType().GetProperty(val.Value.Item1).GetValue(entity, null).ToString().ToLower();
                             var contains = searched.Any(s => s.GetType().GetProperty(idPropertyName).GetValue(s, null).ToString() == entity.GetType().GetProperty(idPropertyName).GetValue(entity, null).ToString());
 
-
                             if ((val.Value.Item2 == typeof(string) && propertyVal.Contains(search)) 
                                 || (val.Value.Item2 != typeof(string) && propertyVal == search) 
                                 && !contains)

@@ -33,7 +33,7 @@ namespace VetClinicWeb.Controllers
             _officeDataAccess = officeDataAccess;
             _facilityDataAccess = facilityDataAccess;
 
-            _restrictedInDropdown = new List<string> { "appointmentid", "date", "time", "cause", "employee", "office", "facility", "patient", "officenumber" };
+            _restrictedInDropdown = new List<string> { "appointmentid", "date", "time", "cause", "employee", "office", "facility", "patient" };
             AddPropertiesNamesToDropdown();
 
             int startHour = 7;
@@ -219,6 +219,7 @@ namespace VetClinicWeb.Controllers
             var date = splittedDate[0];
             var splittedTime = splittedDate[1].Split(':');
             var time = $"{splittedTime[0]}:{splittedTime[1]}";
+            Console.WriteLine(date);
             return new Tuple<string, string>(date, time);
         }
 
@@ -314,6 +315,14 @@ namespace VetClinicWeb.Controllers
             var selectedVetId = dbAppointment.Employee;
 
             return Json(new {offices = offices, veterinarians = employees, selectedOffice = selectedOfficeId, selectedVet = selectedVetId });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetAppointmentDayAndTime(int appointmentId)
+        {
+            var dbAppointment = await _appointmentDataAccess.Get(appointmentId);
+            var splitted = GetDateAndTime(dbAppointment.AppointmentDate);
+            return Json(new { date = splitted.Item1, time = splitted.Item2 });
         }
     }
 }

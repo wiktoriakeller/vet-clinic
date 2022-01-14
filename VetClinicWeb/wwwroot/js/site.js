@@ -1,35 +1,67 @@
 ﻿
 $("#datetimepicker4").datetimepicker({
     format: "DD/MM/YYYY",
-    minDate: new Date(),
+    minDate: moment().millisecond(0).second(0).minute(0).hour(0),
     maxDate: new Date(2025, 12),
     daysOfWeekDisabled: [0, 6]
 });
 
-$(document).ready(function () {
-    var selectedValue = $("#facilityId").val();
-    var appointmentId = $("#appointmentId").val();
+$("#datetimepicker3").datetimepicker({
+    format: "HH:mm",
+    stepping: 30,
+    enabledHours: [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+});
 
-    let names = GetActionAndController();
+$(document).ready(function () {
+    let names = getActionAndController();
     const action = names[0], controller = names[1];
 
-    if ((action == "Update" || action == "Create") && controller == "Appointment") {
-        UpdateTime(true);
-        updateAppointmentDropdowns(selectedValue, appointmentId, true);
+    if (controller == "Appointment") {
+        if (action == "Update") {
+            var selectedValue = $("#facilityId").val();
+            var appointmentId = $("#appointmentId").val();
+            updateAppointmentDropdowns(selectedValue, appointmentId, true);
+
+            var minTime = updateTime(true);
+            if (minTime[1] == true) {
+                $("#datetimepicker3").datetimepicker("defaultDate", minTime[0]);
+                $("#timePicker").val(minTime[0]);
+            }
+            else {
+                updateDateAndTime(appointmentId);
+            }
+        }
+        else if (action == "Create") {
+            var minTime = updateTime(false);
+            $("#timePicker").val(minTime[0]);
+        }
     }
 });
 
 $("#datetimepicker4").on("change.datetimepicker", function () {
-    let names = GetActionAndController();
+    let names = getActionAndController();
     const action = names[0], controller = names[1];
 
     if ((action == "Update" || action == "Create") && controller == "Appointment") {
-        UpdateTime(false);
+        var minTime = updateTime(false);
+        $("#timePicker").val(minTime[0]);
     }
 });
 
-function UpdateTime(initialize) {
-    var selectedDate = $("#datePicker").val();
+function updateTime(useFullDate) {
+    var selectedDate;
+    var selectedTime;
+
+    if (useFullDate) {
+        var selected = $("#fullDate").val().split(" ");
+        selectedDate = formatDate(selected[0]);
+        selectedTime = selected[1];
+    }
+    else {
+        selectedDate = $("#datePicker").val();
+        selectedTime = $("#timePicker").val();
+    }
+
     var currentDate = new Date();
 
     var day = currentDate.getDate();
@@ -42,64 +74,54 @@ function UpdateTime(initialize) {
 
     var year = currentDate.getFullYear().toString();
     var currentDateStr = day + "/" + month + "/" + year;
-    var currentHour = currentDate.getHours();
-    var currentMinutes = currentDate.getMinutes();
+
+    var hour = currentDate.getHours();
+    var minutes = currentDate.getMinutes();
     var time;
 
-    if (currentMinutes <= 30) {
-        if (currentHour <= 10)
-            currentHour = "0" + currentHour.toString();
-        time = currentHour + ":" + "30";
+    if (minutes <= 30) {
+        if (hour <= 10)
+            hour = "0" + currentHour.toString();
+        time = hour + ":" + "30";
     }
     else {
-        currentHour += 1;
-        if (currentHour < 7)
-            currentHour = 7;
-
-        if (currentHour <= 10)
-            currentHour = "0" + currentHour.toString();
-        time = currentHour + ":" + "00";
+        hour += 1;
+        if (hour <= 10)
+            hour = "0" + hour.toString();
+        time = hour + ":" + "00";
     }
 
-    var dateFormat = "DD/MM/YYYY HH:mm";
-    var minDate = moment(currentDateStr + " " + time, dateFormat);
+    var minTime;
+    var change = false;
 
-    if (selectedDate == currentDateStr && initialize) {
-        $("#datetimepicker3").datetimepicker({
-            format: "HH:mm",
-            stepping: 30,
-            enabledHours: [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
-            minDate: minDate
-        });
+    console.log(selectedDate);
+
+    if (selectedDate == currentDateStr && !(hour >= 19 || (hour == 18 && minutes > 30))) {
+        $("#datetimepicker3").datetimepicker("minDate", time);
+        minTime = time;
+
+        var splittedSelTime = selectedTime.split(":");
+        var selHour = parseInt(splittedSelTime[0]);
+        var selMin = parseInt(splittedSelTime[1]);
+
+        if ((selHour == hour && selMin < minutes) || selHour < hour)
+            change = true;
     }
-    else if (initialize && selectedDate != currentDate && selectedDate != null) {
-        $("#datetimepicker3").datetimepicker({
-            format: "HH:mm",
-            stepping: 30,
-            enabledHours: [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
-            minDate: moment(selectedDate + " " + "07:00", dateFormat)
-        });
+    else {
+        $("#datetimepicker3").datetimepicker("minDate", "07:00");
+        minTime = "07:00";
     }
 
-    if (selectedDate == currentDateStr && !initialize)
-        $("#datetimepicker3").datetimepicker("minDate", minDate);
-    else if (!initialize)
-        $("#datetimepicker3").datetimepicker("minDate", moment(selectedDate + " " + "07:00", dateFormat));
+    return [minTime, change];
 }
 
-$("#facilityId").change(function () {
-    var selectedValue = $(this).val();
-    var appointmentId = $("#appointmentId").val();
+function getCurrenDate() {
+    var fullDate = $("#fullDate").val();
+    var date = fullDate.split(" ")[0];
+    return formatDate(date);
+}
 
-    let names = GetActionAndController();
-    const action = names[0], controller = names[1];
-
-    if (action == "Update" && controller == "Appointment") {
-        updateAppointmentDropdowns(selectedValue, appointmentId, false);
-    }
-});
-
-function GetActionAndController() {
+function getActionAndController() {
     var url = window.location.pathname;
     var indexes = getAllIndexes(url, "/");
 
@@ -126,6 +148,18 @@ function getAllIndexes(str, val) {
             indexes.push(i);
     return indexes;
 }
+
+$("#facilityId").change(function () {
+    var selectedValue = $(this).val();
+    var appointmentId = $("#appointmentId").val();
+
+    let names = getActionAndController();
+    const action = names[0], controller = names[1];
+
+    if (action == "Update" && controller == "Appointment") {
+        updateAppointmentDropdowns(selectedValue, appointmentId, false);
+    }
+});
 
 function updateAppointmentDropdowns(selectedValue, appointmentId, setSelected) {
     $.ajax({
@@ -155,6 +189,28 @@ function updateAppointmentDropdowns(selectedValue, appointmentId, setSelected) {
 
                 $("#OfficesFormDropdown").html(officesMarkup);
                 $("#VeterinariansFormDropdown").html(vetMarkup);
+            }
+    });
+}
+
+function formatDate(date) {
+    var indexes = getAllIndexes(date, "/");
+    var day = date.substring(indexes[0] + 1, indexes[1]);
+    var month = date.substring(0, indexes[0]);
+    var year = date.substring(indexes[1] + 1);
+    return day + "/" + month + "/" + year;
+}
+
+function updateDateAndTime(appointmentId) {
+    $.ajax({
+        type: 'POST',
+        dataType: 'JSON',
+        url: '/Appointment/GetAppointmentDayAndTime',
+        data: { appointmentId: appointmentId },
+        success:
+            function (response) {
+                $("#datePicker").val(formatDate((response.date)));
+                $("#timePicker").val(response.time);
             }
     });
 }
