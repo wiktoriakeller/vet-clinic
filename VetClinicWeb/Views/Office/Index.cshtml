@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>List of offices</h1>
+<h4>List of offices</h4>
 @Html.Partial("SearchBoxPartialView")
 
 <p>
@@ -18,7 +18,7 @@
                 @Html.DisplayNameFor(model => model.OfficeNumber)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Address)
+                @Html.DisplayNameFor(model => model.FacilityAddress)
             </th>
             <th></th>
         </tr>
@@ -30,7 +30,7 @@
                 @Html.DisplayFor(modelItem => item.OfficeNumber)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Address)
+                @Html.DisplayFor(modelItem => item.FacilityAddress)
             </td>
             <td>
                 @Html.ActionLink("Update", "Update", new { id=item.OfficeId }) |

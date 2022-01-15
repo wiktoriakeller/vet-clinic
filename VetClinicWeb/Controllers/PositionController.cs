@@ -24,7 +24,7 @@ namespace VetClinicWeb.Controllers
             double? salaryMax = model.SalaryMax;
 
             if (salaryMin != null && salaryMax != null && salaryMax < salaryMin)
-                return Json("Maximum salary should be bigger than minimum salary");
+                return Json("Maximum salary should be bigger than minimum salary.");
 
             return Json(true);
         }

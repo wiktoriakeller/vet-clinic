@@ -28,28 +28,13 @@ namespace VetClinicWeb.Controllers
         public async Task<IActionResult> Index(string option, string search)
         {
             ViewBag.Options = _options;
-
             List<OfficeViewModel> offices = await GetFullOffices();
+
             if (!string.IsNullOrEmpty(search) && !string.IsNullOrEmpty(option))
             {
-                search = search.ToLower().Trim();
-                option = option.ToLower();
-                var searched = new List<OfficeViewModel>();
-
-                foreach (var val in _propertiesNames)
-                {
-                    if (option == val.Key.ToLower() || option == "any")
-                    {
-                        if (val.Value.Item2 == typeof(string))
-                            searched.AddRange(offices.Where(entity => entity.GetType().GetProperty(val.Value.Item1).GetValue(entity, null).ToString().ToLower().Contains(search)));
-                        else
-                            searched.AddRange(offices.Where(entity => entity.GetType().GetProperty(val.Value.Item1).GetValue(entity, null).ToString().ToLower() == search));
-                    }
-                }
-
+                var searched = Search(search, option, offices);
                 return View(searched);
             }
-
 
             return View(offices);
         }
@@ -75,10 +60,9 @@ namespace VetClinicWeb.Controllers
                 catch (Oracle.ManagedDataAccess.Client.OracleException ex)
                 {
                     await UpdateDropdownLists();
-                    ModelState.AddModelError("Custom error", $"Office {GetExceptionMessage(ex.Number)}");
+                    ViewBag.ErrorMessage = GetExceptionMessage(ex.Number);
                     return View(model);
                 }
-
             }
 
             await UpdateDropdownLists();
@@ -88,8 +72,7 @@ namespace VetClinicWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Update(int id)
         {
-            OfficeViewModel office = await GetFullOffice(id);
-
+            var office = await GetFullOffice(id);
             await UpdateDropdownLists();
             return View(office);
         }
@@ -108,7 +91,7 @@ namespace VetClinicWeb.Controllers
                 catch (Oracle.ManagedDataAccess.Client.OracleException ex)
                 {
                     await UpdateDropdownLists();
-                    ModelState.AddModelError("Custom error", $" Office {GetExceptionMessage(ex.Number)}");
+                    ViewBag.ErrorMessage = GetExceptionMessage(ex.Number);
                     return View(model);
                 }
             }
@@ -137,7 +120,7 @@ namespace VetClinicWeb.Controllers
             }
             catch (Oracle.ManagedDataAccess.Client.OracleException ex)
             {
-                ViewBag.ErrorMessage = $"Office {GetExceptionMessage(ex.Number)}";
+                ViewBag.ErrorMessage = GetExceptionMessage(ex.Number);
                 return View(GetFullOffice(id));
             }
 
@@ -148,15 +131,14 @@ namespace VetClinicWeb.Controllers
         {
             var dbOffices = await _officeDataAccess.Get();
 
-            List<OfficeViewModel> offices = new List<OfficeViewModel>();
-            List<Facility> facilities = (List<Facility>)await _facilityDataAccess.Get();
-
+            var offices = new List<OfficeViewModel>();
+            var facilities = (List<Facility>)await _facilityDataAccess.Get();
             IDictionary<int, Facility> facilitiesDic = facilities.ToDictionary(p => p.FacilityId);
 
             foreach (var office in dbOffices)
             {
                 offices.Add(_mapper.Map<OfficeViewModel>(office));
-                offices.Last().Address = facilitiesDic[offices.Last().Facility].Address;
+                offices.Last().FacilityAddress = facilitiesDic[offices.Last().Facility].Address;
             }
 
             return offices;
@@ -164,13 +146,13 @@ namespace VetClinicWeb.Controllers
 
         public async Task<OfficeViewModel> GetFullOffice(int id)
         {
-            List<OfficeViewModel> offices = await GetFullOffices();
+            var offices = await GetFullOffices();
             return offices.Where(o => o.OfficeId == id).FirstOrDefault();
         }
 
         private async Task UpdateDropdownLists()
         {
-            List<Facility> facilities = (List<Facility>)await _facilityDataAccess.Get();
+            var facilities = (List<Facility>)await _facilityDataAccess.Get();
             ViewBag.facilities = new SelectList(facilities, "FacilityId", "Address");
         }
     }

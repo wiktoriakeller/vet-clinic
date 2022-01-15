@@ -12,14 +12,14 @@ namespace VetClinicWeb.Models
 
 		[Required]
 		[DataType(DataType.Text)]
-		[RegularExpression(@"[A-Za-z]*", ErrorMessage = "Employee name should only contain letters")]
-		[StringLength(50, ErrorMessage = "{0} length must be shorter than {1} characters")]
+		[RegularExpression(@"[A-Za-z]*", ErrorMessage = "Employee name should only contain letters.")]
+		[StringLength(50, ErrorMessage = "{0} length must be shorter than {1} characters.")]
 		public string Name { get; set; }
 
 		[Required]
 		[DataType(DataType.Text)]
-		[RegularExpression(@"[A-Za-z]*", ErrorMessage = "Employee surname should only contain letters")]
-		[StringLength(50, ErrorMessage = "{0} length must be shorter than {1} characters")]
+		[RegularExpression(@"[A-Za-z]*", ErrorMessage = "Employee surname should only contain letters.")]
+		[StringLength(50, ErrorMessage = "{0} length must be shorter than {1} characters.")]
 		public string Surname { get; set; }
 
 		public string Fullname { get; set; }
@@ -35,14 +35,14 @@ namespace VetClinicWeb.Models
 		public double BonusSalary { get; set; }
 
 		[Required]
-		[StringLength(150, ErrorMessage = "{0} length must be between {2} and {1}", MinimumLength = 4)]
+		[StringLength(150, ErrorMessage = "{0} length must be between {2} and {1}.", MinimumLength = 4)]
 		[ValidAddress] 
 		public string Address { get; set; }
 
 		[Required]
 		[DisplayName("Phone Number")]
-		[StringLength(9, ErrorMessage = "{0} length must be greater than or equal to {1}", MinimumLength = 9)]
-		[RegularExpression("[0-9]{3}[0-9]{3}[0-9]{3}", ErrorMessage = "Phone number should contain 9 digits")]
+		[StringLength(9, ErrorMessage = "{0} length must be equal to {1}.", MinimumLength = 9)]
+		[RegularExpression("[0-9]{3}[0-9]{3}[0-9]{3}", ErrorMessage = "Phone number should contain 9 digits.")]
 		public string PhoneNumber { get; set; }
 
 		public int Position { get; set; }

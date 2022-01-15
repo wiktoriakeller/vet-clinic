@@ -25,7 +25,7 @@ namespace VetClinicWeb.Controllers
             bool isPESELInUse = results.FirstOrDefault(x => (x.NIP == NIP && x.OrganizationId != organizationId)) == null;
 
             if (isPESELInUse == false)
-                return Json($"NIP {NIP} already in use.");
+                return Json($"NIP {NIP} is already in use.");
             else
                 return Json(true);
         }

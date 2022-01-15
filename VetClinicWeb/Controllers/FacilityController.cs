@@ -27,7 +27,7 @@ namespace VetClinicWeb.Controllers
             bool isAddressInUse = results.FirstOrDefault(x => (x.Address == address && x.FacilityId != facilityId)) == null;
 
             if (isAddressInUse == false)
-                return Json($"Address {address} already in use.");
+                return Json($"Address {address} is already in use.");
             else
                 return Json(true);
         }

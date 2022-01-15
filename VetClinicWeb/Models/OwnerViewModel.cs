@@ -12,19 +12,19 @@ namespace VetClinicWeb.Models
 
         [Required]
         [Remote(action: "IsPESELUnique", controller: "Owner", AdditionalFields = "OwnerId")]
-        [RegularExpression(@"[0-9]*", ErrorMessage = "Owner PESEL should only contain digits")]
+        [RegularExpression(@"[0-9]*", ErrorMessage = "Owner PESEL should only contain digits.")]
         [StringLength(11, ErrorMessage = "{0} length must be shorter than {1} characters")]
         public string PESEL { get; set; }
 
         [Required]
         [DataType(DataType.Text)]
-        [RegularExpression(@"[A-Za-z]*", ErrorMessage = "Owner name should only contain letters")]
+        [RegularExpression(@"[A-Za-z]*", ErrorMessage = "Owner name should only contain letters.")]
         [StringLength(50, ErrorMessage = "{0} length must be shorter than {1} characters")]
         public string Name { get; set; }
 
         [Required]
         [DataType(DataType.Text)]
-        [RegularExpression(@"[A-Za-z]*", ErrorMessage = "Owner surname should only contain letters")]
+        [RegularExpression(@"[A-Za-z]*", ErrorMessage = "Owner surname should only contain letters.")]
         [StringLength(50, ErrorMessage = "{0} length must be shorter than {1} characters")]
         public string Surname { get; set; }
 
@@ -36,7 +36,7 @@ namespace VetClinicWeb.Models
         [Required]
         [DisplayName("Phone Number")]
         [StringLength(9, ErrorMessage = "{0} length must be greater than or equal to {1}", MinimumLength = 9)]
-        [RegularExpression("[0-9]{3}[0-9]{3}[0-9]{3}", ErrorMessage = "Phone number should contain 9 digits")]
+        [RegularExpression("[0-9]{3}[0-9]{3}[0-9]{3}", ErrorMessage = "Phone number should contain 9 digits.")]
         public string PhoneNumber { get; set; }
     }
 }

@@ -11,8 +11,8 @@ namespace VetClinicWeb.Models
         
         [Required]
         [DataType(DataType.Text)]
-        [RegularExpression(@"[A-Za-z]*", ErrorMessage = "Position name should only contain letters")]
-        [StringLength(50, ErrorMessage = "{0} length must be shorter than {1} characters")]
+        [RegularExpression(@"[A-Za-z]*", ErrorMessage = "Position name should only contain letters.")]
+        [StringLength(50, ErrorMessage = "{0} length must be shorter than {1} characters.")]
         public string Name { get; set; }
         
         [Required]

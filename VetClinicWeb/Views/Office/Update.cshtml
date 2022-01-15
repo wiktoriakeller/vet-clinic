@@ -1,13 +1,11 @@
 ﻿@model VetClinicWeb.Models.OfficeViewModel
 
 @{
-    ViewData["Title"] = "Update";
+    ViewData["Title"] = "Office";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Update</h1>
-
-<h4>OfficeViewModel</h4>
+<h4>Update office</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -23,6 +21,7 @@
                 <label asp-for="Facility" class="control-label"></label>
                 @Html.DropDownListFor(model => model.Facility, ViewBag.facilities as SelectList, "-- facility --", new {@class="form-control"})
             </div>
+            <p class="text-danger">@ViewBag.ErrorMessage</p>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
