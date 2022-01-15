@@ -17,6 +17,7 @@ namespace VetClinic.Mappings
             CreateMap<Owner, OwnerViewModel>().ReverseMap();
             CreateMap<Patient, PatientViewModel>().ReverseMap();
             CreateMap<Appointment, AppointmentViewModel>().ReverseMap();
+			CreateMap<Drug, DrugViewModel>().ReverseMap();
         }
     }
 }   
