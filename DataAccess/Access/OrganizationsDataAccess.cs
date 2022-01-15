@@ -11,10 +11,12 @@ namespace DataAccess.Access
     {
         public OrganizationDataAccess(ISQLDataAccess db) : base(db) { }
 
-        public Task<IEnumerable<Organization>> Get()
+        public async Task<IEnumerable<Organization>> Get()
         {
             string sql = "select * from organizations";
-            return _db.LoadData<Organization>(sql);
+            var results = await _db.LoadData<Organization>(sql);
+            results.ToList().ForEach(o => o.NameNIP = $"{o.Name} {o.NIP[..4]}");
+            return results;
         }
 
         public async Task<Organization> Get(int organizationId)
@@ -27,7 +29,9 @@ namespace DataAccess.Access
             });
 
             var results = await _db.LoadData<Organization, DynamicParameters>(sql, dynamicParameters);
-            return results.First();
+            var first = results.First();
+            first.NameNIP = $"{first.Name} {first.NIP[..4]}";
+            return first;
         }
 
         public Task Insert(Organization organization)

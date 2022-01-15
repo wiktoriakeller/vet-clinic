@@ -13,5 +13,6 @@ namespace DataAccess.Models
         public string NIP { get; set;}
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
+        public string NameNIP { get; set; }
     }
 }
