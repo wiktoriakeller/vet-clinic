@@ -99,9 +99,17 @@ namespace VetClinicWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _dataAccess.Update(_mapper.Map<T>(model));
-                ModelState.Clear();
-                return RedirectToAction("Index");
+                try
+                {
+                    await _dataAccess.Update(_mapper.Map<T>(model));
+                    ModelState.Clear();
+                    return RedirectToAction("Index");
+                }
+                catch(Oracle.ManagedDataAccess.Client.OracleException ex)
+                {
+                    ViewBag.ErrorMessage = GetExceptionMessage(ex.Number);
+                    return View(model);
+                }
             }
 
             return View(model);
