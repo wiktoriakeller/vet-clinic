@@ -33,7 +33,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Address" class="control-label"></label>
-                <input asp-for="Address" class="form-control" />
+                <input asp-for="Address" class="form-control" id="addressInfo"/>
                 <span asp-validation-for="Address" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -60,14 +60,6 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
-
-<br />
-<h6>Examples of valid addresses:</h6>
-<ul>
-    <li>Poznan Kwiatowa 2 61-386</li>
-    <li>Poznan Kwiatowa 2 m.12 61-386</li>
-    <li>Bukow 12c 65-040</li>
-</ul>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

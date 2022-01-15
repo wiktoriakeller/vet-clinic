@@ -210,3 +210,20 @@ function setDateAndTimeFromDb(appointmentId) {
             }
     });
 }
+
+$(document).ready(function () {
+    $("#addressInfo").popover({
+        trigger: "focus",
+        title: "Valid addresses examples:",
+        content: `
+        <ul>
+            <li>Poznan Kwiatowa 2 61-386</li>
+            <li>Poznan Kwiatowa 2 m.12 61-386</li>
+            <li>Bukow 12c 65-040</li>
+        </ul>
+        `,
+        placement: "right",
+        html: true,
+        animation: true
+    });
+});
