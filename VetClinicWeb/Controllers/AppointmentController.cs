@@ -37,7 +37,7 @@ namespace VetClinicWeb.Controllers
             AddPropertiesNamesToDropdown();
 
             int startHour = 7;
-            int endHour = 18;
+            int endHour = 19;
             _availableHours = new List<string>();
             for (int i = startHour; i <= endHour; i++)
             {
@@ -219,7 +219,6 @@ namespace VetClinicWeb.Controllers
             var date = splittedDate[0];
             var splittedTime = splittedDate[1].Split(':');
             var time = $"{splittedTime[0]}:{splittedTime[1]}";
-            Console.WriteLine(date);
             return new Tuple<string, string>(date, time);
         }
 
@@ -251,7 +250,9 @@ namespace VetClinicWeb.Controllers
             foreach (var dbApp in dbAppointments)
             {
                 if (dbApp.Employee == model.Employee && dbApp.AppointmentDate == fullDate && dbApp.AppointmentId != model.AppointmentId)
+                {
                     return Json("This employee has another appointment at the same time.");
+                }
             }
 
             return Json(true);
@@ -266,9 +267,9 @@ namespace VetClinicWeb.Controllers
 
             foreach (var dbApp in dbAppointments)
             {
-                if (dbApp.Office == model.Office && dbApp.AppointmentDate == fullDate)
+                if (dbApp.Office == model.Office && dbApp.AppointmentDate == fullDate && dbApp.AppointmentId != model.AppointmentId)
                 {
-                    var office = dbOffices.FirstOrDefault(o => o.OfficeId == model.Office && o.Facility == model.Facility);
+                    var office = dbOffices.FirstOrDefault(o => o.OfficeId == model.Office && o.Facility == model.Facility && dbApp.AppointmentId != model.AppointmentId);
                     if (office != null)
                         return Json("There is another appointment in this office at the same time.");
                 }
@@ -286,7 +287,7 @@ namespace VetClinicWeb.Controllers
 
             foreach (var dbApp in dbAppointments)
             {
-                if (dbApp.Patient == model.Patient && dbApp.AppointmentDate == fullDate)
+                if (dbApp.Patient == model.Patient && dbApp.AppointmentDate == fullDate && dbApp.AppointmentId != model.AppointmentId)
                     return Json("This patient has another appointment at the same time.");
             }
 
