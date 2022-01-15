@@ -13,7 +13,7 @@ namespace DataAccess.Access
 
         public Task<IEnumerable<Appointment>> Get()
         {
-            string sql = "select appointmentId, to_char(appointmentDate, 'DD/MM/YYYY HH24:MI') as appointmentDate, cause, office, employee, patient from appointments";
+            string sql = "select appointmentId, to_char(appointmentDate, 'DD/MM/YYYY HH24:MI') as appointmentDate, cause, office, employee, patient from appointments order by appointmentDate";
             return _db.LoadData<Appointment>(sql);
         }
 
