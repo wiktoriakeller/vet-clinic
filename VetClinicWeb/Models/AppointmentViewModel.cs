@@ -32,7 +32,7 @@ namespace VetClinicWeb.Models
         [Remote(action: "IsOfficeFree", controller: "Appointment", AdditionalFields = "Office, Date, Time, Facility, AppointmentId")]
         public int Office { get; set; }
 
-        [DisplayName("Office Number")]
+        [DisplayName("Office")]
         public int OfficeNumber { get; set; }
 
         [Required]

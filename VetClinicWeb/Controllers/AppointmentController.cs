@@ -33,7 +33,7 @@ namespace VetClinicWeb.Controllers
             _officeDataAccess = officeDataAccess;
             _facilityDataAccess = facilityDataAccess;
 
-            _restrictedInDropdown = new List<string> { "appointmentid", "date", "time", "cause", "employee", "office", "facility", "patient" };
+            _restrictedInDropdown = new List<string> { "appointmentid", "appointmentdate", "cause", "employee", "office", "facility", "patient" };
             AddPropertiesNamesToDropdown();
 
             int startHour = 7;
@@ -78,6 +78,9 @@ namespace VetClinicWeb.Controllers
                 appointments.Last().OfficeNumber = officesDic[appointments.Last().Office].OfficeNumber;
                 appointments.Last().PatientName = patientsDic[appointments.Last().Patient].Name;
                 appointments.Last().FacilityAddress = facilitiesDic[officesDic[appointments.Last().Office].Facility].Address;
+                var dateTime = GetDateAndTime(dbAppointment.AppointmentDate);
+                appointments.Last().Date = dateTime.Item1;
+                appointments.Last().Time = dateTime.Item2;
             }
 
             if (!string.IsNullOrEmpty(search) && !string.IsNullOrEmpty(option))
