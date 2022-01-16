@@ -11,7 +11,7 @@ namespace VetClinicWeb.Models
         public int FacilityId { get; set; }
 
         [Required]
-        [StringLength(150, ErrorMessage = "{0} length must be between {2} and {1}.", MinimumLength = 4)]
+        [StringLength(150, ErrorMessage = "{0} length must be between {2} and {1}.", MinimumLength = 8)]
         [Remote(action: "IsAddressUnique", controller: "Facility", AdditionalFields = "FacilityId")]
         [ValidAddress]
         public string Address { get; set; }

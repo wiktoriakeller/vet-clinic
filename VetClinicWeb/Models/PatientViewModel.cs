@@ -12,8 +12,8 @@ namespace VetClinicWeb.Models
 
         [Required]
         [DataType(DataType.Text)]
-        [RegularExpression(@"[A-Za-z]*", ErrorMessage = "Patient name should only contain letters")]
-        [StringLength(50, ErrorMessage = "{0} length must be shorter than {1} characters")]
+        [RegularExpression(@"[A-Za-z]*", ErrorMessage = "Patient name should only contain letters.")]
+        [StringLength(50, ErrorMessage = "{0} length must be shorter than or equal to {1} characters.")]
         public string Name { get; set; }
         
         public int Species { get; set; }
@@ -26,9 +26,9 @@ namespace VetClinicWeb.Models
         public string SpeciesName { get; set; }
 
         [DisplayName("Organization")]
-        public string OrganizationNIP { get; set; }
+        public string OrganizationName { get; set; }
 
         [DisplayName("Owner")]
-        public string OwnerPESEL { get; set; }
+        public string OwnerName { get; set; }
     }
 }

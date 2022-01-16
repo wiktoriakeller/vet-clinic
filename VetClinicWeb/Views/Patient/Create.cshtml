@@ -28,6 +28,7 @@
                 <label asp-for="Owner" class="control-label"></label>
                 @Html.DropDownListFor(model => model.Owner, ViewBag.owners as SelectList, "-- owner --", new {@class="form-control"})
              </div>
+            <p class="text-danger">@ViewBag.ErrorMessage</p>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

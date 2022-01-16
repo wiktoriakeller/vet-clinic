@@ -11,10 +11,12 @@ namespace DataAccess.Access
     {
         public OwnerDataAccess(ISQLDataAccess db) : base(db) { }
 
-        public Task<IEnumerable<Owner>> Get()
+        public async Task<IEnumerable<Owner>> Get()
         {
             string sql = "select * from owners";
-            return _db.LoadData<Owner>(sql);
+            var results = await _db.LoadData<Owner>(sql);
+            results.ToList().ForEach(o => o.NameSurnamePESEL = $"{o.Name} {o.Surname} {o.PESEL[..4]}");
+            return results;
         }
 
         public async Task<Owner> Get(int ownerId)
@@ -27,7 +29,9 @@ namespace DataAccess.Access
             });
 
             var results = await _db.LoadData<Owner, DynamicParameters>(sql, dynamicParameters);
-            return results.First();
+            var first = results.First();
+            first.NameSurnamePESEL = $"{first.Name} {first.Surname} {first.PESEL[..4]}";
+            return first;
         }
 
         public Task Insert(Owner owner)

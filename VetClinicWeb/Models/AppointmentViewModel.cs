@@ -20,7 +20,7 @@ namespace VetClinicWeb.Models
 
         [DataType(DataType.Text)]
         [RegularExpression(@"[A-Za-z0-9.,?() ]*", ErrorMessage = "Cause can only contain letters, numbers and punctuation marks.")]
-        [StringLength(150, ErrorMessage = "{0} length must be between {2} and {1}.", MinimumLength = 0)]
+        [StringLength(150, ErrorMessage = "{0} length must be shorter than or equal to {1} characters.")]
         public string Cause { get; set; }
 
         [Required]
@@ -32,7 +32,7 @@ namespace VetClinicWeb.Models
         [Remote(action: "IsOfficeFree", controller: "Appointment", AdditionalFields = "Office, Date, Time, Facility, AppointmentId")]
         public int Office { get; set; }
 
-        [DisplayName("Office Number")]
+        [DisplayName("Office")]
         public int OfficeNumber { get; set; }
 
         [Required]

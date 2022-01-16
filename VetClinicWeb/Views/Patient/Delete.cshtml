@@ -24,23 +24,23 @@
         @if(Model.Organization != null)
         {
             <dt class = "col-sm-2">
-                @Html.DisplayNameFor(model => model.OrganizationNIP)
+                @Html.DisplayNameFor(model => model.OrganizationName)
             </dt>
             <dd class = "col-sm-10">
-                @Html.DisplayFor(model => model.OrganizationNIP)
+                @Html.DisplayFor(model => model.OrganizationName)
             </dd>
         }
         else
         {
            <dt class = "col-sm-2">
-                @Html.DisplayNameFor(model => model.OwnerPESEL)
+                @Html.DisplayNameFor(model => model.OwnerName)
             </dt>
             <dd class = "col-sm-10">
-                @Html.DisplayFor(model => model.OwnerPESEL)
+                @Html.DisplayFor(model => model.OwnerName)
            </dd>
         }
     </dl>
-    
+    <p class="text-danger">@ViewBag.ErrorMessage</p>
     <form method="post" asp-controller="Patient" asp-action="Delete" asp-route-id="@Model.PatientId">
         <input type="submit" value="Delete" class="btn btn-danger"/>
     </form>

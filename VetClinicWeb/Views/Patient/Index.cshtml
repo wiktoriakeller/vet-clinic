@@ -22,10 +22,10 @@
                 @Html.DisplayNameFor(model => model.SpeciesName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.OwnerPESEL)
+                @Html.DisplayNameFor(model => model.OwnerName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.OrganizationNIP)
+                @Html.DisplayNameFor(model => model.OrganizationName)
             </th>
             <th></th>
         </tr>
@@ -39,10 +39,10 @@
             <td>
                 @Html.DisplayFor(modelItem => item.SpeciesName)
             </td>
-            @if(item.OwnerPESEL != null)
+            @if(item.OwnerName != null)
             {
             <td>
-                @Html.DisplayFor(modelItem => item.OwnerPESEL)
+                @Html.DisplayFor(modelItem => item.OwnerName)
             </td> 
             }
             else {
@@ -50,10 +50,10 @@
                 None
             </td>
             }
-            @if(item.OrganizationNIP != null)
+            @if(item.OrganizationName != null)
             {
             <td>
-                @Html.DisplayFor(modelItem => item.OrganizationNIP)
+                @Html.DisplayFor(modelItem => item.OrganizationName)
             </td> 
             }
             else {

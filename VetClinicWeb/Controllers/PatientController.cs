@@ -28,7 +28,7 @@ namespace VetClinicWeb.Controllers
             _organizationDataAccess = organizationDataAccess;
             _ownerDataAccess = ownerDataAccess;
 
-            _restrictedInDropdown = new List<string> { "patientid" };
+            _restrictedInDropdown = new List<string> { "patientid", "owner", "organization", "species" };
             AddPropertiesNamesToDropdown();
         }
 
@@ -38,10 +38,10 @@ namespace VetClinicWeb.Controllers
             ViewBag.Options = _options;
 
             var dbPatients = await _patientDataAccess.Get();
-            List<PatientViewModel> patients = new List<PatientViewModel>();
-            List<Species> species = (List<Species>)await _speciesDataAccess.Get();
-            List<Organization> organizations = (List<Organization>)await _organizationDataAccess.Get();
-            List<Owner> owners = (List<Owner>)await _ownerDataAccess.Get();
+            var patients = new List<PatientViewModel>();
+            var species = (List<Species>)await _speciesDataAccess.Get();
+            var organizations = (List<Organization>)await _organizationDataAccess.Get();
+            var owners = (List<Owner>)await _ownerDataAccess.Get();
 
             IDictionary<int, Species> speciesDic = species.ToDictionary(p => p.SpeciesId);
             IDictionary<int, Organization> orgzanizationsDic = organizations.ToDictionary(p => p.OrganizationId);
@@ -52,39 +52,24 @@ namespace VetClinicWeb.Controllers
                 patients.Add(_mapper.Map<PatientViewModel>(dbPatinet));
                 patients.Last().SpeciesName = speciesDic[patients.Last().Species].Name;
 
-                patients.Last().OrganizationNIP = null;
+                patients.Last().OrganizationName = null;
                 if (patients.Last().Organization != null)
                 {
                     int id = (int)patients.Last().Organization;
-                    patients.Last().OrganizationNIP = orgzanizationsDic[id].NIP;
+                    patients.Last().OrganizationName = orgzanizationsDic[id].NameNIP;
                 }
 
-                patients.Last().OwnerPESEL = null;
+                patients.Last().OwnerName = null;
                 if(patients.Last().Owner != null)
                 {
                     int id = (int) patients.Last().Owner;
-                    patients.Last().OwnerPESEL = ownersDic[id].PESEL;
+                    patients.Last().OwnerName = ownersDic[id].NameSurnamePESEL;
                 }
-
             }
 
             if (!string.IsNullOrEmpty(search) && !string.IsNullOrEmpty(option))
             {
-                search = search.ToLower().Trim();
-                option = option.ToLower();
-                var searched = new List<PatientViewModel>();
-
-                foreach (var val in _propertiesNames)
-                {
-                    if (option == val.Key.ToLower() || option == "any")
-                    {
-                        if (val.Value.Item2 == typeof(string))
-                            searched.AddRange(patients.Where(entity => entity.GetType().GetProperty(val.Value.Item1).GetValue(entity, null).ToString().ToLower().Contains(search)));
-                        else
-                            searched.AddRange(patients.Where(entity => entity.GetType().GetProperty(val.Value.Item1).GetValue(entity, null).ToString().ToLower() == search));
-                    }
-                }
-
+                var searched = Search(search, option, patients);
                 return View(searched);
             }
 
@@ -112,7 +97,7 @@ namespace VetClinicWeb.Controllers
                 catch (Oracle.ManagedDataAccess.Client.OracleException ex)
                 {
                     await UpdateDropdownLists();
-                    ModelState.AddModelError("Custom error", $"Patient {GetExceptionMessage(ex.Number)}");
+                    ViewBag.ErrorMessage = GetExceptionMessage(ex.Number);
                     return View(model);
                 }
 
@@ -144,7 +129,7 @@ namespace VetClinicWeb.Controllers
                 catch (Oracle.ManagedDataAccess.Client.OracleException ex)
                 {
                     await UpdateDropdownLists();
-                    ModelState.AddModelError("Custom error", $"Patient {GetExceptionMessage(ex.Number)}");
+                    ViewBag.ErrorMessage = GetExceptionMessage(ex.Number);
                     return View(model);
                 }
             }
@@ -173,8 +158,8 @@ namespace VetClinicWeb.Controllers
             }
             catch (Oracle.ManagedDataAccess.Client.OracleException ex)
             {
-                ViewBag.ErrorMessage = $"Patient {GetExceptionMessage(ex.Number)}";
-                return View(GetFullPatient(id));
+                ViewBag.ErrorMessage = GetExceptionMessage(ex.Number);
+                return View(await GetFullPatient(id));
             }
 
             return RedirectToAction("Index");
@@ -183,25 +168,25 @@ namespace VetClinicWeb.Controllers
         public async Task<PatientViewModel> GetFullPatient(int id)
         {
             var dbPatient = await _patientDataAccess.Get(id);
-            PatientViewModel patient = _mapper.Map<PatientViewModel>(dbPatient);
+            var patient = _mapper.Map<PatientViewModel>(dbPatient);
 
-            Species species = await _speciesDataAccess.Get(patient.Species);
+            var species = await _speciesDataAccess.Get(patient.Species);
             patient.SpeciesName = species.Name;
 
-            patient.OrganizationNIP = null;
+            patient.OrganizationName = null;
             if(patient.Organization != null)
             {
                 int organizationId = (int)patient.Organization;
-                Organization organization = await _organizationDataAccess.Get(organizationId);
-                patient.OrganizationNIP = organization.NIP;
+                var organization = await _organizationDataAccess.Get(organizationId);
+                patient.OrganizationName = organization.NameNIP;
             }
 
-            patient.OwnerPESEL = null;
+            patient.OwnerName = null;
             if (patient.Owner != null)
             {
                 int ownerId = (int)patient.Owner;
-                Owner owner = await _ownerDataAccess.Get(ownerId);
-                patient.OwnerPESEL = owner.PESEL;
+                var owner = await _ownerDataAccess.Get(ownerId);
+                patient.OwnerName = owner.NameSurnamePESEL;
             }
 
             return patient;
@@ -209,13 +194,13 @@ namespace VetClinicWeb.Controllers
 
         private async Task UpdateDropdownLists()
         {
-            List<Species> species = (List<Species>)await _speciesDataAccess.Get();
-            List<Organization> organizations = (List<Organization>)await _organizationDataAccess.Get();
-            List<Owner> owners = (List<Owner>)await _ownerDataAccess.Get();
+            var species = (List<Species>)await _speciesDataAccess.Get();
+            var organizations = (List<Organization>)await _organizationDataAccess.Get();
+            var owners = (List<Owner>)await _ownerDataAccess.Get();
 
             ViewBag.species = new SelectList(species, "SpeciesId", "Name");
-            ViewBag.organizations = new SelectList(organizations, "OrganizationId", "NIP");
-            ViewBag.owners = new SelectList(owners, "OwnerId", "PESEL");
+            ViewBag.organizations = new SelectList(organizations, "OrganizationId", "NameNIP");
+            ViewBag.owners = new SelectList(owners, "OwnerId", "NameSurnamePESEL");
         }
     }
 }
