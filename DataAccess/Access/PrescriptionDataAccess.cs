@@ -15,7 +15,7 @@ namespace DataAccess.Access
 
         public Task Delete(int appointmentId, int drugId)
         {
-            string sql = "delete from prescriptions where drugid = :DrugId and appointmentid = :AppointmentId";
+            string sql = "delete from prescriptions where appointmentId = :AppointmentId and drugId = :DrugId";
             DynamicParameters dynamicParameters = new DynamicParameters(new
             {
                 AppointmentId = appointmentId,
@@ -46,6 +46,20 @@ namespace DataAccess.Access
             var results = await _db.LoadData<Prescription, DynamicParameters>(sql, dynamicParameters);
 
             return results;
+        }
+
+        public Task Update(Prescription prescription)
+        {
+            string sql = "update prescriptions set drugId = :DrugId, dosage = :Dosage where prescriptionId = :Id";
+
+            DynamicParameters dynamicParameters = new DynamicParameters(new
+            {
+                Id = prescription.PrescriptionId,
+                Dosage = prescription.Dosage,
+                DrugId = prescription.DrugId
+            });
+
+            return _db.SaveData(sql, dynamicParameters);
         }
 
         public Task Insert(Prescription prescription)

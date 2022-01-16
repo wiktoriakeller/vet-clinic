@@ -8,6 +8,7 @@ namespace DataAccess.Models
 {
     public class Prescription
     {
+        public int PrescriptionId { get; set; }
         public string Dosage { get; set; }
         public int DrugId { get; set; }
         public int AppointmentId { get; set; }

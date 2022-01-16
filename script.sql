@@ -102,17 +102,19 @@ CREATE TABLE Appointments(
 	);
 	
 CREATE TABLE ServicesInAppointment(
+    ServicesInAppointmentId NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 	Diagnosis VARCHAR2(150) NULL,
 	AppointmentId REFERENCES Appointments(AppointmentId) NOT NULL,
 	Service REFERENCES Services(ServiceId) NOT NULL,
-	PRIMARY KEY(Service, AppointmentId)
+	CONSTRAINT UniqueServicesInAppointment UNIQUE(Service, AppointmentId)
 	);
 
 CREATE TABLE Prescriptions(
+    PrescriptionId NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 	Dosage VARCHAR2(100) NOT NULL,
 	DrugId REFERENCES Drugs(DrugId) NOT NULL,
 	AppointmentId REFERENCES Appointments(AppointmentId) NOT NULL,
-	PRIMARY KEY(DrugId, AppointmentId)
+	CONSTRAINT UniquePrescriptions UNIQUE(DrugId, AppointmentId)
 	);
 	
 INSERT INTO Positions(Name, SalaryMin, SalaryMax) VALUES('Veterinarian', 3000, 10000);
@@ -244,8 +246,7 @@ select AppointmentId, extract(month from appointmentDate) from appointments;
 SELECT * FROM appointments;
 SELECT * FROM patients;
 
-INSERT INTO ServicesInAppointment VALUES(NULL, 2, 1);
-INSERT INTO ServicesInAppointment VALUES(NULL, 3, 2);
+INSERT INTO ServicesInAppointment(Diagnosis, AppointmentId, Service) VALUES(NULL, 2, 1);
 
 commit;
 

@@ -21,7 +21,7 @@ namespace VetClinicWeb.Controllers
         {
             _drugDataAccess = drugDataAccess;
             _prescriptionDataAccess = prescriptionDataAccess;
-            _restrictedInDropdown = new List<string> { "drugid", "appointmentid" };
+            _restrictedInDropdown = new List<string> { "drugid", "appointmentid", "prescriptionId" };
             AddPropertiesNamesToDropdown();
         }
 
@@ -46,7 +46,7 @@ namespace VetClinicWeb.Controllers
 
             if (!string.IsNullOrEmpty(search) && !string.IsNullOrEmpty(option))
             {
-                searched = Search(search, option, prescriptions, "DrugId");
+                searched = Search(search, option, prescriptions, "PrescriptionId");
             }
             else
             {
@@ -59,7 +59,6 @@ namespace VetClinicWeb.Controllers
 
             return View(viewModel);
         }
-
 
         [HttpPost]
         public async Task<IActionResult> Create(PrescriptionViewModel model)
@@ -92,6 +91,48 @@ namespace VetClinicWeb.Controllers
             return RedirectToAction("Index", new { appointmentId = model.AppointmentId });
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Update(int appointmentId, int drugId)
+        {
+            var prescription = await _prescriptionDataAccess.Get(appointmentId, drugId);
+            await UpdateDropdownLists(appointmentId, prescription.DrugId);
+            var view = _mapper.Map<PrescriptionViewModel>(prescription);
+            return View(view);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(PrescriptionViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _prescriptionDataAccess.Update(_mapper.Map<Prescription>(model));
+                    ModelState.Clear();
+                    return RedirectToAction("Index", new { appointmentId = model.AppointmentId });
+                }
+                catch (Oracle.ManagedDataAccess.Client.OracleException ex)
+                {
+                    await UpdateDropdownLists(model.AppointmentId);
+                    ViewBag.ErrorMessage = GetExceptionMessage(ex.Number);
+                    return View(model);
+                }
+            }
+
+            TempData["Error"] = ModelState.Values
+                .SelectMany(v => v.Errors)
+                .First().ErrorMessage;
+
+            if (TempData["Error"].ToString() == "The value '' is invalid.")
+            {
+                TempData["ErrorDropdown"] = "You need to choose a drug.";
+                TempData["Error"] = "";
+            }
+
+            await UpdateDropdownLists(model.PrescriptionId, model.DrugId);
+            return View(model);
+        }
+
         public async Task<IActionResult> Delete(int appointmentId, int drugId)
         {
             try
@@ -107,7 +148,7 @@ namespace VetClinicWeb.Controllers
         }
 
 
-        private async Task UpdateDropdownLists(int appointmentId)
+        private async Task UpdateDropdownLists(int appointmentId, int excludeDrug = -1)
         {
             var drugs = (List<Drug>)await _drugDataAccess.Get();
             var dbPrescriptions = (List<Prescription>)await _prescriptionDataAccess.Get(appointmentId);
@@ -116,6 +157,10 @@ namespace VetClinicWeb.Controllers
             foreach (Drug drug in drugs)
             {
                 if(!dbPrescriptions.Exists(p => p.DrugId == drug.DrugId))
+                {
+                    uniqueDrugs.Add(drug);
+                }
+                else if(excludeDrug != -1 && excludeDrug == drug.DrugId)
                 {
                     uniqueDrugs.Add(drug);
                 }
