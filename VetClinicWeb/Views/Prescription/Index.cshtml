@@ -1,0 +1,66 @@
+﻿@model VetClinicWeb.Models.PrescriptionViewModel
+
+@{
+    ViewData["Title"] = "Prescription";
+}
+
+
+<h4>Prescriptions</h4>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DrugName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Dosage)
+            </th>
+            <th>
+
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                @Html.HiddenFor(model => model.AppointmentId)
+                <td>
+                    <div class="form-group">
+                        @Html.DropDownListFor(model => model.DrugId, ViewBag.drugs as SelectList, "-- drug --", new {@class="form-control"})
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <input asp-for="Dosage" class="form-control" />
+                        <span asp-validation-for="Dosage" class="text-danger"></span>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    </div>
+                </td>
+            </form>
+        </tr>
+@foreach (var item in ViewData["prescriptions"] as IList<PrescriptionViewModel>) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DrugName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Dosage)
+            </td>
+            <td>
+                @Html.ActionLink("Delete", "Delete", new { appointmentId = item.AppointmentId, drugId = item.DrugId })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
