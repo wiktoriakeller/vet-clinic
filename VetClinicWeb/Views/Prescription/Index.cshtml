@@ -51,6 +51,7 @@
                     <div class="form-group">
                         <div class="input-in-table">
                             @Html.DropDownListFor(model => model.DrugId, ViewBag.drugs as SelectList, "-- drug --", new {@class="form-control"})
+                            <p class="text-danger">@TempData["ErrorDropdown"]</p>
                         </div>
                     </div>
                 </td>

@@ -82,6 +82,13 @@ namespace VetClinicWeb.Controllers
             TempData["Error"] = ModelState.Values
                 .SelectMany(v => v.Errors)
                 .First().ErrorMessage;
+
+            if(TempData["Error"].ToString() == "The value '' is invalid.")
+            {
+                TempData["ErrorDropdown"] = "You need to choose a drug.";
+                TempData["Error"] = "";
+            }
+
             return RedirectToAction("Index", new { appointmentId = model.AppointmentId });
         }
 
