@@ -13,13 +13,13 @@ namespace VetClinicWeb.Models
 		[Required]
 		[DataType(DataType.Text)]
 		[RegularExpression(@"[A-Za-z]*", ErrorMessage = "Employee name should only contain letters.")]
-		[StringLength(50, ErrorMessage = "{0} length must be shorter than {1} characters.")]
+		[StringLength(50, ErrorMessage = "{0} length must be shorter than or equal to {1} characters.")]
 		public string Name { get; set; }
 
 		[Required]
 		[DataType(DataType.Text)]
 		[RegularExpression(@"[A-Za-z]*", ErrorMessage = "Employee surname should only contain letters.")]
-		[StringLength(50, ErrorMessage = "{0} length must be shorter than {1} characters.")]
+		[StringLength(50, ErrorMessage = "{0} length must be shorter than or equal to {1} characters.")]
 		public string Surname { get; set; }
 
 		public string Fullname { get; set; }
@@ -35,7 +35,7 @@ namespace VetClinicWeb.Models
 		public double BonusSalary { get; set; }
 
 		[Required]
-		[StringLength(150, ErrorMessage = "{0} length must be between {2} and {1}.", MinimumLength = 4)]
+		[StringLength(150, ErrorMessage = "{0} length must be between {2} and {1}.", MinimumLength = 8)]
 		[ValidAddress] 
 		public string Address { get; set; }
 
