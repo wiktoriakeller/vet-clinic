@@ -1,5 +1,9 @@
 ﻿@model VetClinicWeb.Models.PrescriptionViewModel
 
+@section AddToHead{
+    <link href="@Url.Content("~/css/prescriptionStyle.css")" rel="stylesheet" type="text/css" />
+}
+
 @{
     ViewData["Title"] = "Prescription";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -8,23 +12,23 @@
 <h4>List of prescriptions</h4>
 
 <form asp-controller="Prescription" asp-action="Index" method="get">
-<div class="container-md mt-3 mb-3" style="width:50%">
-    <div class="row">
-        <div class="col">
-            @Html.DropDownList("Option", (IEnumerable<SelectListItem>) ViewBag.Options, "Choose", new {@class="form-control"})
-        </div>
-        <div class="col-8">
-            <div class="input-group-append">
-                <input type="text" name="search" placeholder="Search" class="form-control"/>
-                <input type="hidden" name="appointmentId" value=@ViewBag.AppId />
-                <input type="submit" value="Search" class="btn btn-primary"/>
+    <div class="container-md mt-3 mb-3" style="width:50%">
+        <div id="search-box-pres">
+            <div class="row">
+                <div class="col">
+                    @Html.DropDownList("Option", (IEnumerable<SelectListItem>) ViewBag.Options, "Choose", new {@class="form-control"})
+                </div>
+                <div class="col-8">
+                    <div class="input-group-append">
+                        <input type="text" name="search" placeholder="Search" class="form-control"/>
+                        <input type="hidden" name="appointmentId" value=@ViewBag.AppId />
+                        <input type="submit" value="Search" class="btn btn-primary"/>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 </form>
-
-<br />
 
 <table class = "table table-striped">
     <thead>
@@ -35,28 +39,30 @@
             <th>
                 @Html.DisplayNameFor(model => model.Dosage)
             </th>
-            <th>
-
-            </th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
-        <tr>
+        <tr id="input-row">
             <form asp-action="Create">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 @Html.HiddenFor(model => model.AppointmentId)
                 <td>
                     <div class="form-group">
-                        @Html.DropDownListFor(model => model.DrugId, ViewBag.drugs as SelectList, "-- drug --", new {@class="form-control"})
+                        <div class="input-in-table">
+                            @Html.DropDownListFor(model => model.DrugId, ViewBag.drugs as SelectList, "-- drug --", new {@class="form-control"})
+                        </div>
                     </div>
                 </td>
                 <td>
                     <div class="form-group">
-                        <input asp-for="Dosage" class="form-control" />
-                        <p class="text-danger">@TempData["Error"]</p>
+                       <div class="input-in-table">
+                            <input asp-for="Dosage" class="form-control" />
+                            <p class="text-danger">@TempData["Error"]</p>
+                       </div>
                     </div>
                 </td>
-                <td>
+                <td class="button-in-table">
                     <div class="form-group">
                         <input type="submit" value="Create" class="btn btn-primary" />
                     </div>
@@ -74,6 +80,7 @@
                 @Html.DisplayFor(modelItem => item.Dosage)
             </td>
             <td>
+                @Html.ActionLink("Update", "Update", new { appointmentId = item.AppointmentId, drugId = item.DrugId }) |
                 @Html.ActionLink("Delete", "Delete", new { appointmentId = item.AppointmentId, drugId = item.DrugId })
             </td>
         </tr>

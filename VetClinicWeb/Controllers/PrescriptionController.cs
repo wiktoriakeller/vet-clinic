@@ -104,7 +104,6 @@ namespace VetClinicWeb.Controllers
         {
             var drugs = (List<Drug>)await _drugDataAccess.Get();
             var dbPrescriptions = (List<Prescription>)await _prescriptionDataAccess.Get(appointmentId);
-           
             var uniqueDrugs = new List<Drug>();
 
             foreach (Drug drug in drugs)

@@ -17,7 +17,6 @@ $(document).ready(function () {
     const action = names[0], controller = names[1];
 
     var navbarItems = $(".menu-elements li"), i;
-    console.log(navbarItems);
 
     for (i = 0; i < navbarItems.length; i++) {
         if (navbarItems[i].lastElementChild.innerHTML == controller) {

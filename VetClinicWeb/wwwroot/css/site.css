@@ -18,10 +18,24 @@ a {
     border-color: #1861ac;
 }
 
+
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
   font-size: 14px;
+}
+
+.input-in-table .form-control {
+    margin: 0px 7px 2px 0px;
+    width: 300px;
+}
+
+.button-in-table .btn-primary{
+    margin: 0px 7px 2px 0px;
+}
+
+#search-box-pres {
+    margin-bottom: 30px;
 }
 
 @media (min-width: 768px) {
