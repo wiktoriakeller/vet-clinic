@@ -10,46 +10,72 @@
     <link rel="stylesheet" href="~/css/site.css"/>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">VetClinic</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Facility" asp-action="Index">Facilities</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Position" asp-action="Index">Positions</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Employee" asp-action="Index">Employees</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Species" asp-action="Index">Species</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Owner" asp-action="Index">Owners</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Organization" asp-action="Index">Organizations</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Patient" asp-action="Index">Patients</a>
-                        </li>
-                    </ul>
-                </div>
+    <div class="wrapper">
+        <nav class="sidebar">
+ 
+            <div class="dismiss">
+                <i class="fas fa-arrow-left"></i>
+            </div>
+ 
+            <div class="logo">
+                <h3 class="font-weight-bolder text-center">
+                    VetClinic
+                </h3>
+            </div>
+ 
+            <ul class="list-unstyled menu-elements">
+                <li class="active">
+                    <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                    <p hidden>Home</p>
+                </li>
+                <li>
+                    <a class="active" asp-area="" asp-controller="Facility" asp-action="Index">Facilities</a>
+                    <p hidden>Facility</p>
+                </li>
+                <li>
+                    <a asp-area="" asp-controller="Position" asp-action="Index">Positions</a>
+                    <p hidden>Position</p>
+                </li>
+                <li>
+                    <a asp-area="" asp-controller="Employee" asp-action="Index">Employees</a>
+                    <p hidden>Employee</p>
+                </li>
+                <li>
+                    <a asp-area="" asp-controller="Species" asp-action="Index">Species</a>
+                    <p hidden>Species</p>
+                </li>
+                <li>
+                    <a asp-area="" asp-controller="Owner" asp-action="Index">Owners</a>
+                    <p hidden>Owners</p>
+                </li>
+                <li>
+                    <a asp-area="" asp-controller="Organization" asp-action="Index">Organizations</a>
+                    <p hidden>Organization</p>
+                </li>
+                <li>
+                    <a asp-area="" asp-controller="Patient" asp-action="Index">Patients</a>
+                    <p hidden>Patient</p>
+                </li>
+            </ul>
+ 
+            <div class="to-top">
+                <a class="btn btn-primary btn-customized-3" href="#" role="button">
+                    <i class="fas fa-arrow-up"></i>
+                </a>
             </div>
         </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+
+        <div class="content">
+            <a class="btn btn-primary btn-customized open-menu" href="#" role="button">
+                <i class="fas fa-align-left"></i> <span>Menu</span>
+            </a>
+               
+            <div class="container">
+                <main role="main" class="pb-3" id="main-content">
+                    @RenderBody()
+                </main>
+            </div>
+        </div>
     </div>
 
     <footer class="border-top footer text-muted">
