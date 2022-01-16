@@ -259,6 +259,9 @@ $(".to-top a").on("click", function (e) {
     e.preventDefault();
     if ($(window).scrollTop() != 0) {
         $("html, body").stop().animate({ scrollTop: 0 }, 1000);
+    }
 
+    if ($(window).scrollTop() == 0) {
+        $(this).removeClass("active");
     }
 });

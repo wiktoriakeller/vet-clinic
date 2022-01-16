@@ -128,7 +128,7 @@ a.btn-customized {
     margin-left: 5px;
     margin-right: 5px;
     padding: .75rem 1.5rem;
-    background: #f35b3f;
+    background: #1c80bd;
     border: 0;
     border-radius: 4px;
     font-size: 16px;
@@ -145,8 +145,7 @@ a.btn-customized.active:focus,
 a.btn-customized.btn.btn-primary:not(:disabled):not(.disabled):active,
 a.btn-customized.btn.btn-primary:not(:disabled):not(.disabled):active:focus {
     outline: 0;
-    background: #cd533d;
-    background: rgba(243, 91, 63, 0.7);
+    background: #24a0ed;
     border: 0;
     color: #fff;
     box-shadow: none;
@@ -194,10 +193,6 @@ a.btn-customized.btn.btn-primary:not(:disabled):not(.disabled):active:focus {
     color: #fff;
 }
 
-.sidebar ul li a i {
-    margin-right: 5px;
-}
-
 .sidebar ul li.active > a,
 a[aria-expanded="true"] {
     background: #444;
@@ -227,15 +222,15 @@ a[aria-expanded="true"] {
 }
 
 .sidebar .to-top {
-    padding: 25px;
+    margin: -7px 0px;
     text-align: center;
 }
 
 a.btn-customized-3 {
     display: inline-block;
-    width: 100%;
+    width: 60%;
     margin: 0;
-    padding: .75rem 1.5rem;
+    padding: .4rem .4rem;
     background: #444;
     border: 0;
     border-radius: 4px;
@@ -246,7 +241,6 @@ a.btn-customized-3 {
 }
 
 a.btn-customized-3:hover,
-a.btn-customized-3:active,
 a.btn-customized-3:focus,
 a.btn-customized-3:active:focus,
 a.btn-customized-3.active:focus,
@@ -264,7 +258,7 @@ a.btn-customized-3 i {
 }
 
 .sidebar .logo {
-    padding: 40px 20px;
+    padding: 30px 20px;
     border-bottom: 1px solid #444;
     transition: all .3s;
 }
