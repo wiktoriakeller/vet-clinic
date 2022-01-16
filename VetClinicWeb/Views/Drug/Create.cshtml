@@ -1,18 +1,16 @@
 ﻿@model VetClinicWeb.Models.DrugViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Drug";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
-
-<h4>DrugViewModel</h4>
+<h4>Create new drug</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
@@ -23,6 +21,7 @@
                 <input asp-for="Manufacturer" class="form-control" />
                 <span asp-validation-for="Manufacturer" class="text-danger"></span>
             </div>
+            <p class="text-danger">@ViewBag.ErrorMessage</p>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

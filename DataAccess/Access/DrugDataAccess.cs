@@ -43,7 +43,7 @@ namespace DataAccess.Access
 
         public Task Insert(Drug entity)
         {
-            string sql = "insert into drugs(name, manufacturer) values(:Mame, :Manufacturer)";
+            string sql = "insert into drugs(name, manufacturer) values(:Name, :Manufacturer)";
             DynamicParameters dynamicParameters = new DynamicParameters(new
             {
                 Name = entity.Name,

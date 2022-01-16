@@ -9,13 +9,16 @@ namespace VetClinicWeb.Models
 
         [Required]
         [DataType(DataType.Text)]
-        [StringLength(100, ErrorMessage = "{0} length must be shorter than {1} characters")]
-        [Remote(action: "IsDrugUnique", controller: "Drug", AdditionalFields = "manufacturer, drugId")]
+        [StringLength(100, ErrorMessage = "{0} length must be shorter than {1} characters.")]
+        [Remote(action: "IsDrugUnique", controller: "Drug", AdditionalFields = "Manufacturer, DrugId")]
+        [RegularExpression(@"^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$", ErrorMessage = "Drug name should only contain letters and spaces (no spaces at the end or at the beginning).")]
         public string Name { get; set; }
 
         [Required]
         [DataType(DataType.Text)]
-        [StringLength(100, ErrorMessage = "{0} length must be shorter than {1} characters")]
+        [StringLength(100, ErrorMessage = "{0} length must be shorter than {1} characters.")]
+        [Remote(action: "IsDrugUnique", controller: "Drug", AdditionalFields = "Name, DrugId")]
+        [RegularExpression(@"^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$", ErrorMessage = "Drug manufacturer name should only contain letters and spaces (no spaces at the end or at the beginning).")]
         public string Manufacturer { get; set; }
     }
 }

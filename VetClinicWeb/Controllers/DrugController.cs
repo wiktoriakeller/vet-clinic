@@ -21,7 +21,7 @@ namespace VetClinicWeb.Controllers
         public async Task<IActionResult> IsDrugUnique(DrugViewModel model)
         {
             var results = await _dataAccess.Get();
-            bool isDrugInUse = results.FirstOrDefault(x => (x.Name == model.Name && x.Manufacturer == model.Manufacturer && x.DrugId != model.DrugId)) == null;
+            bool isDrugInUse = results.FirstOrDefault(x => (x.Name == model.Name && x.Manufacturer == model.Manufacturer && ((x.DrugId != model.DrugId && model.DrugId != 0) || model.DrugId == 0))) == null;
 
             if (isDrugInUse == false)
                 return Json($"This drug already exists.");
