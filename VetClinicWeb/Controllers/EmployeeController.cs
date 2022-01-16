@@ -35,9 +35,9 @@ namespace VetClinicWeb.Controllers
             ViewBag.Options = _options;
 
             var dbEmployees = await _employeeDataAccess.Get();
-            List<EmployeeViewModel> employees = new List<EmployeeViewModel>();
-            List<Position> positions = (List<Position>)await _positionDataAccess.Get();
-            List<Facility> facilities= (List<Facility>)await _facilityDataAccess.Get();
+            var employees = new List<EmployeeViewModel>();
+            var positions = (List<Position>)await _positionDataAccess.Get();
+            var facilities= (List<Facility>)await _facilityDataAccess.Get();
 
             IDictionary<int, Position> positionsDic = positions.ToDictionary(p => p.PositionId);
             IDictionary<int, Facility> facilitiesDic = facilities.ToDictionary(p => p.FacilityId);
@@ -51,21 +51,7 @@ namespace VetClinicWeb.Controllers
 
             if (!string.IsNullOrEmpty(search) && !string.IsNullOrEmpty(option))
             {
-                search = search.ToLower().Trim();
-                option = option.ToLower();
-                var searched = new List<EmployeeViewModel>();
-
-                foreach (var val in _propertiesNames)
-                {
-                    if (option == val.Key.ToLower() || option == "any")
-                    {
-                        if (val.Value.Item2 == typeof(string))
-                            searched.AddRange(employees.Where(entity => entity.GetType().GetProperty(val.Value.Item1).GetValue(entity, null).ToString().ToLower().Contains(search)));
-                        else
-                            searched.AddRange(employees.Where(entity => entity.GetType().GetProperty(val.Value.Item1).GetValue(entity, null).ToString().ToLower() == search));
-                    }
-                }
-
+                var searched = Search(search, option, employees);
                 return View(searched);
             }
 
@@ -82,12 +68,12 @@ namespace VetClinicWeb.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var dbEmployee = await _employeeDataAccess.Get(id);
-            EmployeeViewModel employee = _mapper.Map<EmployeeViewModel>(dbEmployee);
+            var employee = _mapper.Map<EmployeeViewModel>(dbEmployee);
             
-            Position position = await _positionDataAccess.Get(employee.Position);
+            var position = await _positionDataAccess.Get(employee.Position);
             employee.PositionName = position.Name;
             
-            Facility facility = await _facilityDataAccess.Get(employee.Facility);
+            var facility = await _facilityDataAccess.Get(employee.Facility);
             employee.FacilityAddress = facility.Address;
             return View(employee);
         }
@@ -106,7 +92,7 @@ namespace VetClinicWeb.Controllers
                 catch (Oracle.ManagedDataAccess.Client.OracleException ex)
                 {
                     await UpdateDropdownLists();
-                    ModelState.AddModelError("Custom error", $"Employee {GetExceptionMessage(ex.Number)}");
+                    ViewBag.ErrorMessage = GetExceptionMessage(ex.Number);
                     return View(model);
                 }
 
@@ -138,7 +124,7 @@ namespace VetClinicWeb.Controllers
                 catch (Oracle.ManagedDataAccess.Client.OracleException ex)
                 {
                     await UpdateDropdownLists();
-                    ModelState.AddModelError("Custom error", $"Employee {GetExceptionMessage(ex.Number)}");
+                    ViewBag.ErrorMessage = GetExceptionMessage(ex.Number);
                     return View(model);
                 } 
             }
@@ -177,12 +163,12 @@ namespace VetClinicWeb.Controllers
         public async Task<EmployeeViewModel> GetFullEmployee(int id)
         {
             var dbEmployee = await _employeeDataAccess.Get(id);
-            EmployeeViewModel employee = _mapper.Map<EmployeeViewModel>(dbEmployee);
+            var employee = _mapper.Map<EmployeeViewModel>(dbEmployee);
             
-            Position position = await _positionDataAccess.Get(employee.Position);
+            var position = await _positionDataAccess.Get(employee.Position);
             employee.PositionName = position.Name;
             
-            Facility facility = await _facilityDataAccess.Get(employee.Facility);
+            var facility = await _facilityDataAccess.Get(employee.Facility);
             employee.FacilityAddress = facility.Address;
             
             return employee;
@@ -191,7 +177,7 @@ namespace VetClinicWeb.Controllers
         [AcceptVerbs("Get", "Post")]
         public async Task<IActionResult> IsSalaryInRangeAsync(EmployeeViewModel model)
         {
-            Position position = await _positionDataAccess.Get(model.Position);
+            var position = await _positionDataAccess.Get(model.Position);
 
             if (model.Salary > position.SalaryMax)
                 return Json($"Salary is greater than the maximum salary for this position: {position.SalaryMax}");
@@ -203,8 +189,8 @@ namespace VetClinicWeb.Controllers
 
         private async Task UpdateDropdownLists()
         {
-            List<Position> positions = (List<Position>)await _positionDataAccess.Get();
-            List<Facility> facilities = (List<Facility>)await _facilityDataAccess.Get();
+            var positions = (List<Position>)await _positionDataAccess.Get();
+            var facilities = (List<Facility>)await _facilityDataAccess.Get();
             ViewBag.positions = new SelectList(positions, "PositionId", "Name");
             ViewBag.facilities = new SelectList(facilities, "FacilityId", "Address");
         }

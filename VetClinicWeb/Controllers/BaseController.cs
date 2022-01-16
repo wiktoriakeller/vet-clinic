@@ -50,14 +50,18 @@ namespace VetClinicWeb.Controllers
             _options.Add(new SelectListItem { Text = "Any" });
         }
 
-        protected List<T> Search(string search, string option, List<T> entities)
+        protected List<T> Search(string search, string option, List<T> entities, string idName="")
         {
             search = search.ToLower().Trim();
             option = option.ToLower();
             var searched = new List<T>();
             string idPropertyName = "";
 
-            if(entities.Count > 0)
+            if(idName != "")
+            {
+                idPropertyName = idName;
+            }
+            else if(entities.Count > 0)
             {
                 var listOfFields = typeof(T).GetProperties();
                 idPropertyName = listOfFields.SingleOrDefault(field => field.Name.ToLower().Contains("id")).Name;

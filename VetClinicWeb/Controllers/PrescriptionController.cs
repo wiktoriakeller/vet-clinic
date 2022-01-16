@@ -21,14 +21,18 @@ namespace VetClinicWeb.Controllers
         {
             _drugDataAccess = drugDataAccess;
             _prescriptionDataAccess = prescriptionDataAccess;
+            _restrictedInDropdown = new List<string> { "drugid", "appointmentid" };
+            AddPropertiesNamesToDropdown();
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(int appointmentId)
+        public async Task<IActionResult> Index(int appointmentId, string option, string search)
         {
+            ViewBag.Options = _options;
+            ViewBag.AppId = appointmentId;
             await UpdateDropdownLists(appointmentId);
             var dbPrescriptions = await _prescriptionDataAccess.Get(appointmentId);
-            List<PrescriptionViewModel> prescriptions = new List<PrescriptionViewModel>();
+            var prescriptions = new List<PrescriptionViewModel>();
 
             foreach (var p in dbPrescriptions)
             {
@@ -37,9 +41,22 @@ namespace VetClinicWeb.Controllers
                 prescription.DrugName = drug.Name;
                 prescriptions.Add(prescription);
             }
-            ViewData["prescriptions"] = prescriptions;
+
+            List<PrescriptionViewModel> searched;
+
+            if (!string.IsNullOrEmpty(search) && !string.IsNullOrEmpty(option))
+            {
+                searched = Search(search, option, prescriptions, "DrugId");
+            }
+            else
+            {
+                searched = prescriptions;
+            }
+
+            ViewData["prescriptions"] = searched;
             var viewModel = new PrescriptionViewModel();
             viewModel.AppointmentId = appointmentId;
+
             return View(viewModel);
         }
 
@@ -57,11 +74,14 @@ namespace VetClinicWeb.Controllers
                 }
                 catch (Oracle.ManagedDataAccess.Client.OracleException ex)
                 {
-                    ModelState.AddModelError("Custom error", $"Drug {GetExceptionMessage(ex.Number)}");
+                    TempData["ErrorDb"] = GetExceptionMessage(ex.Number);
                     return RedirectToAction("Index", new { appointmentId = model.AppointmentId });
                 }
-
             }
+
+            TempData["Error"] = ModelState.Values
+                .SelectMany(v => v.Errors)
+                .First().ErrorMessage;
             return RedirectToAction("Index", new { appointmentId = model.AppointmentId });
         }
 
@@ -73,8 +93,9 @@ namespace VetClinicWeb.Controllers
             }
             catch (Oracle.ManagedDataAccess.Client.OracleException ex)
             {
-                //add db error page
+                //
             }
+
             return RedirectToAction("Index", new { appointmentId = appointmentId });
         }
 
@@ -84,7 +105,7 @@ namespace VetClinicWeb.Controllers
             var drugs = (List<Drug>)await _drugDataAccess.Get();
             var dbPrescriptions = (List<Prescription>)await _prescriptionDataAccess.Get(appointmentId);
            
-            List<Drug> uniqueDrugs = new List<Drug>();
+            var uniqueDrugs = new List<Drug>();
 
             foreach (Drug drug in drugs)
             {

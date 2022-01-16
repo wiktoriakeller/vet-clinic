@@ -2,11 +2,29 @@
 
 @{
     ViewData["Title"] = "Prescription";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<h4>List of prescriptions</h4>
 
-<h4>Prescriptions</h4>
+<form asp-controller="Prescription" asp-action="Index" method="get">
+<div class="container-md mt-3 mb-3" style="width:50%">
+    <div class="row">
+        <div class="col">
+            @Html.DropDownList("Option", (IEnumerable<SelectListItem>) ViewBag.Options, "Choose", new {@class="form-control"})
+        </div>
+        <div class="col-8">
+            <div class="input-group-append">
+                <input type="text" name="search" placeholder="Search" class="form-control"/>
+                <input type="hidden" name="appointmentId" value=@ViewBag.AppId />
+                <input type="submit" value="Search" class="btn btn-primary"/>
+            </div>
+        </div>
+    </div>
+</div>
+</form>
 
+<br />
 
 <table class = "table table-striped">
     <thead>
@@ -35,7 +53,7 @@
                 <td>
                     <div class="form-group">
                         <input asp-for="Dosage" class="form-control" />
-                        <span asp-validation-for="Dosage" class="text-danger"></span>
+                        <p class="text-danger">@TempData["Error"]</p>
                     </div>
                 </td>
                 <td>
@@ -43,6 +61,8 @@
                         <input type="submit" value="Create" class="btn btn-primary" />
                     </div>
                 </td>
+
+                <p class="text-danger">@TempData["ErrorDb"]</p>
             </form>
         </tr>
 @foreach (var item in ViewData["prescriptions"] as IList<PrescriptionViewModel>) {
