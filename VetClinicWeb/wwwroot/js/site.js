@@ -16,6 +16,18 @@ $(document).ready(function () {
     let names = getActionAndController();
     const action = names[0], controller = names[1];
 
+    var navbarItems = $(".menu-elements li"), i;
+    console.log(navbarItems);
+
+    for (i = 0; i < navbarItems.length; i++) {
+        if (navbarItems[i].lastElementChild.innerHTML == controller) {
+            navbarItems[i].className = "active";
+        }
+        else {
+            navbarItems[i].className = "";
+        }
+    }
+
     if (controller == "Appointment") {
         if (action == "Update") {
             var selectedValue = $("#facilityId").val();
@@ -141,6 +153,10 @@ function getActionAndController() {
 
         return [action, controller];
     }
+    else if (indexes.length == 1) {
+        var controller = url.substring(1);
+        return ["", controller];
+    }
 
     return ["", ""];
 }
@@ -226,4 +242,23 @@ $(document).ready(function () {
         html: true,
         animation: true
     });
+});
+
+$(document).ready(function () {
+    $(".dismiss").on("click", function () {
+        $(".sidebar").removeClass("active");
+    });
+
+    $(".open-menu").on("click", function (e) {
+        e.preventDefault();
+        $(".sidebar").addClass("active");
+    });
+});
+
+$(".to-top a").on("click", function (e) {
+    e.preventDefault();
+    if ($(window).scrollTop() != 0) {
+        $("html, body").stop().animate({ scrollTop: 0 }, 1000);
+
+    }
 });
