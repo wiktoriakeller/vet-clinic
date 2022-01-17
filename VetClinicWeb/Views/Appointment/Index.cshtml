@@ -1,0 +1,69 @@
+﻿@model IEnumerable<VetClinicWeb.Models.AppointmentViewModel>
+
+@{
+    ViewData["Title"] = "Appointment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h4>List of appointments</h4>
+
+@Html.Partial("SearchBoxPartialView")
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<table class="table table-hover table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Time)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FacilityAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OfficeNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmployeeName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PatientName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Time)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FacilityAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OfficeNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmployeeName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PatientName)
+            </td>
+            <td>
+                @Html.ActionLink("Services", "Index", "ServicesInAppointment", new { appointmentId=item.AppointmentId}) |
+                @Html.ActionLink("Prescription", "Index", "Prescription", new { appointmentId=item.AppointmentId}) |
+                @Html.ActionLink("Details", "Details", new { id=item.AppointmentId })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

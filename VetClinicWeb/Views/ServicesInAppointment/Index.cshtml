@@ -1,0 +1,96 @@
+﻿@model VetClinicWeb.Models.ServicesInAppointmentViewModel
+
+@{
+    ViewData["Title"] = "Appointment services";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section AddToHead{
+    <link href="@Url.Content("~/css/prescriptionStyle.css")" rel="stylesheet" type="text/css" />
+}
+
+<h4>List of services in appointment</h4>
+
+<form asp-controller="ServicesInAppointment" asp-action="Index" method="get">
+    <div class="container-md mt-3 mb-3" style="width:50%">
+        <div id="search-box-pres">
+            <div class="row">
+                <div class="col">
+                    @Html.DropDownList("Option", (IEnumerable<SelectListItem>) ViewBag.Options, "Choose", new {@class="form-control"})
+                </div>
+                <div class="col-8">
+                    <div class="input-group-append">
+                        <input type="text" name="search" placeholder="Search" class="form-control"/>
+                        <input type="hidden" name="appointmentId" value=@ViewBag.AppId />
+                        <input type="submit" value="Search" class="btn btn-primary"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<table class="table table-hover table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ServiceName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Diagnosis)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr id="input-row">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                @Html.HiddenFor(model => model.AppointmentId, new {id = "appointmentId" })
+                <td>
+                    <div class="form-group">
+                        <div class="input-in-table">
+                            @Html.DropDownListFor(model => model.Service, ViewBag.services as SelectList, "-- service --", new {@class="form-control"})
+                            <p class="text-danger">@TempData["ErrorDropdown"]</p>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                       <div class="input-in-table">
+                            <input asp-for="Diagnosis" class="form-control" />
+                            <p class="text-danger">@TempData["Error"]</p>
+                            <p class="text-danger">@TempData["ErrorDb"]</p>
+                       </div>
+                    </div>
+                </td>
+                <td class="button-in-table">
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    </div>
+                </td>
+            </form>
+        </tr>
+@foreach (var item in ViewData["servicesInAppointments"] as IList<ServicesInAppointmentViewModel>) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ServiceName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Diagnosis)
+            </td>
+            <td>
+                @Html.ActionLink("Update", "Update", new { id = item.ServicesInAppointmentId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.ServicesInAppointmentId, appointmentId = item.AppointmentId })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<a asp-controller="Appointment" asp-action="Index" id="appointment-services-back">Back to appointments</a>
+<p class="text-danger" id="error-message-in-return"></p>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

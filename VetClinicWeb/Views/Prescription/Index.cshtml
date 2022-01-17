@@ -1,0 +1,98 @@
+﻿@model VetClinicWeb.Models.PrescriptionViewModel
+
+@{
+    ViewData["Title"] = "Prescription";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section AddToHead{
+    <link href="@Url.Content("~/css/prescriptionStyle.css")" rel="stylesheet" type="text/css" />
+}
+
+<h4>List of prescriptions</h4>
+
+<form asp-controller="Prescription" asp-action="Index" method="get">
+    <div class="container-md mt-3 mb-3" style="width:50%">
+        <div id="search-box-pres">
+            <div class="row">
+                <div class="col">
+                    @Html.DropDownList("Option", (IEnumerable<SelectListItem>) ViewBag.Options, "Choose", new {@class="form-control"})
+                </div>
+                <div class="col-8">
+                    <div class="input-group-append">
+                        <input type="text" name="search" placeholder="Search" class="form-control"/>
+                        <input type="hidden" name="appointmentId" value=@ViewBag.AppId />
+                        <input type="submit" value="Search" class="btn btn-primary"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<table class="table table-hover table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DrugName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Dosage)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr id="input-row">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                @Html.HiddenFor(model => model.AppointmentId)
+                <td>
+                    <div class="form-group">
+                        <div class="input-in-table">
+                            @Html.DropDownListFor(model => model.DrugId, ViewBag.drugs as SelectList, "-- drug --", new {@class="form-control"})
+                            <p class="text-danger">@TempData["ErrorDropdown"]</p>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                       <div class="input-in-table">
+                            <input asp-for="Dosage" class="form-control" />
+                            <p class="text-danger">@TempData["Error"]</p>
+                       </div>
+                    </div>
+                </td>
+                <td class="button-in-table">
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    </div>
+                </td>
+
+                <p class="text-danger">@TempData["ErrorDb"]</p>
+            </form>
+        </tr>
+@foreach (var item in ViewData["prescriptions"] as IList<PrescriptionViewModel>) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DrugName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Dosage)
+            </td>
+            <td>
+                @Html.ActionLink("Update", "Update", new { appointmentId = item.AppointmentId, drugId = item.DrugId }) |
+                @Html.ActionLink("Delete", "Delete", new { appointmentId = item.AppointmentId, drugId = item.DrugId })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<div>
+    <a asp-controller="Appointment" asp-action="Index">Back to appointments</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

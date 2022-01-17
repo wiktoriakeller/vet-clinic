@@ -1,0 +1,120 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>@ViewData["Title"] - VetClinic</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/css/tempusdominus-bootstrap-4.min.css"/>
+    <link rel="stylesheet" href="~/css/site.css"/>
+
+    @if (IsSectionDefined("AddToHead"))
+    {
+        @RenderSection("AddToHead", required: false)
+    }
+
+     @if (IsSectionDefined("DetailsAppointmentsAddToHead"))
+    {
+        @RenderSection("DetailsAppointmentsAddToHead", required: false)
+    }
+</head>
+<body>
+    <div class="wrapper">
+        <nav class="sidebar">
+ 
+            <div class="dismiss">
+                <i class="fas fa-arrow-left"></i>
+            </div>
+ 
+            <div class="logo">
+                <h3 class="font-weight-bolder text-center">
+                    <a id="logo-link" asp-area="" asp-controller="Home" asp-action="Index">VetClinic</a>
+                </h3>
+            </div>
+ 
+            <ul class="list-unstyled menu-elements">
+                <li>
+                    <a class="active" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                    <p hidden>Home</p>
+                </li>
+                <li>
+                    <a class="active" asp-area="" asp-controller="Facility" asp-action="Index">Facilities</a>
+                    <p hidden>Facility</p>
+                </li>
+                <li>
+                    <a class="active" asp-area="" asp-controller="Office" asp-action="Index">Offices</a>
+                    <p hidden>Office</p>
+                </li>
+                <li>
+                    <a asp-area="" asp-controller="Position" asp-action="Index">Positions</a>
+                    <p hidden>Position</p>
+                </li>
+                <li>
+                    <a asp-area="" asp-controller="Employee" asp-action="Index">Employees</a>
+                    <p hidden>Employee</p>
+                </li>
+                <li>
+                    <a asp-area="" asp-controller="Species" asp-action="Index">Species</a>
+                    <p hidden>Species</p>
+                </li>
+                <li>
+                    <a asp-area="" asp-controller="Owner" asp-action="Index">Owners</a>
+                    <p hidden>Owners</p>
+                </li>
+                <li>
+                    <a asp-area="" asp-controller="Organization" asp-action="Index">Organizations</a>
+                    <p hidden>Organization</p>
+                </li>
+                <li>
+                    <a asp-area="" asp-controller="Patient" asp-action="Index">Patients</a>
+                    <p hidden>Patient</p>
+                </li>
+                <li>
+                    <a asp-area="" asp-controller="Appointment" asp-action="Index">Appointments</a>
+                    <p hidden>Appointment</p>
+                </li>
+                <li>
+                    <a asp-area="" asp-controller="Drug" asp-action="Index">Drugs</a>
+                    <p hidden>Drug</p>
+                </li>
+                <li>
+                    <a asp-area="" asp-controller="Service" asp-action="Index">Services</a>
+                    <p hidden>Service</p>
+                </li>
+            </ul>
+ 
+            <div class="to-top">
+                <a class="btn btn-primary btn-customized-3" href="#" role="button">
+                    <i class="fas fa-arrow-up"></i>
+                </a>
+            </div>
+        </nav>
+
+        <div class="content">
+            <a class="btn btn-primary btn-customized open-menu" href="#" role="button">
+                <i class="fas fa-align-left"></i> <span>Menu</span>
+            </a>
+               
+            <div class="container">
+                <main role="main" class="pb-3" id="main-content">
+                    @RenderBody()
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2022 - VetClinic
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.39.0/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

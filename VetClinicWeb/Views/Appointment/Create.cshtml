@@ -1,0 +1,63 @@
+﻿@model VetClinicWeb.Models.AppointmentViewModel
+
+@{
+    ViewData["Title"] = "Appointment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h4>Create new appointment</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @Html.HiddenFor(model => model.AppointmentDate, new {id = "fullDate" })
+            <div class="form-group">
+                <label asp-for="Date" class="control-label"></label>
+                <div class="input-group date" id="datetimepicker4" data-target-input="nearest">
+                    <input asp-for="Date" type="text" class="form-control datetimepicker-input" data-target="#datetimepicker4" id="datePicker"/>
+                    <div class="input-group-append" data-target="#datetimepicker4" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
+                </div>
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Time" class="control-label"></label>
+                <div class="input-group date" id="datetimepicker3" data-target-input="nearest">
+                    <input asp-for="Time" type="text" class="form-control datetimepicker-input" data-target="#datetimepicker3" id="timePicker"/>
+                    <div class="input-group-append" data-target="#datetimepicker3" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-clock-four" aria-hidden="true"></i></div>
+                    </div>
+                </div>
+                <span asp-validation-for="Time" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Cause" class="control-label"></label>
+                <textarea asp-for="Cause" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Cause" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Facility" class="control-label"></label>
+                @Html.DropDownListFor(model => model.Facility, ViewBag.facilities as SelectList, "-- facility --", new {@class="form-control"})
+            </div>
+            <div class="form-group">
+                <label asp-for="Patient" class="control-label"></label>
+                @Html.DropDownListFor(model => model.Patient, ViewBag.patients as SelectList, "-- patient --", new {@class="form-control"})
+                <span asp-validation-for="Patient" class="text-danger"></span>
+            </div>
+            <p class="text-danger">@ViewBag.ErrorMessage</p>
+            <div class="form-group">
+                <input type="submit" value="Add services" class="btn btn-primary" />
+            </div>      
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,49 @@
+﻿@model IEnumerable<VetClinicWeb.Models.PositionViewModel>
+
+@{
+    ViewData["Title"] = "Position";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h4>List of positions</h4>
+
+@Html.Partial("SearchBoxPartialView")
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table table-hover table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SalaryMin)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SalaryMax)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SalaryMin)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SalaryMax)
+            </td>
+            <td width="20%">
+                @Html.ActionLink("Update", "Update", new { id = item.PositionId }) |
+                @Html.ActionLink("Delete", "ShowDelete", new { id = item.PositionId })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

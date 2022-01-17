@@ -1,0 +1,15 @@
+﻿
+#buttons {
+    margin-bottom: 15px;
+    margin-top: 10px;
+    color: white;
+}
+
+    #buttons a:link, #buttons a:hover {
+        text-decoration: none;
+        color: white;
+    }
+
+#buttons a {
+    color: white;
+}

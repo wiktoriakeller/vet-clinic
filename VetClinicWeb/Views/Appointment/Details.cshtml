@@ -1,0 +1,82 @@
+﻿@model VetClinicWeb.Models.AppointmentViewModel
+
+@section DetailsAppointmentsAddToHead{
+    <link href="@Url.Content("~/css/detailsAppointmentStyle.css")" rel="stylesheet" type="text/css" />
+}
+
+@{
+    ViewData["Title"] = "Appointment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h4>Appointment details</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+            @Html.HiddenFor(model => model.AppointmentId, new {id = "appointmentId" })
+            @Html.HiddenFor(model => model.AppointmentDate, new {id = "fullDate" })
+            <label asp-for="Date" class="control-label"></label>
+            <div class="input-group date" id="datetimepicker4" data-target-input="nearest">
+                <input disabled asp-for="Date" type="text" class="form-control datetimepicker-input" data-target="#datetimepicker4" id="datePicker"/>
+                <div class="input-group-append" data-target="#datetimepicker4" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Time" class="control-label"></label>
+            <div class="input-group date" id="datetimepicker3" data-target-input="nearest">
+                <input asp-for="Time" type="text" class="form-control datetimepicker-input" data-target="#datetimepicker3" id="timePicker" disabled/>
+                <div class="input-group-append" data-target="#datetimepicker3" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-clock-four" aria-hidden="true"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Cause" class="control-label"></label>
+            <textarea asp-for="Cause" class="form-control" rows="3" disabled></textarea>
+        </div>
+        <div class="form-group">
+            <label asp-for="Patient" class="control-label"></label>
+            <select class="form-control" disabled>
+                <option selected disabled>@Model.PatientName</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label asp-for="Facility" class="control-label"></label>
+            <select class="form-control" disabled>
+                <option selected disabled>@Model.FacilityAddress</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label asp-for="OfficeNumber" class="control-label"></label>
+            <select class="form-control" disabled>
+                <option selected disabled>@Model.OfficeNumber</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label asp-for="Employee" class="control-label"></label>
+            <select class="form-control" disabled>
+                <option selected disabled>@Model.EmployeeName</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<div class="row" id="buttons">
+    <div class="col-6 col-md-1">
+        <button type="button" class="btn btn-primary">
+            <a asp-controller="Appointment" asp-action="Update" asp-route-id=@Model.AppointmentId>Update</a>
+        </button>
+    </div>
+    <div class="col-6 col-md-1">
+        <button type="button" class="btn btn-danger">
+            <a asp-controller="Appointment" asp-action="ShowDelete" asp-route-id=@Model.AppointmentId>Delete</a>
+        </button>
+    </div>
+</div>
+
+<div>
+    <a asp-controller="Appointment" asp-action="Index">Back to List</a>
+</div>

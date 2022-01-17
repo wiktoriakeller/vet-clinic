@@ -1,0 +1,32 @@
+﻿@model VetClinicWeb.Models.ServiceViewModel
+
+@{
+    ViewData["Title"] = "Service";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h4>Service details</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control" disabled/>
+        </div>
+        <div class="form-group">
+            <label asp-for="Price" class="control-label"></label>
+            <input asp-for="Price" class="form-control" disabled/>
+        </div>
+        <div class="form-group">
+            <label asp-for="Description" class="control-label"></label>
+            <textarea asp-for="Description" class="form-control" rows="3" disabled></textarea>
+        </div>
+        <div class="form-group">
+            <label asp-for="ServiceType" class="control-label"></label>
+            @Html.DropDownListFor(model => model.ServiceType, new SelectList(new List<SelectListItem> { new SelectListItem { Text = "Treatment", Value = "T"}, new SelectListItem {Text = "Examination", Value = "E"}}, "Value", "Text") , "-- type --", new {@class="form-control", @disabled = "disabled" })
+        </div>
+    </div>
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
