@@ -24,11 +24,19 @@ namespace VetClinicWeb.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(int year)
+        public async Task<IActionResult> Index(int year = 2022)
         {
-            if (year <= 0)
+            ViewBag.error = "";
+            if (year <= 2019)
+            {
                 year = DateTime.Now.Year;
-           
+                ViewBag.error = "Year shouldn't be lower than 2020.";
+            }
+            else if(year > 2025)
+            {
+                ViewBag.error = "Year shouldn't be higher than 2025.";
+            }
+
             ViewBag.Year = year;
 
             var dbEntities = await _facilityDataAccess.Get();

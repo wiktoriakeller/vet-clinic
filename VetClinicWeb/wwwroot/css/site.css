@@ -40,6 +40,15 @@ html {
     margin: 0px 7px 2px 0px;
 }
 
+.logo a {
+    color: white;
+}
+
+.logo a:link {
+    text-decoration: none;
+    color: white;
+}
+
 #search-box-pres {
     margin-bottom: 30px;
 }
@@ -276,4 +285,20 @@ a.btn-customized-3 i {
     padding: 30px 20px;
     border-bottom: 1px solid #444;
     transition: all .3s;
+}
+
+
+#buttons {
+    margin-bottom: 15px;
+    margin-top: 10px;
+    color: white;
+}
+
+#buttons a:link, #buttons a:hover {
+    text-decoration: none;
+    color: white;
+}
+
+#buttons a {
+    color: white;
 }

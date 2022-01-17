@@ -5,7 +5,11 @@
     color: white;
 }
 
-#buttons a:link {
-    text-decoration: none;
+    #buttons a:link, #buttons a:hover {
+        text-decoration: none;
+        color: white;
+    }
+
+#buttons a {
     color: white;
 }
