@@ -19,6 +19,7 @@ namespace VetClinic.Mappings
             CreateMap<Appointment, AppointmentViewModel>().ReverseMap();
 			CreateMap<Drug, DrugViewModel>().ReverseMap();
             CreateMap<Prescription, PrescriptionViewModel>().ReverseMap();
+            CreateMap<Service, ServiceViewModel>().ReverseMap();
         }
     }
 }   

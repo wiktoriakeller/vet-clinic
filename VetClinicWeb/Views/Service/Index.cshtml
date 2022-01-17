@@ -1,0 +1,55 @@
+﻿@model IEnumerable<VetClinicWeb.Models.ServiceViewModel>
+
+@{
+    ViewData["Title"] = "Service";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h4>List of services</h4>
+
+@Html.Partial("SearchBoxPartialView")
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ServiceType)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ServiceType)
+            </td>
+            <td>
+                @Html.ActionLink("Update", "Update", new { id=item.ServiceId }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.ServiceId })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

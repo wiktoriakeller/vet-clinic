@@ -140,7 +140,10 @@ function getActionAndController() {
     var url = window.location.pathname;
     var indexes = getAllIndexes(url, "/");
 
-    if (indexes.length == 3) {
+    if (url == "/") {
+        return ["Index", "Facility"]
+    }
+    else if (indexes.length == 3) {
         var controller = url.substring(indexes[0] + 1, indexes[1]);
         var action = url.substring(indexes[1] + 1, indexes[2]);
 

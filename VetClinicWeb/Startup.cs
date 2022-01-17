@@ -38,6 +38,7 @@ namespace VetClinicWeb
             services.AddSingleton<IDataAccess<Appointment>, AppointmentDataAccess>();
             services.AddSingleton<IDataAccess<Drug>, DrugDataAccess>();
 			services.AddSingleton<IPrescriptionDataAccess, PrescriptionDataAccess>();
+            services.AddSingleton<IDataAccess<Service>, ServiceDataAccess>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddRazorPages();
             services.AddControllersWithViews();
@@ -72,7 +73,7 @@ namespace VetClinicWeb
                 endpoints.MapControllers();
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Facility}/{action=Index}/{id?}");
             });
         }
     }
