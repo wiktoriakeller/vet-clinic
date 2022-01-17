@@ -19,8 +19,8 @@ namespace VetClinicWeb.Models
         public string Time { get; set; }
 
         [DataType(DataType.Text)]
-        [RegularExpression(@"[A-Za-z0-9.,?() ]*", ErrorMessage = "Cause can only contain letters, numbers or punctuation marks.")]
-        [StringLength(150, ErrorMessage = "{0} length must be between {2} and {1}", MinimumLength = 0)]
+        [RegularExpression(@"[A-Za-z0-9.,?() ]*", ErrorMessage = "Cause can only contain letters, numbers and punctuation marks.")]
+        [StringLength(150, ErrorMessage = "{0} length must be between {2} and {1}.", MinimumLength = 0)]
         public string Cause { get; set; }
 
         [Required]
@@ -29,21 +29,21 @@ namespace VetClinicWeb.Models
         [DisplayName("Facility")]
         public string FacilityAddress { get; set; }
 
-        [Remote(action: "IsOfficeFree", controller: "Appointment", AdditionalFields = "Office, Date, Time, Facility")]
+        [Remote(action: "IsOfficeFree", controller: "Appointment", AdditionalFields = "Office, Date, Time, Facility, AppointmentId")]
         public int Office { get; set; }
 
         [DisplayName("Office Number")]
         public int OfficeNumber { get; set; }
 
         [Required]
-        [Remote(action: "IsEmployeeFree", controller: "Appointment", AdditionalFields = "Employee, Date, Time")]
+        [Remote(action: "IsEmployeeFree", controller: "Appointment", AdditionalFields = "Employee, Date, Time, AppointmentId")]
         public int Employee { get; set; }
         
         [DisplayName("Employee")]
         public string EmployeeName { get; set; }
 
         [Required]
-        [Remote(action: "IsPatientFree", controller: "Appointment", AdditionalFields = "Patient, Date, Time")]
+        [Remote(action: "IsPatientFree", controller: "Appointment", AdditionalFields = "Patient, Date, Time, AppointmentId")]
         public int Patient { get; set; }
 
         [DisplayName("Patient")]
