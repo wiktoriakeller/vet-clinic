@@ -13,7 +13,7 @@ namespace VetClinicWeb.Models
         [Required]
         [Remote(action: "IsPESELUnique", controller: "Owner", AdditionalFields = "OwnerId")]
         [RegularExpression(@"[0-9]*", ErrorMessage = "Owner PESEL should only contain digits.")]
-        [StringLength(11, ErrorMessage = "{0} length must be equal to {1} characters.")]
+        [StringLength(11, ErrorMessage = "{0} length must be equal to {1} characters.", MinimumLength = 11)]
         public string PESEL { get; set; }
 
         [Required]
