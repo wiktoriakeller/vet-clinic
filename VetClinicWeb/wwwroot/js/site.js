@@ -9,7 +9,7 @@ $("#datetimepicker4").datetimepicker({
 $("#datetimepicker3").datetimepicker({
     format: "HH:mm",
     stepping: 30,
-    enabledHours: [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+    enabledHours: [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
 });
 
 $(document).ready(function () {
@@ -22,18 +22,21 @@ $(document).ready(function () {
             var appointmentId = $("#appointmentId").val();
             updateAppointmentDropdowns(selectedValue, appointmentId, true);
 
-            var minTime = updateTime(true);
-            if (minTime[1] == true) {
-                $("#datetimepicker3").datetimepicker("defaultDate", minTime[0]);
-                $("#timePicker").val(minTime[0]);
+            var minTimeDate = updateTimeAndDate(true);
+
+            if (minTimeDate[2] == true) {
+                $("#timePicker").val(minTimeDate[0]);
+
+                if (minTimeDate[1] != null)
+                    $("#datePicker").val(minTimeDate[1]);
             }
             else {
-                updateDateAndTime(appointmentId);
+                setDateAndTimeFromDb(appointmentId);
             }
         }
         else if (action == "Create") {
-            var minTime = updateTime(false);
-            $("#timePicker").val(minTime[0]);
+            var minTimeDate = updateTimeAndDate(false);
+            $("#timePicker").val(minTimeDate[0]);
         }
     }
 });
@@ -43,82 +46,83 @@ $("#datetimepicker4").on("change.datetimepicker", function () {
     const action = names[0], controller = names[1];
 
     if ((action == "Update" || action == "Create") && controller == "Appointment") {
-        var minTime = updateTime(false);
-        $("#timePicker").val(minTime[0]);
+        var minTimeDate = updateTimeAndDate(false);
+        $("#timePicker").val(minTimeDate[0]);
     }
 });
 
-function updateTime(useFullDate) {
-    var selectedDate;
-    var selectedTime;
+function updateTimeAndDate(useFullDate) {
+    var selectedDateStr;
+    var selectedTimeStr;
 
     if (useFullDate) {
         var selected = $("#fullDate").val().split(" ");
-        selectedDate = formatDate(selected[0]);
-        selectedTime = selected[1];
+        selectedDateStr = selected[0];
+        selectedTimeStr = selected[1];
     }
     else {
-        selectedDate = $("#datePicker").val();
-        selectedTime = $("#timePicker").val();
+        selectedDateStr = $("#datePicker").val();
+        selectedTimeStr = $("#timePicker").val();
     }
 
-    var currentDate = new Date();
+    var curDateTime = new Date();
 
-    var day = currentDate.getDate();
-    if (day <= 9)
-        day = "0" + day.toString();
+    var day = curDateTime.getDate();
+    day = day <= 9 ? "0" + day.toString() : day.toString();
+    var month = curDateTime.getMonth() + 1;
+    month = month <= 9 ? "0" + month.toString() : month.toString();
 
-    var month = currentDate.getMonth() + 1;
-    if (month <= 9)
-        month = "0" + month.toString();
-
-    var year = currentDate.getFullYear().toString();
+    var year = curDateTime.getFullYear().toString();
     var currentDateStr = day + "/" + month + "/" + year;
 
-    var hour = currentDate.getHours();
-    var minutes = currentDate.getMinutes();
+    var hour = curDateTime.getHours();
+    var minutes = curDateTime.getMinutes();
     var time;
 
-    if (minutes <= 30) {
-        if (hour <= 10)
-            hour = "0" + currentHour.toString();
+    if (minutes >= 0 && minutes < 30) {
+        hour = hour <= 9 ? "0" + hour.toString() : hour.toString();
         time = hour + ":" + "30";
     }
     else {
         hour += 1;
-        if (hour <= 10)
-            hour = "0" + hour.toString();
+        hour = hour <= 9 ? "0" + hour.toString() : hour.toString();
         time = hour + ":" + "00";
     }
 
-    var minTime;
+    var minTime = null;
+    var minDate = null;
     var change = false;
 
-    console.log(selectedTime);
+    const selectedDate = toDate(selectedDateStr);
+    const currentDate = toDate(currentDateStr);
 
-    if (selectedDate == currentDateStr && !(hour >= 19 || (hour == 18 && minutes > 30))) {
-        $("#datetimepicker3").datetimepicker("minDate", time);
+    var splittedSelTime = selectedTimeStr.split(":");
+    var selectedHour = parseInt(splittedSelTime[0]);
+    var selectedMin = parseInt(splittedSelTime[1]);
+
+    if (selectedDateStr == currentDateStr) {
         minTime = time;
 
-        var splittedSelTime = selectedTime.split(":");
-        var selHour = parseInt(splittedSelTime[0]);
-        var selMin = parseInt(splittedSelTime[1]);
-
-        if ((selHour == hour && selMin < minutes) || selHour < hour)
+        if ((selectedHour == hour && selectedMin < minutes) || selectedHour < hour)
             change = true;
     }
+    else if (selectedDate < currentDate) {
+        minTime = time;
+        minDate = currentDateStr;
+        change = true;
+    }
     else {
-        $("#datetimepicker3").datetimepicker("minDate", "07:00");
         minTime = "07:00";
     }
 
-    return [minTime, change];
+    $("#datetimepicker3").datetimepicker("minDate", minTime);
+
+    return [minTime, minDate, change];
 }
 
-function getCurrenDate() {
-    var fullDate = $("#fullDate").val();
-    var date = fullDate.split(" ")[0];
-    return formatDate(date);
+const toDate = (dateStr) => {
+    const [day, month, year] = dateStr.split("/")
+    return new Date(year, month - 1, day)
 }
 
 function getActionAndController() {
@@ -193,15 +197,7 @@ function updateAppointmentDropdowns(selectedValue, appointmentId, setSelected) {
     });
 }
 
-function formatDate(date) {
-    var indexes = getAllIndexes(date, "/");
-    var day = date.substring(indexes[0] + 1, indexes[1]);
-    var month = date.substring(0, indexes[0]);
-    var year = date.substring(indexes[1] + 1);
-    return day + "/" + month + "/" + year;
-}
-
-function updateDateAndTime(appointmentId) {
+function setDateAndTimeFromDb(appointmentId) {
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
@@ -209,7 +205,7 @@ function updateDateAndTime(appointmentId) {
         data: { appointmentId: appointmentId },
         success:
             function (response) {
-                $("#datePicker").val(formatDate((response.date)));
+                $("#datePicker").val(response.date);
                 $("#timePicker").val(response.time);
             }
     });
