@@ -15,7 +15,7 @@ namespace VetClinicWeb.Controllers
     {
         public FacilityController(IDataAccess<Facility> facilityDataAccess, IMapper mapper) : base(mapper, facilityDataAccess) 
         {
-            _restrictedInDropdown = new List<string> { "facilityid" };
+            _restrictedInDropdown = new List<string> { "facilityid", "income" };
             AddPropertiesNamesToDropdown();
         }
 

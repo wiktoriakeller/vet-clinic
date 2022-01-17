@@ -7,7 +7,7 @@ using Dapper;
 
 namespace DataAccess.Access
 {
-    public class FacilityDataAccess : Access, IDataAccess<Facility>
+    public class FacilityDataAccess : Access, IDataAccess<Facility>, IProcedureResultDataAccess
     {
         public FacilityDataAccess(ISQLDataAccess db) : base(db) { }
 
@@ -67,6 +67,13 @@ namespace DataAccess.Access
             });
 
             return _db.SaveData(sql, dynamicParameters);
+        }
+
+        public async Task<double> GetIncome(int facilityId, int year)
+        {
+            string sql = $"select INF145189.CalcYearlyIncome({year}, {facilityId}) as result from dual";
+            var results = await _db.ExecuteProcedure<double>(sql);
+            return results.First();
         }
     }
 }

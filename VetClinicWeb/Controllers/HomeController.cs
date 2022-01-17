@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using DataAccess.Access;
+using DataAccess.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -9,25 +12,38 @@ using VetClinicWeb.Models;
 
 namespace VetClinicWeb.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController<FacilityViewModel>
     {
-        private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IDataAccess<Facility> _facilityDataAccess;
+        
+
+        public HomeController(IMapper mapper, IDataAccess<Facility> facilityDataAccess) : base(mapper)
         {
-            _logger = logger;
+            _facilityDataAccess = facilityDataAccess;
         }
 
-        public IActionResult Index()
+        [HttpGet]
+        public async Task<IActionResult> Index(int year)
         {
-            return View();
-        }
+            if (year <= 0)
+                year = DateTime.Now.Year;
+           
+            ViewBag.Year = year;
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+            var dbEntities = await _facilityDataAccess.Get();
+            var entities = new List<FacilityViewModel>();
 
+            foreach (var dbEntity in dbEntities)
+            {
+                var facility = _mapper.Map<FacilityViewModel>(dbEntity);
+                var dataAccess = (IProcedureResultDataAccess)_facilityDataAccess;
+                facility.Income = await dataAccess.GetIncome(facility.FacilityId, year);
+                entities.Add(facility);
+            }
+            
+            return View(entities);
+        }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
