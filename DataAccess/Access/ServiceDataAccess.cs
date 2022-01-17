@@ -32,7 +32,7 @@ namespace DataAccess.Access
 
         public Task Insert(Service service)
         {
-            string sql = "insert into services(Name, Price, Description, ServiceType) VALUES(:Name, :Price, :Description, :ServiceType);";
+            string sql = "insert into services(Name, Price, Description, ServiceType) VALUES(:Name, :Price, :Description, :ServiceType)";
 
             DynamicParameters dynamicParameters = new DynamicParameters(new
             {

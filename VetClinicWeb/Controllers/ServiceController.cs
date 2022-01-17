@@ -15,8 +15,14 @@ namespace VetClinicWeb.Controllers
     {
         public ServiceController(IMapper mapper, IDataAccess<Service> dataAccess) : base(mapper, dataAccess)
         {
-            _restrictedInDropdown = new List<string> { "serviceId" };
+            _restrictedInDropdown = new List<string> { "serviceid", "description" };
             AddPropertiesNamesToDropdown();
+        }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var entity = await _dataAccess.Get(id);
+            return View(_mapper.Map<ServiceViewModel>(entity));
         }
     }
 }
