@@ -6,47 +6,56 @@
 }
 
 <h4>Appointment details</h4>
-
-<div>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AppointmentDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AppointmentDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FacilityAddress)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FacilityAddress)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.OfficeNumber)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.OfficeNumber)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EmployeeName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EmployeeName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PatientName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PatientName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Cause)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Cause)
-        </dd>
-    </dl>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="Date" class="control-label"></label>
+            <div class="input-group date" id="datetimepicker4" data-target-input="nearest">
+                <input disabled asp-for="Date" type="text" class="form-control datetimepicker-input" data-target="#datetimepicker4" id="datePicker"/>
+                <div class="input-group-append" data-target="#datetimepicker4" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Time" class="control-label"></label>
+            <div class="input-group date" id="datetimepicker3" data-target-input="nearest">
+                <input asp-for="Time" type="text" class="form-control datetimepicker-input" data-target="#datetimepicker3" id="timePicker" disabled/>
+                <div class="input-group-append" data-target="#datetimepicker3" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-clock-four" aria-hidden="true"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Cause" class="control-label"></label>
+            <textarea asp-for="Cause" class="form-control" rows="3" disabled></textarea>
+        </div>
+        <div class="form-group">
+            <label asp-for="Patient" class="control-label"></label>
+            <select class="form-control" disabled>
+                <option selected disabled>@Model.PatientName</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label asp-for="Facility" class="control-label"></label>
+            <select class="form-control" disabled>
+                <option selected disabled>@Model.FacilityAddress</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label asp-for="OfficeNumber" class="control-label"></label>
+            <select class="form-control" disabled>
+                <option selected disabled>@Model.OfficeNumber</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label asp-for="Employee" class="control-label"></label>
+            <select class="form-control" disabled>
+                <option selected disabled>@Model.EmployeeName</option>
+            </select>
+        </div>
+    </div>
 </div>
 <div>
     <a asp-action="Index">Back to List</a>

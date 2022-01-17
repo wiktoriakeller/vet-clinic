@@ -6,61 +6,49 @@
 }
 
 <h4>Employee details</h4>
-
-<div>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Surname)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Surname)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Salary)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Salary)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.BonusSalary)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.BonusSalary)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Address)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Address)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PhoneNumber)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PhoneNumber)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PositionName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PositionName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FacilityAddress)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FacilityAddress)
-        </dd>
-    </dl>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control" disabled/>
+        </div>
+        <div class="form-group">
+            <label asp-for="Surname" class="control-label"></label>
+            <input asp-for="Surname" class="form-control" disabled/>
+        </div>
+        <div class="form-group">
+            <label asp-for="Salary" class="control-label"></label>
+            <input asp-for="Salary" class="form-control" disabled/>
+        </div>
+        <div class="form-group">
+            <label asp-for="BonusSalary" class="control-label"></label>
+            <input asp-for="BonusSalary" class="form-control" disabled/>
+        </div>
+        <div class="form-group">
+            <label asp-for="Address" class="control-label"></label>
+            <input asp-for="Address" class="form-control" id="addressInfo" disabled/>
+        </div>
+        <div class="form-group">
+            <label asp-for="PhoneNumber" class="control-label"></label>
+            <input asp-for="PhoneNumber" class="form-control" disabled/>
+        </div>
+        <div class="form-group">
+            <label asp-for="Position" class="control-label"></label>
+            <select disabled class="form-control">
+                <option selected>@Model.PositionName</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label asp-for="Facility" class="control-label"></label>
+            <select disabled class="form-control">
+                <option selected>
+                    @Model.FacilityAddress
+                </option>
+            </select>
+        </div>
+    </div>
 </div>
-
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
