@@ -19,7 +19,7 @@ namespace DataAccess.Access
 
         public async Task<Appointment> Get(int appointmentId)
         {
-            string sql = "select * from appointments where appointmentId = :Id";
+            string sql = "select appointmentId, to_char(appointmentDate, 'DD/MM/YYYY HH24:MI') as appointmentDate, cause, office, employee, patient from appointments where appointmentId = :Id";
 
             var dynamicParameters = new DynamicParameters(new
             {

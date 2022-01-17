@@ -29,8 +29,6 @@ namespace VetClinicWeb.Controllers
             var listOfFields = typeof(T).GetProperties();
             _options = new List<SelectListItem>();
 
-            Console.WriteLine(typeof(T));
-
             foreach (var field in listOfFields)
             {
                 if (!_restrictedInDropdown.Any(str => field.Name.ToLower() == str))
