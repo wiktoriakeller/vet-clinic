@@ -13,6 +13,11 @@
     {
         @RenderSection("AddToHead", required: false)
     }
+
+     @if (IsSectionDefined("DetailsAppointmentsAddToHead"))
+    {
+        @RenderSection("DetailsAppointmentsAddToHead", required: false)
+    }
 </head>
 <body>
     <div class="wrapper">
