@@ -19,7 +19,7 @@ namespace VetClinicWeb.Models
         [Required]
         [Remote(action: "IsNIPUnique", controller: "Organization", AdditionalFields = "OrganizationId")]
         [RegularExpression(@"[0-9]*", ErrorMessage = "Organization NIP should only contain digits.")]
-        [StringLength(10, ErrorMessage = "{0} length must be equal to {1} characters.")]
+        [StringLength(10, ErrorMessage = "{0} length must be equal to {1} characters.", MinimumLength = 10)]
         public string NIP { get; set; }
 
         [Required]

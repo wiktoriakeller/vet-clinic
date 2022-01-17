@@ -11,7 +11,7 @@ namespace VetClinicWeb.Models
         public int PrescriptionId { get; set; }
 
         [Required]
-        [RegularExpression(@"^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$", ErrorMessage = "Dosage should only contain letters, numbers and spaces.")]
+        [RegularExpression(@"^[a-zA-Z0-9_x]+( [a-zA-Z0-9_x]+)*$", ErrorMessage = "Dosage should only contain letters, numbers, spaces and letter x.")]
         [StringLength(100, ErrorMessage = "{0} length must shorter than {1}.")]
         public string Dosage { get; set; }
 
