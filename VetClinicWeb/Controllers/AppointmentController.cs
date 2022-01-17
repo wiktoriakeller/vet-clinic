@@ -117,7 +117,9 @@ namespace VetClinicWeb.Controllers
                     var _appointmentProcedureAccess = (IProcedureDataAccess<Appointment, Facility>)_appointmentDataAccess;
                     await _appointmentProcedureAccess.Insert(_mapper.Map<Appointment>(model), facility);
                     ModelState.Clear();
-                    return RedirectToAction("Index");
+                    var appointments = await _appointmentDataAccess.Get();
+                    var maxId = appointments.Max(a => a.AppointmentId);
+                    return RedirectToAction("Index", "ServicesInAppointment", new { appointmentId = maxId });
                 }
                 catch (Oracle.ManagedDataAccess.Client.OracleException ex)
                 {
@@ -185,7 +187,7 @@ namespace VetClinicWeb.Controllers
             catch (Oracle.ManagedDataAccess.Client.OracleException ex)
             {
                 ViewBag.ErrorMessage = GetExceptionMessage(ex.Number);
-                return View(GetFullAppointment(id));
+                return View(await GetFullAppointment(id));
             }
 
             return RedirectToAction("Index");

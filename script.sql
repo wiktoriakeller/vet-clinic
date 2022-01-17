@@ -256,7 +256,7 @@ SELECT * FROM Services;
 CREATE OR REPLACE FUNCTION CalcYearlyIncome (visitYear IN NUMBER, facilityId IN Facilities.FacilityId%Type) RETURN NUMBER IS
 pricesSum NUMBER;
 BEGIN
-    SELECT SUM(serv.Price) INTO pricesSum
+    SELECT COALESCE(SUM(serv.Price), 0) INTO pricesSum
     FROM Services serv INNER JOIN ServicesInAppointments servApp ON serv.ServiceId = servApp.Service
     INNER JOIN Appointments a ON a.AppointmentId = servApp.AppointmentId
     INNER JOIN Offices o ON o.OfficeId = a.Office
@@ -266,3 +266,4 @@ END CalcYearlyIncome;
 
 SELECT CalcYearlyIncome(2022, 1) FROM dual;
 
+commit;

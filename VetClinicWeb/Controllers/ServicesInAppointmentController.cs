@@ -170,5 +170,14 @@ namespace VetClinicWeb.Controllers
 
             ViewBag.services = new SelectList(uniqueServices, "ServiceId", "Name");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> GetNumberOfBookedServices(int appointmentId)
+        {
+            var dbServices = await _servicesInAppointmentDataAccess.Get();
+            var dbServicesInApp = dbServices.Where(x => x.AppointmentId == appointmentId);
+            System.Console.WriteLine(dbServicesInApp.Count());
+            return Json(new { number = dbServicesInApp.Count() });
+        }
     }
 }

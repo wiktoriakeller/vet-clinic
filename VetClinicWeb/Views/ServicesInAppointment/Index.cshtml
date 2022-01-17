@@ -46,7 +46,7 @@
         <tr id="input-row">
             <form asp-action="Create">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                @Html.HiddenFor(model => model.AppointmentId)
+                @Html.HiddenFor(model => model.AppointmentId, new {id = "appointmentId" })
                 <td>
                     <div class="form-group">
                         <div class="input-in-table">
@@ -60,6 +60,7 @@
                        <div class="input-in-table">
                             <input asp-for="Diagnosis" class="form-control" />
                             <p class="text-danger">@TempData["Error"]</p>
+                            <p class="text-danger">@TempData["ErrorDb"]</p>
                        </div>
                     </div>
                 </td>
@@ -68,8 +69,6 @@
                         <input type="submit" value="Create" class="btn btn-primary" />
                     </div>
                 </td>
-
-                <p class="text-danger">@TempData["ErrorDb"]</p>
             </form>
         </tr>
 @foreach (var item in ViewData["servicesInAppointments"] as IList<ServicesInAppointmentViewModel>) {
@@ -89,9 +88,8 @@
     </tbody>
 </table>
 
-<div>
-    <a asp-controller="Appointment" asp-action="Index">Back to appointments</a>
-</div>
+<a asp-controller="Appointment" asp-action="Index" id="appointment-services-back">Back to appointments</a>
+<p class="text-danger" id="error-message-in-return"></p>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

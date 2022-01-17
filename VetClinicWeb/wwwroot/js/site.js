@@ -234,7 +234,7 @@ $(document).ready(function () {
         trigger: "focus",
         title: "Valid addresses examples:",
         content: `
-        <ul>
+        <ul class="list-unstyled menu-elements">
             <li>Poznan Kwiatowa 2 61-386</li>
             <li>Poznan Kwiatowa 2 m.12 61-386</li>
             <li>Bukow 12c 65-040</li>
@@ -266,4 +266,28 @@ $(".to-top a").on("click", function (e) {
     if ($(window).scrollTop() == 0) {
         $(this).removeClass("active");
     }
+});
+
+$("#appointment-services-back").on("click", function (e) {
+    e.preventDefault();
+    var appointmentId = $("#appointmentId").val();
+    $("#error-message-in-return").html("");
+    var url = $(this).attr("href");
+
+    $.ajax({
+        type: 'POST',
+        dataType: 'JSON',
+        url: '/ServicesInAppointment/GetNumberOfBookedServices',
+        data: { appointmentId: appointmentId },
+        success:
+            function (response) {
+                if (response.number <= 0) {
+                    $("#error-message-in-return").html("Appointment shouldn't have 0 services.");
+                }
+                else {
+                    window.location.href = url;
+                    window.location.replace(url);
+                }
+            }
+    });
 });
