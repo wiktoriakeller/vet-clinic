@@ -17,7 +17,7 @@ namespace VetClinicWeb.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(string option, string search)
+        public virtual async Task<IActionResult> Index(string option, string search)
         {
             ViewBag.Options = _options;
             var dbEntities = await _dataAccess.Get();
@@ -28,40 +28,7 @@ namespace VetClinicWeb.Controllers
 
             if (!string.IsNullOrEmpty(search) && !string.IsNullOrEmpty(option))
             {
-                search = search.ToLower().Trim();
-                option = option.ToLower();
-                var searched = new List<U>();
-                string idPropertyName = "";
-
-                if(entities.Count > 0)
-                {
-                    var listOfFields = typeof(T).GetProperties();
-                    idPropertyName = listOfFields.SingleOrDefault(field => field.Name.ToLower().Contains("id")).Name;
-                }
-
-                if(idPropertyName != "")
-                {
-                    foreach(var entity in entities)
-                    {
-                        foreach(var val in _propertiesNames)
-                        {
-                            if(option == val.Key.ToLower() || option == "any")
-                            {
-                                var propertyVal = entity.GetType().GetProperty(val.Value.Item1).GetValue(entity, null).ToString().ToLower();
-                                var contains = searched.Any(s => s.GetType().GetProperty(idPropertyName).GetValue(s, null).ToString() == entity.GetType().GetProperty(idPropertyName).GetValue(entity, null).ToString());
-
-                                if ((val.Value.Item2 == typeof(string) && propertyVal.Contains(search)) 
-                                    || (val.Value.Item2 != typeof(string) && propertyVal == search) 
-                                    && !contains)
-                                {
-                                    searched.Add(entity);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-
+                var searched = Search(search, option, entities);
                 return View(searched);
             }
 

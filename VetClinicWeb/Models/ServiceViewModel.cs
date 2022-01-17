@@ -31,5 +31,8 @@ namespace VetClinicWeb.Models
         [Required]
         [DisplayName("Service type")]
         public char ServiceType { get; set; }
+
+        [DisplayName("Service type")]
+        public string FullServiceType { get; set; }
     }
 }

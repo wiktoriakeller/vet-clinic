@@ -15,8 +15,38 @@ namespace VetClinicWeb.Controllers
     {
         public ServiceController(IMapper mapper, IDataAccess<Service> dataAccess) : base(mapper, dataAccess)
         {
-            _restrictedInDropdown = new List<string> { "serviceid", "description" };
+            _restrictedInDropdown = new List<string> { "serviceid", "description", "servicetype" };
             AddPropertiesNamesToDropdown();
+        }
+
+        [HttpGet]
+        public override async Task<IActionResult> Index(string option, string search)
+        {
+            ViewBag.Options = _options;
+            var dbEntities = await _dataAccess.Get();
+            var entities = new List<ServiceViewModel>();
+
+            foreach (var dbEntity in dbEntities)
+            {
+                entities.Add(_mapper.Map<ServiceViewModel>(dbEntity));
+                if(entities.Last().ServiceType == 'E')
+                {
+                    entities.Last().FullServiceType = "Examination";
+                }
+                else
+                {
+                    entities.Last().FullServiceType = "Treatment";
+                }
+            }
+
+
+            if (!string.IsNullOrEmpty(search) && !string.IsNullOrEmpty(option))
+            {
+                var searched = Search(search, option, entities);
+                return View(searched);
+            }
+
+            return View(entities);
         }
 
         public async Task<IActionResult> Details(int id)
