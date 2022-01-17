@@ -26,10 +26,11 @@ namespace VetClinicWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(int year)
         {
-            if (year == 0)
-            {
+            if (year <= 0)
                 year = DateTime.Now.Year;
-            }
+           
+            ViewBag.Year = year;
+
             var dbEntities = await _facilityDataAccess.Get();
             var entities = new List<FacilityViewModel>();
 
