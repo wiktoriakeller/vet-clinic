@@ -1,0 +1,11 @@
+﻿
+#buttons {
+    margin-bottom: 15px;
+    margin-top: 10px;
+    color: white;
+}
+
+#buttons a:link {
+    text-decoration: none;
+    color: white;
+}

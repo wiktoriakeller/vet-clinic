@@ -1,7 +1,7 @@
-﻿@model VetClinicWeb.Models.PrescriptionViewModel
+﻿@model VetClinicWeb.Models.ServicesInAppointmentViewModel
 
 @{
-    ViewData["Title"] = "Prescription";
+    ViewData["Title"] = "Appointment services";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -9,9 +9,9 @@
     <link href="@Url.Content("~/css/prescriptionStyle.css")" rel="stylesheet" type="text/css" />
 }
 
-<h4>List of prescriptions</h4>
+<h4>List of services in appointment</h4>
 
-<form asp-controller="Prescription" asp-action="Index" method="get">
+<form asp-controller="ServicesInAppointment" asp-action="Index" method="get">
     <div class="container-md mt-3 mb-3" style="width:50%">
         <div id="search-box-pres">
             <div class="row">
@@ -34,10 +34,10 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.DrugName)
+                @Html.DisplayNameFor(model => model.ServiceName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Dosage)
+                @Html.DisplayNameFor(model => model.Diagnosis)
             </th>
             <th></th>
         </tr>
@@ -50,7 +50,7 @@
                 <td>
                     <div class="form-group">
                         <div class="input-in-table">
-                            @Html.DropDownListFor(model => model.DrugId, ViewBag.drugs as SelectList, "-- drug --", new {@class="form-control"})
+                            @Html.DropDownListFor(model => model.Service, ViewBag.services as SelectList, "-- service --", new {@class="form-control"})
                             <p class="text-danger">@TempData["ErrorDropdown"]</p>
                         </div>
                     </div>
@@ -58,7 +58,7 @@
                 <td>
                     <div class="form-group">
                        <div class="input-in-table">
-                            <input asp-for="Dosage" class="form-control" />
+                            <input asp-for="Diagnosis" class="form-control" />
                             <p class="text-danger">@TempData["Error"]</p>
                        </div>
                     </div>
@@ -72,17 +72,17 @@
                 <p class="text-danger">@TempData["ErrorDb"]</p>
             </form>
         </tr>
-@foreach (var item in ViewData["prescriptions"] as IList<PrescriptionViewModel>) {
+@foreach (var item in ViewData["servicesInAppointments"] as IList<ServicesInAppointmentViewModel>) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.DrugName)
+                @Html.DisplayFor(modelItem => item.ServiceName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Dosage)
+                @Html.DisplayFor(modelItem => item.Diagnosis)
             </td>
             <td>
-                @Html.ActionLink("Update", "Update", new { appointmentId = item.AppointmentId, drugId = item.DrugId }) |
-                @Html.ActionLink("Delete", "Delete", new { appointmentId = item.AppointmentId, drugId = item.DrugId })
+                @Html.ActionLink("Update", "Update", new { id = item.ServicesInAppointmentId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.ServicesInAppointmentId, appointmentId = item.AppointmentId })
             </td>
         </tr>
 }

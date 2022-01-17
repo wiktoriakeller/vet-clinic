@@ -21,7 +21,7 @@ namespace VetClinicWeb.Controllers
         {
             _drugDataAccess = drugDataAccess;
             _prescriptionDataAccess = prescriptionDataAccess;
-            _restrictedInDropdown = new List<string> { "drugid", "appointmentid", "prescriptionId" };
+            _restrictedInDropdown = new List<string> { "drugid", "appointmentid", "prescriptionid" };
             AddPropertiesNamesToDropdown();
         }
 

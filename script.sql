@@ -1,5 +1,5 @@
 DROP TABLE Prescriptions;
-DROP TABLE ServicesInAppointment;
+DROP TABLE ServicesInAppointments;
 DROP TABLE Appointments;
 DROP TABLE Services;
 DROP TABLE Drugs;
@@ -101,7 +101,7 @@ CREATE TABLE Appointments(
     CONSTRAINT UniqueAppointmentOffice UNIQUE(AppointmentDate, Office)
 	);
 	
-CREATE TABLE ServicesInAppointment(
+CREATE TABLE ServicesInAppointments(
     ServicesInAppointmentId NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 	Diagnosis VARCHAR2(150) NULL,
 	AppointmentId REFERENCES Appointments(AppointmentId) NOT NULL,
@@ -253,16 +253,16 @@ commit;
 SELECT * FROM ServicesInAppointment;
 SELECT * FROM Services;
 
-CREATE OR REPLACE FUNCTION CalcYearlyIncome (visitYear IN NUMBER) RETURN NUMBER IS
+CREATE OR REPLACE FUNCTION CalcYearlyIncome (visitYear IN NUMBER, facilityId IN Facilities.FacilityId%Type) RETURN NUMBER IS
 pricesSum NUMBER;
 BEGIN
     SELECT SUM(serv.Price) INTO pricesSum
-    FROM Services serv INNER JOIN ServicesInAppointment servApp ON serv.ServiceId = servApp.Service
+    FROM Services serv INNER JOIN ServicesInAppointments servApp ON serv.ServiceId = servApp.Service
     INNER JOIN Appointments a ON a.AppointmentId = servApp.AppointmentId
-    WHERE visitYear = EXTRACT(YEAR FROM a.AppointmentDate);
-    
+    INNER JOIN Offices o ON o.OfficeId = a.Office
+    WHERE visitYear = EXTRACT(YEAR FROM a.AppointmentDate) AND o.Facility = facilityId;
     RETURN pricesSum;
 END CalcYearlyIncome;
 
-SELECT CalcYearlyIncome(2021) FROM dual;
+SELECT CalcYearlyIncome(2022, 1) FROM dual;
 
