@@ -1,8 +1,35 @@
-﻿@{
+﻿@model IEnumerable<VetClinicWeb.Models.FacilityViewModel>
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
     <h2>Welcome</h2>
-    <h3>To the Vet Clinic</h3>
+    <h3>To the Vet Clinic 😺</h3>
 </div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Income)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Income)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

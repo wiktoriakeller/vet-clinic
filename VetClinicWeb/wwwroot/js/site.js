@@ -141,7 +141,7 @@ function getActionAndController() {
     var indexes = getAllIndexes(url, "/");
 
     if (url == "/") {
-        return ["Index", "Facility"]
+        return ["Index", "Home"]
     }
     else if (indexes.length == 3) {
         var controller = url.substring(indexes[0] + 1, indexes[1]);

@@ -21,5 +21,8 @@ namespace VetClinicWeb.Models
         [StringLength(9, ErrorMessage = "{0} length must be greater than or equal to {1}.", MinimumLength = 9)]
         [RegularExpression("[0-9]{3}[0-9]{3}[0-9]{3}", ErrorMessage = "Phone number should contain 9 digits.")]
         public string PhoneNumber { get; set; }
+
+        [DisplayName("This years income")]
+        public double Income { get; set; }
     }
 }
