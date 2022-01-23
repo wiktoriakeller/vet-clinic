@@ -22,7 +22,7 @@ CREATE TABLE Positions(
 CREATE TABLE Facilities(
     FacilityId NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 	Address VARCHAR2(150) UNIQUE NOT NULL,
-	PhoneNumber VARCHAR2(14) NOT NULL
+	PhoneNumber VARCHAR2(9) NOT NULL
 	);
     
 CREATE TABLE Employees(
@@ -32,7 +32,7 @@ CREATE TABLE Employees(
 	Salary NUMBER(7, 2) NOT NULL,
 	BonusSalary NUMBER(6, 2) NOT NULL,
 	Address VARCHAR2(150) NOT NULL,
-	PhoneNumber VARCHAR2(14) NOT NULL,
+	PhoneNumber VARCHAR2(9) NOT NULL,
 	Position REFERENCES Positions(PositionId) NOT NULL,
 	Facility REFERENCES Facilities(FacilityId) NOT NULL
 	);
@@ -49,7 +49,7 @@ CREATE TABLE Organizations(
 	NIP VARCHAR2(10) UNIQUE NOT NULL,
 	Name VARCHAR(100) NOT NULL,
 	Address VARCHAR2(150) NOT NULL,
-	PhoneNumber VARCHAR2(14) NOT NULL
+	PhoneNumber VARCHAR2(9) NOT NULL
 	);
 
 CREATE TABLE Owners(
@@ -58,7 +58,7 @@ CREATE TABLE Owners(
 	Name VARCHAR2(50) NOT NULL,
 	Surname VARCHAR2(50) NOT NULL,
 	Address VARCHAR2(150) NOT NULL,
-	PhoneNumber VARCHAR2(14) NOT NULL
+	PhoneNumber VARCHAR2(9) NOT NULL
 	);
 	
 CREATE TABLE Species(
