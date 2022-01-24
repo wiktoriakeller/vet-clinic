@@ -62,6 +62,7 @@
             </td>
             }
             <td width="20%">
+                @Html.ActionLink("History", "PatientHistory", "Appointment", new { patientId=item.PatientId, option="", search=""}) |
                 @Html.ActionLink("Update", "Update", new { id=item.PatientId }) |
                 @Html.ActionLink("Delete", "ShowDelete", new { id=item.PatientId })
             </td>

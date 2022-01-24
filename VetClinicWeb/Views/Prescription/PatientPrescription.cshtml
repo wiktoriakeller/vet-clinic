@@ -1,0 +1,59 @@
+﻿@model VetClinicWeb.Models.PrescriptionViewModel
+
+@{
+    ViewData["Title"] = "Patient prescriptions";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section AddToHead{
+    <link href="@Url.Content("~/css/prescriptionStyle.css")" rel="stylesheet" type="text/css" />
+}
+
+<h4>Patient prescriptions</h4>
+
+<form asp-controller="Prescription" asp-action="PatientPrescription" method="get">
+    <div class="container-md mt-3 mb-3" style="width:50%">
+        <div id="search-box-pres">
+            <div class="row">
+                <div class="col">
+                    @Html.DropDownList("Option", (IEnumerable<SelectListItem>) ViewBag.Options, "Choose", new {@class="form-control"})
+                </div>
+                <div class="col-8">
+                    <div class="input-group-append">
+                        <input type="text" name="search" placeholder="Search" class="form-control"/>
+                        <input type="hidden" name="appointmentId" value=@ViewBag.AppId />
+                        <input type="hidden" name="patientId" value=@ViewBag.PatientId />
+                        <input type="submit" value="Search" class="btn btn-primary"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<table class="table table-hover table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DrugName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Dosage)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in ViewData["prescriptions"] as IList<PrescriptionViewModel>) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DrugName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Dosage)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+@Html.ActionLink("Back to history", "PatientHistory", "Appointment", new { patientId=@ViewBag.PatientId, option="", search=""})

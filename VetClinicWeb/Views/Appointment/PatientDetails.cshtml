@@ -5,17 +5,15 @@
 }
 
 @{
-    ViewData["Title"] = "Appointment";
+    ViewData["Title"] = "Patient appointment";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h4>Appointment details</h4>
+<h4>Patient appointment details</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <div class="form-group">
-            @Html.HiddenFor(model => model.AppointmentId, new {id = "appointmentId" })
-            @Html.HiddenFor(model => model.AppointmentDate, new {id = "fullDate" })
             <label asp-for="Date" class="control-label"></label>
             <div class="input-group date">
                 <input disabled asp-for="Date" class="form-control" />
@@ -64,19 +62,4 @@
     </div>
 </div>
 
-<div class="row" id="buttons">
-    <div class="col-6 col-md-1">
-        <button type="button" class="btn btn-primary">
-            <a asp-controller="Appointment" asp-action="Update" asp-route-id=@Model.AppointmentId>Update</a>
-        </button>
-    </div>
-    <div class="col-6 col-md-1">
-        <button type="button" class="btn btn-danger">
-            <a asp-controller="Appointment" asp-action="ShowDelete" asp-route-id=@Model.AppointmentId>Delete</a>
-        </button>
-    </div>
-</div>
-
-<div>
-    <a asp-controller="Appointment" asp-action="Index">Back to List</a>
-</div>
+@Html.ActionLink("Back to history", "PatientHistory", "Appointment", new { patientId=@ViewBag.PatientId, option="", search=""})

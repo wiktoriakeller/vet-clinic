@@ -60,6 +60,13 @@ namespace VetClinicWeb.Controllers
             return View(viewModel);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> PatientPrescription(int appointmentId, int patientId, string option, string search)
+        {
+            ViewBag.PatientId = patientId;
+            return await Index(appointmentId, option, search);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create(PrescriptionViewModel model)
         {

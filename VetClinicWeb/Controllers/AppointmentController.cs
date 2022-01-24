@@ -58,7 +58,36 @@ namespace VetClinicWeb.Controllers
         public async Task<IActionResult> Index(string option, string search)
         {
             ViewBag.Options = _options;
+            List<AppointmentViewModel> appointments = await GetAppointmentViewModel();
 
+            if (!string.IsNullOrEmpty(search) && !string.IsNullOrEmpty(option))
+            {
+                var searched = Search(search, option, appointments);
+                return View(searched);
+            }
+
+            return View(appointments);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> PatientHistory(string option, string search, int patientId)
+        {
+            ViewBag.Options = _options;
+            ViewBag.PatientId = patientId;
+            List<AppointmentViewModel> appointments = await GetAppointmentViewModel();
+            appointments = appointments.Where(x => x.Patient == patientId).ToList();
+
+            if (!string.IsNullOrEmpty(search) && !string.IsNullOrEmpty(option))
+            {
+                var searched = Search(search, option, appointments);
+                return View(searched);
+            }
+
+            return View(appointments);
+        }
+
+        private async Task<List<AppointmentViewModel>> GetAppointmentViewModel()
+        {
             var dbAppointments = await _appointmentDataAccess.Get();
             var appointments = new List<AppointmentViewModel>();
             var employees = (List<Employee>)await _employeeDataAccess.Get();
@@ -83,18 +112,18 @@ namespace VetClinicWeb.Controllers
                 appointments.Last().Time = dateTime.Item2;
             }
 
-            if (!string.IsNullOrEmpty(search) && !string.IsNullOrEmpty(option))
-            {
-                var searched = Search(search, option, appointments);
-                return View(searched);
-            }
-
-            return View(appointments);
+            return appointments;
         }
 
         public async Task<IActionResult> Details(int id)
         {
             return View(await GetFullAppointment(id));
+        }
+
+        public async Task<IActionResult> PatientDetails(int appointmentId, int patientId)
+        {
+            ViewBag.PatientId = patientId;
+            return View(await GetFullAppointment(appointmentId));
         }
 
         [HttpGet]

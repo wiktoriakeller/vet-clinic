@@ -14,13 +14,16 @@ namespace VetClinicWeb.Controllers
     {
         private readonly IDataAccess<Service> _serviceDataAccess;
         private readonly IDataAccess<ServicesInAppointment> _servicesInAppointmentDataAccess;
+        private readonly IDataAccess<Appointment> _appointmentsDataAccess;
 
         public ServicesInAppointmentController(IDataAccess<ServicesInAppointment> servicesInAppointmentDataAccess,
            IDataAccess<Service> serviceDataAccess,
+           IDataAccess<Appointment> appointmentsDataAccess,
             IMapper mapper) : base(mapper)
         {
             _servicesInAppointmentDataAccess = servicesInAppointmentDataAccess;
             _serviceDataAccess = serviceDataAccess;
+            _appointmentsDataAccess = appointmentsDataAccess;
             _restrictedInDropdown = new List<string> { "servicesinappointmentid", "appointmentid", "service" };
             AddPropertiesNamesToDropdown();
         }
@@ -59,6 +62,13 @@ namespace VetClinicWeb.Controllers
             viewModel.AppointmentId = appointmentId;
 
             return View(viewModel);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> PatientServices(int patientId, int appointmentId, string option, string search)
+        {
+            ViewBag.PatientId = patientId;
+            return await Index(appointmentId, option, search);
         }
 
         [HttpPost]

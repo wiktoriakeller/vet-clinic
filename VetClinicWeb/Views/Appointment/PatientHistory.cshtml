@@ -1,0 +1,86 @@
+﻿@model IEnumerable<VetClinicWeb.Models.AppointmentViewModel>
+
+@{
+    ViewData["Title"] = "Patient history";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h4>Patient History</h4>
+
+<form asp-controller="Appointment" asp-action="PatientHistory" method="get">
+    <div class="container-md mt-3 mb-3" style="width:50%">
+        <div id="search-box-pres">
+            <div class="row">
+                <div class="col">
+                    @Html.DropDownList("Option", (IEnumerable<SelectListItem>) ViewBag.Options, "Choose", new {@class="form-control"})
+                </div>
+                <div class="col-8">
+                    <div class="input-group-append">
+                        <input type="hidden" name="patientId" value=@ViewBag.PatientId />
+                        <input type="text" name="search" placeholder="Search" class="form-control"/>
+                        <input type="submit" value="Search" class="btn btn-primary"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<table class="table table-hover table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Time)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FacilityAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OfficeNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmployeeName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PatientName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Time)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FacilityAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OfficeNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmployeeName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PatientName)
+            </td>
+            <td>
+                @Html.ActionLink("Services", "PatientServices", "ServicesInAppointment", new { appointmentId = item.AppointmentId, patientId = item.Patient }) |
+                @Html.ActionLink("Prescriptions", "PatientPrescription", "Prescription", new { appointmentId = item.AppointmentId, patientId = item.Patient }) |
+                @Html.ActionLink("Details", "PatientDetails", "Appointment", new { appointmentId = item.AppointmentId, patientId = item.Patient })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<div>
+    <a asp-controller="Patient" asp-action="Index">Back to patients</a>
+</div>
