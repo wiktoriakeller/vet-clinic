@@ -121,7 +121,7 @@ namespace VetClinicWeb.Controllers
             catch (Oracle.ManagedDataAccess.Client.OracleException ex)
             {
                 ViewBag.ErrorMessage = GetExceptionMessage(ex.Number);
-                return View(GetFullOffice(id));
+                return View(await GetFullOffice(id));
             }
 
             return RedirectToAction("Index");
@@ -154,6 +154,18 @@ namespace VetClinicWeb.Controllers
         {
             var facilities = (List<Facility>)await _facilityDataAccess.Get();
             ViewBag.facilities = new SelectList(facilities, "FacilityId", "Address");
+        }
+
+        [AcceptVerbs("Get", "Post")]
+        public async Task<IActionResult> IsOfficeUnique(int officeNumber, int facility, int officeId)
+        {
+            var results = await _officeDataAccess.Get();
+            bool isOfficeInUse = results.FirstOrDefault(x => (x.OfficeNumber == officeNumber && x.Facility == facility && x.OfficeId != officeId)) == null;
+
+            if (isOfficeInUse == false)
+                return Json($"Office {officeNumber} already exists in that facility.");
+            else
+                return Json(true);
         }
     }
 }

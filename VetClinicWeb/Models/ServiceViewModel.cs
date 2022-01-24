@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 
 namespace VetClinicWeb.Models
 {
@@ -16,6 +17,7 @@ namespace VetClinicWeb.Models
         [DataType(DataType.Text)]
         [RegularExpression(@"^[a-zA-Z_]+( [a-zA-Z_]+)*$", ErrorMessage = "Service name should only contain letters and spaces (no spaces at the end or at the beginning).")]
         [StringLength(100, ErrorMessage = "{0} length must be shorter than or equal to {1} characters.")]
+        [Remote(action: "IsServiceNameUnique", controller: "Service", AdditionalFields = "ServiceId")]
         public string Name { get; set; }
 
         [Required]

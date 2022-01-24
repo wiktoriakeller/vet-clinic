@@ -54,5 +54,18 @@ namespace VetClinicWeb.Controllers
             var entity = await _dataAccess.Get(id);
             return View(_mapper.Map<ServiceViewModel>(entity));
         }
+
+        [AcceptVerbs("Get", "Post")]
+        public async Task<IActionResult> IsServiceNameUnique(string name, int serviceId)
+        {
+            name = name.Trim();
+            var results = await _dataAccess.Get();
+            bool isServiceInUse = results.FirstOrDefault(x => (x.Name == name && x.ServiceId != serviceId)) == null;
+
+            if (isServiceInUse == false)
+                return Json($"Service {name} already exists.");
+            else
+                return Json(true);
+        }
     }
 }

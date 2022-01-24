@@ -49,7 +49,7 @@
                 <label asp-for="Facility" class="control-label"></label>
                 @Html.DropDownListFor(model => model.Facility, ViewBag.facilities as SelectList, "-- facility --", new {@class="form-control"})
              </div>
-
+             <p class="text-danger">@ViewBag.ErrorMessage</p>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

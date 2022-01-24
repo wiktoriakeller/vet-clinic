@@ -52,8 +52,8 @@ namespace DataAccess.Access
                 set name = :Name,
                     description = :Description,
                     price = :Price,
-                    serviceType = :Owner
-                where serviceId = :ServiceType";
+                    serviceType = :ServiceType
+                where serviceId = :Id";
 
             DynamicParameters dynamicParameters = new DynamicParameters(new
             {

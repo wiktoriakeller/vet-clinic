@@ -253,6 +253,10 @@ commit;
 SELECT * FROM ServicesInAppointment;
 SELECT * FROM Services;
 
+update services
+set price = 250
+where serviceid = 1;
+
 CREATE OR REPLACE FUNCTION CalcYearlyIncome (visitYear IN NUMBER, facilityId IN Facilities.FacilityId%Type) RETURN NUMBER IS
 pricesSum NUMBER;
 BEGIN
@@ -267,3 +271,4 @@ END CalcYearlyIncome;
 SELECT CalcYearlyIncome(2022, 1) FROM dual;
 
 commit;
+

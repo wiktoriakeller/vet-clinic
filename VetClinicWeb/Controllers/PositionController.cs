@@ -28,5 +28,40 @@ namespace VetClinicWeb.Controllers
 
             return Json(true);
         }
+
+        [HttpPost]
+        public override async Task<IActionResult> Delete(int id, PositionViewModel model)
+        {
+            var entity = await _dataAccess.Get(id);
+            if (entity.Name == "Veterinarian")
+            {
+                ViewBag.ErrorMessage = "You can't delete Veterinarian.";
+                return View(_mapper.Map<PositionViewModel>(entity));
+            }
+
+            try
+            {
+                await _dataAccess.Delete(id);
+            }
+            catch (Oracle.ManagedDataAccess.Client.OracleException ex)
+            {
+                ViewBag.ErrorMessage = GetExceptionMessage(ex.Number);
+                return View(_mapper.Map<PositionViewModel>(entity));
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [AcceptVerbs("Get", "Post")]
+        public async Task<IActionResult> IsPositionUnique(string name, int positionId)
+        {
+            var results = await _dataAccess.Get();
+            bool isPositionInUse = results.FirstOrDefault(x => (x.Name == name && x.PositionId != positionId)) == null;
+
+            if (isPositionInUse == false)
+                return Json($"Position {name} is already in use.");
+            else
+                return Json(true);
+        }
     }
 }

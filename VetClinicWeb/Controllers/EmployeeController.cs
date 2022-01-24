@@ -153,8 +153,8 @@ namespace VetClinicWeb.Controllers
             }
             catch (Oracle.ManagedDataAccess.Client.OracleException ex)
             {
-                ViewBag.ErrorMessage = $"Employee {GetExceptionMessage(ex.Number)}";
-                return View(GetFullEmployee(id));
+                ViewBag.ErrorMessage = $"{GetExceptionMessage(ex.Number)}";
+                return View(await GetFullEmployee(id));
             }
 
             return RedirectToAction("Index");

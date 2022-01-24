@@ -97,7 +97,7 @@ namespace VetClinicWeb.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete(int id, U model)
+        public virtual async Task<IActionResult> Delete(int id, U model)
         {
             try
             {

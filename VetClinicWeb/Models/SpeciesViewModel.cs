@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace VetClinicWeb.Models
 {
@@ -10,6 +11,7 @@ namespace VetClinicWeb.Models
         [DataType(DataType.Text)]
         [RegularExpression(@"^[a-zA-Z_]+( [a-zA-Z_]+)*$", ErrorMessage = "Species name should only contain letters and spaces (no spaces at the end or at the beginning).")]
         [StringLength(50, ErrorMessage = "{0} length must be shorter than or equal to {1} characters.")]
+        [Remote(action: "IsSpeciesNameUnique", controller: "Species", AdditionalFields = "SpeciesId")]
         public string Name { get; set; }
 
     }

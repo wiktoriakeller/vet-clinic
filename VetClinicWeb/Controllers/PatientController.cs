@@ -202,5 +202,14 @@ namespace VetClinicWeb.Controllers
             ViewBag.organizations = new SelectList(organizations, "OrganizationId", "NameNIP");
             ViewBag.owners = new SelectList(owners, "OwnerId", "NameSurnamePESEL");
         }
+
+        [AcceptVerbs("Get", "Post")]
+        public IActionResult OrganizationOrOwner(PatientViewModel model)
+        {
+            if (model.Organization != null && model.Owner != null)
+                return Json($"Patient shouldn't have both owner and organization set.");
+            else
+                return Json(true);
+        }
     }
 }

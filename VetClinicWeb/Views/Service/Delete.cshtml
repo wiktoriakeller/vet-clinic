@@ -30,9 +30,18 @@
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.ServiceType)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ServiceType)
-        </dd>
+        @if(Model.ServiceType == 'E')
+        {
+            <dd>
+                Examination
+            </dd>
+        }
+        else
+        {
+            <dd>
+                Treatment
+            </dd>
+        }
     </dl>
     
     <p class="text-danger">@ViewBag.ErrorMessage</p>
