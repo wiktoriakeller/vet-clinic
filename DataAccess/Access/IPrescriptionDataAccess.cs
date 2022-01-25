@@ -7,6 +7,7 @@ namespace DataAccess.Access
     public interface IPrescriptionDataAccess
     {
         Task Delete(int appointmentId, int drugId);
+        Task Delete(int appointmentId);
         Task<IEnumerable<Prescription>> Get(int appointmentId);
         Task<Prescription> Get(int appointmentId, int drugId);
         Task Insert(Prescription prescription);

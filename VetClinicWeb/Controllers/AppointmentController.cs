@@ -18,6 +18,8 @@ namespace VetClinicWeb.Controllers
         private readonly IDataAccess<Patient> _patientDataAccess;
         private readonly IDataAccess<Office> _officeDataAccess;
         private readonly IDataAccess<Facility> _facilityDataAccess;
+        private readonly IDataAccess<ServicesInAppointment> _servicesInAppointmentDataAccess;
+        private readonly IPrescriptionDataAccess _prescriptionDataAccess;
         private readonly List<string> _availableHours;
              
         public AppointmentController(IDataAccess<Appointment> appointmentDataAccess,
@@ -25,6 +27,8 @@ namespace VetClinicWeb.Controllers
             IDataAccess<Patient> patientDataAccess,
             IDataAccess<Office> officeDataAccess,
             IDataAccess<Facility> facilityDataAccess,
+            IDataAccess<ServicesInAppointment> servicesInAppointmentDataAccess,
+            IPrescriptionDataAccess prescriptionDataAccess,
             IMapper mapper) : base(mapper)
         {
             _appointmentDataAccess = appointmentDataAccess;
@@ -32,6 +36,8 @@ namespace VetClinicWeb.Controllers
             _patientDataAccess = patientDataAccess;
             _officeDataAccess = officeDataAccess;
             _facilityDataAccess = facilityDataAccess;
+            _servicesInAppointmentDataAccess = servicesInAppointmentDataAccess;
+            _prescriptionDataAccess = prescriptionDataAccess;
 
             _restrictedInDropdown = new List<string> { "appointmentid", "appointmentdate", "cause", "employee", "office", "facility", "patient" };
             AddPropertiesNamesToDropdown();
@@ -211,6 +217,21 @@ namespace VetClinicWeb.Controllers
         {
             try
             {
+                var services = await _servicesInAppointmentDataAccess.Get();
+                var prescriptions = await _prescriptionDataAccess.Get(id);
+
+                foreach(var service in services)
+                {
+                    if (service.AppointmentId == id)
+                        await _servicesInAppointmentDataAccess.Delete(service.ServicesInAppointmentId);
+                }
+
+                foreach(var prescription in prescriptions)
+                {
+                    if (prescription.AppointmentId == id)
+                        await _prescriptionDataAccess.Delete(prescription.AppointmentId);
+                }
+
                 await _appointmentDataAccess.Delete(id);
             }
             catch (Oracle.ManagedDataAccess.Client.OracleException ex)

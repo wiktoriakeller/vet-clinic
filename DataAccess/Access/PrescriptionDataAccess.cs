@@ -24,6 +24,16 @@ namespace DataAccess.Access
             return _db.SaveData(sql, dynamicParameters);
         }
 
+        public Task Delete(int appointmentId)
+        {
+            string sql = "delete from prescriptions where appointmentId = :AppointmentId";
+            DynamicParameters dynamicParameters = new DynamicParameters(new
+            {
+                AppointmentId = appointmentId
+            });
+            return _db.SaveData(sql, dynamicParameters);
+        }
+
         public async Task<Prescription> Get(int appointmentId, int drugId)
         {
             string sql = "select * from prescriptions where appointmentId = :AppointmentId and drugId = :DrugId";

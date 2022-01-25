@@ -247,6 +247,19 @@ $(document).ready(function () {
 });
 
 $(document).ready(function () {
+    $("#delete-appointment").popover({
+        trigger: "hover",
+        title: "Warning",
+        content: `
+        This will also delete all services and prescriptions in that appointment.
+        `,
+        placement: "right",
+        html: true,
+        animation: true
+    });
+});
+
+$(document).ready(function () {
     $(".dismiss").on("click", function () {
         $(".sidebar").removeClass("active");
     });

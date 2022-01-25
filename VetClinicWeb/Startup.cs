@@ -39,7 +39,6 @@ namespace VetClinicWeb
             services.AddSingleton<IDataAccess<Drug>, DrugDataAccess>();
 			services.AddSingleton<IPrescriptionDataAccess, PrescriptionDataAccess>();
             services.AddSingleton<IDataAccess<Service>, ServiceDataAccess>();
-            services.AddSingleton<IDataAccess<Service>, ServiceDataAccess>();
             services.AddSingleton<IDataAccess<ServicesInAppointment>, ServicesInAppointmentDataAccess>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddRazorPages();
