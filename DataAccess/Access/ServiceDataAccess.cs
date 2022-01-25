@@ -13,13 +13,13 @@ namespace DataAccess.Access
 
         public Task<IEnumerable<Service>> Get()
         {
-            string sql = "select * from services";
+            string sql = "select serviceId, name, round(price, 2) as price, description, serviceType from services";
             return _db.LoadData<Service>(sql);
         }
 
         public async Task<Service> Get(int serviceId)
         {
-            string sql = "select * from services where serviceId = :Id";
+            string sql = "select serviceId, name, round(price, 2) as price, description, serviceType from services where serviceId = :Id";
 
             DynamicParameters dynamicParameters = new DynamicParameters(new
             {

@@ -13,13 +13,13 @@ namespace DataAccess.Access
 
         public Task<IEnumerable<Position>> Get()
         {
-            string sql = "select * from positions";
+            string sql = "select positionId, name, round(salaryMin, 2) as salaryMin, round(salaryMax, 2) as salaryMax from positions";
             return _db.LoadData<Position>(sql);
         }
 
         public async Task<Position> Get(int positionId)
         {
-            string sql = "select * from positions where positionId = :Id";
+            string sql = "select positionId, name, round(salaryMin, 2) as salaryMin, round(salaryMax, 2) as salaryMax from positions where positionId = :Id";
 
             DynamicParameters dynamicParameters = new DynamicParameters(new
             {
