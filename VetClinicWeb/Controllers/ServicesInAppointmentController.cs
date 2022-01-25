@@ -186,7 +186,6 @@ namespace VetClinicWeb.Controllers
         {
             var dbServices = await _servicesInAppointmentDataAccess.Get();
             var dbServicesInApp = dbServices.Where(x => x.AppointmentId == appointmentId);
-            System.Console.WriteLine(dbServicesInApp.Count());
             return Json(new { number = dbServicesInApp.Count() });
         }
     }

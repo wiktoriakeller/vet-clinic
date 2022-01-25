@@ -70,7 +70,7 @@ namespace VetClinicWeb.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(int id, U model)
+        public virtual async Task<IActionResult> Update(int id, U model)
         {
             if (ModelState.IsValid)
             {

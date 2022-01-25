@@ -18,10 +18,10 @@ namespace VetClinicWeb.Models
         
         public int Species { get; set; }
 
-        [Remote(action: "OrganizationOrOwner", controller: "Patient", AdditionalFields = "Owner")]
+        [OrganizationOrOwner]
         public int? Organization { get; set; }
 
-        [Remote(action: "OrganizationOrOwner", controller: "Patient", AdditionalFields = "Organization")]
+        [OrganizationOrOwner]
         public int? Owner { get; set; }
 
         [DisplayName("Species")]

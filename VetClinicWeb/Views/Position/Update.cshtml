@@ -14,9 +14,10 @@
             <div class="form-group">
                 @Html.HiddenFor(model => model.PositionId)
                 <label asp-for="Name" class="control-label"></label>
-                @if(Model.Name == "Veterinarian")
+                @if(Model.PositionId == 1)
                 {
-                    <input asp-for="Name" class="form-control" disabled/>
+                    <input asp-for="Name" value="Veterinarian" class="form-control" disabled/>
+                    @Html.HiddenFor(model => model.Name)
                 }
                 else
                 {

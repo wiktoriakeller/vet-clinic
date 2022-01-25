@@ -52,6 +52,28 @@ namespace VetClinicWeb.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        public override async Task<IActionResult> Update(int id, PositionViewModel model)
+        {
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _dataAccess.Update(_mapper.Map<Position>(model));
+                    ModelState.Clear();
+                    return RedirectToAction("Index");
+                }
+                catch (Oracle.ManagedDataAccess.Client.OracleException ex)
+                {
+                    ViewBag.ErrorMessage = GetExceptionMessage(ex.Number);
+                    return View(model);
+                }
+            }
+
+            return View(model);
+        }
+
         [AcceptVerbs("Get", "Post")]
         public async Task<IActionResult> IsPositionUnique(string name, int positionId)
         {
