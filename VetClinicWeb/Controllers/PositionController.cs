@@ -11,9 +11,11 @@ namespace VetClinicWeb.Controllers
 {
     public class PositionController : BaseOperationsController<Position, PositionViewModel>
     {
-        public PositionController(IDataAccess<Position> positionDataAccess, IMapper mapper) : base(mapper, positionDataAccess) 
+        private readonly IDataAccess<Employee> _employeeDataAccess;
+        public PositionController(IDataAccess<Position> positionDataAccess, IDataAccess<Employee> employeeDataAccess, IMapper mapper) : base(mapper, positionDataAccess) 
         {
             _restrictedInDropdown = new List<string> { "positionid" };
+            _employeeDataAccess = employeeDataAccess;
             AddPropertiesNamesToDropdown();
         }
 
@@ -55,13 +57,26 @@ namespace VetClinicWeb.Controllers
         [HttpPost]
         public override async Task<IActionResult> Update(int id, PositionViewModel model)
         {
-
             if (ModelState.IsValid)
             {
                 try
                 {
                     await _dataAccess.Update(_mapper.Map<Position>(model));
                     ModelState.Clear();
+
+                    var updateEmpAccess = (IUpdateEmployeeSalary)_employeeDataAccess;
+                    var employees = await _employeeDataAccess.Get();
+                    foreach (var employee in employees)
+                    {
+                        if (employee.Position == model.PositionId)
+                        {
+                            if(employee.Salary < model.SalaryMin)
+                                await updateEmpAccess.UpdateSalary(model.SalaryMin, employee.EmployeeId);
+                            else if(employee.Salary > model.SalaryMax)
+                                await updateEmpAccess.UpdateSalary(model.SalaryMax, employee.EmployeeId);
+                        }
+                    }
+
                     return RedirectToAction("Index");
                 }
                 catch (Oracle.ManagedDataAccess.Client.OracleException ex)

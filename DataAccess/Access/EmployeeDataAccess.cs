@@ -7,7 +7,7 @@ using Dapper;
 
 namespace DataAccess.Access
 {
-    public class EmployeeDataAccess : Access, IDataAccess<Employee>, IVeterinariansAccess
+    public class EmployeeDataAccess : Access, IDataAccess<Employee>, IVeterinariansAccess, IUpdateEmployeeSalary
     {
         public EmployeeDataAccess(ISQLDataAccess db) : base(db) { }
 
@@ -64,6 +64,19 @@ namespace DataAccess.Access
                 PhoneNumber = employee.PhoneNumber,
                 Position = employee.Position,
                 Facility = employee.Facility
+            });
+
+            return _db.SaveData(sql, dynamicParameters);
+        }
+
+        public Task UpdateSalary(double salary, int employeeId)
+        {
+            string sql = "update employees set salary = :Salary where employeeId = :Id";
+
+            DynamicParameters dynamicParameters = new DynamicParameters(new
+            {
+                Id = employeeId,
+                Salary = salary
             });
 
             return _db.SaveData(sql, dynamicParameters);

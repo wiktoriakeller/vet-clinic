@@ -27,14 +27,15 @@ namespace VetClinicWeb.Controllers
         public async Task<IActionResult> Index(int year = 2022)
         {
             ViewBag.error = "";
-            if (year <= 2019)
+            if (year <= 2021)
             {
                 year = DateTime.Now.Year;
-                ViewBag.error = "Year shouldn't be lower than 2020.";
+                ViewBag.error = "Year shouldn't be lower than 2022.";
             }
-            else if(year > 2025)
+            else if(year > 2099)
             {
-                ViewBag.error = "Year shouldn't be higher than 2025.";
+                year = DateTime.Now.Year;
+                ViewBag.error = "Year shouldn't be higher than 2099.";
             }
 
             ViewBag.Year = year;
