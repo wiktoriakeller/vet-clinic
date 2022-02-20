@@ -21,6 +21,7 @@ With this application you can schedule an appointment for a given patient - a fr
 
 ## Technologies
 * ASP.NET Core in .NET 5
+* Dapper
 * JavaScript
 * HTML5
 * CSS3
